@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "meals",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id"}, name = "meals_unique_restaurant_idx")})
 public class Meal extends AbstractNamedEntity {
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
     private Integer cost;
