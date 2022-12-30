@@ -3,10 +3,9 @@ package com.topjava.restaurant_voting.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "meals",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id"}, name = "meals_unique_restaurant_idx")})
+@Table(name = "meals", indexes = @Index(columnList = "restaurant_id", name = "meals_restaurant_idx"))
 public class Meal extends AbstractNamedEntity {
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
     private Integer cost;
@@ -14,9 +13,10 @@ public class Meal extends AbstractNamedEntity {
     public Meal() {
     }
 
-    public Meal(Integer id, String name, Integer cost) {
+    public Meal(Integer id, String name, Integer cost, Restaurant restaurant) {
         super(id, name);
         this.cost = cost;
+        this.restaurant = restaurant;
     }
 
     public Restaurant getRestaurant() {

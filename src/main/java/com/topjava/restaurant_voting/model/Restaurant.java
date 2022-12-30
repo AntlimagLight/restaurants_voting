@@ -1,9 +1,7 @@
 package com.topjava.restaurant_voting.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +10,12 @@ import java.util.List;
 @Table(name = "restaurants")
 public class Restaurant extends AbstractNamedEntity {
 
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant")
-//    private List<Meal> menu;
+    private Integer votes;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "restaurant")
+    @JsonIgnore
+    private List<Meal> menu;
+
     public Restaurant() {
     }
 
@@ -21,10 +23,28 @@ public class Restaurant extends AbstractNamedEntity {
         super(id, name);
     }
 
+    public Integer getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Integer votes) {
+        this.votes = votes;
+    }
+
+    public List<Meal> getMenu() {
+        return menu;
+    }
+
+    public void setMenu(List<Meal> menu) {
+        this.menu = menu;
+    }
+
     @Override
     public String toString() {
         return "Restaurant{" +
-                "name='" + name + '\'' +
+                "votes=" + votes +
+                ", menu=" + menu +
+                ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';
     }

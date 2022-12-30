@@ -22,12 +22,15 @@ public class User extends AbstractNamedEntity {
 
     private Boolean enabled;
 
+    private Boolean enable_vote;
+
     public User() {
     }
 
     public User(User u) {
         this(u.id, u.name, u.email, u.password, u.registered, u.roles);
         this.enabled = u.enabled;
+        this.enable_vote = u.enable_vote;
     }
 
     public User(Integer id, String name, String email, String password, Date registered, Role... roles) {
@@ -40,11 +43,12 @@ public class User extends AbstractNamedEntity {
         this.password = password;
         this.registered = registered;
         this.enabled = true;
+        this.enable_vote = true;
         setRoles(roles);
     }
 
     public User(Integer id, String name, String email, String password, Date registered) {
-        this(id, name, email, password, registered, Collections.<Role>emptyList());
+        this(id, name, email, password, registered, Collections.emptyList());
     }
 
     public String getEmail() {
@@ -87,6 +91,14 @@ public class User extends AbstractNamedEntity {
         this.enabled = enabled;
     }
 
+    public Boolean getEnable_vote() {
+        return enable_vote;
+    }
+
+    public void setEnable_vote(Boolean enable_vote) {
+        this.enable_vote = enable_vote;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -94,8 +106,11 @@ public class User extends AbstractNamedEntity {
                 ", password='" + password + '\'' +
                 ", registered=" + registered +
                 ", roles=" + roles +
+                ", enabled=" + enabled +
+                ", enable_vote=" + enable_vote +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';
     }
+
 }
