@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface MealRepository extends CrudRepository<Meal, Integer> {
 
-    Meal findByRestaurantAndName (Restaurant restaurant, String name);
+    Meal findByRestaurantAndName(Restaurant restaurant, String name);
 
     Meal findByRestaurantAndId(Restaurant restaurant, Integer id);
 
-    List<Meal> findAllByRestaurant (Restaurant restaurant);
+    List<Meal> findAllByRestaurant(Restaurant restaurant);
 
 
 }

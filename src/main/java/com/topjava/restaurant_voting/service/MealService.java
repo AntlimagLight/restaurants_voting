@@ -5,15 +5,14 @@ import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.model.Meal;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.repository.MealRepository;
-import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 
+@SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
 public class MealService {
     public static final String MEAL_ENTITY_NAME = "Meal";

@@ -2,28 +2,28 @@ package com.topjava.restaurant_voting.controller;
 
 import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
-import com.topjava.restaurant_voting.model.Restaurant;
-import com.topjava.restaurant_voting.service.RestaurantService;
+import com.topjava.restaurant_voting.model.User;
+import com.topjava.restaurant_voting.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.topjava.restaurant_voting.exeption.ExceptionMassages.BAD_REQUEST_MASSAGE;
-import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
+import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
 @RestController
-@RequestMapping("/restaurant")
-public class RestaurantController {
+@RequestMapping("/users")
+public class UserController {
 
     @Autowired
-    private RestaurantService restaurantService;
+    private UserService userService;
 
     @PostMapping
-    public ResponseEntity createRestaurant(@RequestBody Restaurant restaurant) {
+    public ResponseEntity createUser(@RequestBody User user) {
         try {
-            restaurantService.create(restaurant);
-            return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " saved:\n" + restaurant);
+            userService.create(user);
+            return ResponseEntity.ok(USER_ENTITY_NAME + " saved:\n" + user);
         } catch (AlreadyExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -32,10 +32,10 @@ public class RestaurantController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateRestaurant(@RequestBody Restaurant restaurant, @PathVariable Integer id) {
+    public ResponseEntity updateUser(@RequestBody User user, @PathVariable Integer id) {
         try {
-            restaurantService.update(id, restaurant);
-            return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " updated:\n" + restaurant);
+            userService.update(id, user);
+            return ResponseEntity.ok(USER_ENTITY_NAME + " updated:\n" + user);
         } catch (NotExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -44,20 +44,9 @@ public class RestaurantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getRestaurant(@PathVariable Integer id) {
+    public ResponseEntity getUserByID(@PathVariable Integer id) {
         try {
-            return ResponseEntity.ok(restaurantService.getById(id));
-        } catch (NotExistException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteRestaurant(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " deleted:\n" + restaurantService.delete(id));
+            return ResponseEntity.ok(userService.getById(id));
         } catch (NotExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -66,9 +55,31 @@ public class RestaurantController {
     }
 
     @GetMapping
+    public ResponseEntity getUserByEmail(@RequestParam String email) {
+        try {
+            return ResponseEntity.ok(userService.getByEmail(email));
+        } catch (NotExistException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUser(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(USER_ENTITY_NAME + " deleted:\n" + userService.delete(id));
+        } catch (NotExistException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
+        }
+    }
+
+    @GetMapping("/list")
     public ResponseEntity getAll() {
         try {
-            return ResponseEntity.ok(restaurantService.getAll());
+            return ResponseEntity.ok(userService.getAll());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
         }

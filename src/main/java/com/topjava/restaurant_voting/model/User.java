@@ -3,51 +3,46 @@ package com.topjava.restaurant_voting.model;
 import jakarta.persistence.*;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}, name = "users_unique_email_idx")})
+@Table(name = "users", indexes = @Index(columnList = "email", name = "users_unique_email_idx", unique = true))
 public class User extends AbstractNamedEntity {
 
     private String email;
     private String password;
-    private Date registered;
+    private LocalDate registered;
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
-            uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_idx")})
+            indexes = @Index(columnList = "user_id, role", name = "users_roles_idx", unique = true))
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     private Boolean enabled;
 
-    private Boolean enable_vote;
+    private Boolean enableVote;
 
     public User() {
     }
 
-    public User(User u) {
-        this(u.id, u.name, u.email, u.password, u.registered, u.roles);
-        this.enabled = u.enabled;
-        this.enable_vote = u.enable_vote;
-    }
-
-    public User(Integer id, String name, String email, String password, Date registered, Role... roles) {
+    public User(Integer id, String name, String email, String password, LocalDate registered, Role... roles) {
         this(id, name, email, password, registered, Arrays.asList((roles)));
     }
 
-    public User(Integer id, String name, String email, String password, Date registered, Collection<Role> roles) {
+    public User(Integer id, String name, String email, String password, LocalDate registered, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
         this.registered = registered;
         this.enabled = true;
-        this.enable_vote = true;
+        this.enableVote = true;
         setRoles(roles);
     }
 
-    public User(Integer id, String name, String email, String password, Date registered) {
+    public User(Integer id, String name, String email, String password, LocalDate registered) {
         this(id, name, email, password, registered, Collections.emptyList());
     }
 
@@ -67,11 +62,11 @@ public class User extends AbstractNamedEntity {
         this.password = password;
     }
 
-    public Date getRegistered() {
+    public LocalDate getRegistered() {
         return registered;
     }
 
-    public void setRegistered(Date registered) {
+    public void setRegistered(LocalDate registered) {
         this.registered = registered;
     }
 
@@ -91,12 +86,12 @@ public class User extends AbstractNamedEntity {
         this.enabled = enabled;
     }
 
-    public Boolean getEnable_vote() {
-        return enable_vote;
+    public Boolean getEnableVote() {
+        return enableVote;
     }
 
-    public void setEnable_vote(Boolean enable_vote) {
-        this.enable_vote = enable_vote;
+    public void setEnableVote(Boolean enable_vote) {
+        this.enableVote = enable_vote;
     }
 
     @Override
@@ -107,7 +102,7 @@ public class User extends AbstractNamedEntity {
                 ", registered=" + registered +
                 ", roles=" + roles +
                 ", enabled=" + enabled +
-                ", enable_vote=" + enable_vote +
+                ", enable_vote=" + enableVote +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';

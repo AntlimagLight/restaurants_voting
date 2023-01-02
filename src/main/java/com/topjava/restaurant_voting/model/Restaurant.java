@@ -3,7 +3,6 @@ package com.topjava.restaurant_voting.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,6 +20,7 @@ public class Restaurant extends AbstractNamedEntity {
 
     public Restaurant(Integer id, String name) {
         super(id, name);
+        this.votes = 0;
     }
 
     public Integer getVotes() {
