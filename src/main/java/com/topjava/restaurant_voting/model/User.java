@@ -23,7 +23,8 @@ public class User extends AbstractNamedEntity {
 
     private Boolean enabled;
 
-    private Boolean enableVote;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private Vote vote;
 
     public User() {
     }
@@ -38,7 +39,7 @@ public class User extends AbstractNamedEntity {
         this.password = password;
         this.registered = registered;
         this.enabled = true;
-        this.enableVote = true;
+        this.vote = null;
         setRoles(roles);
     }
 
@@ -86,12 +87,12 @@ public class User extends AbstractNamedEntity {
         this.enabled = enabled;
     }
 
-    public Boolean getEnableVote() {
-        return enableVote;
+    public Vote getVote() {
+        return vote;
     }
 
-    public void setEnableVote(Boolean enable_vote) {
-        this.enableVote = enable_vote;
+    public void setVote(Vote vote) {
+        this.vote = vote;
     }
 
     @Override
@@ -102,10 +103,9 @@ public class User extends AbstractNamedEntity {
                 ", registered=" + registered +
                 ", roles=" + roles +
                 ", enabled=" + enabled +
-                ", enable_vote=" + enableVote +
+                ", vote=" + vote +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';
     }
-
 }

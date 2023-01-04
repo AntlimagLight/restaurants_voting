@@ -34,3 +34,8 @@ VALUES ('Soup', 50, 100003),
        ('Fry Potato', 120, 100004),
        ('Classic Sushi', 200, 100005),
        ('Wok', 180, 100005);
+
+INSERT INTO votes (user_id, restaurant_id)
+VALUES ('100001', '100003'),
+       ('100002', '100004');
+

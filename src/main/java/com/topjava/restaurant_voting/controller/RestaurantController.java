@@ -13,7 +13,7 @@ import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
 @RestController
-@RequestMapping("/restaurant")
+@RequestMapping("/admin/restaurant")
 public class RestaurantController {
 
     @Autowired

@@ -13,8 +13,8 @@ import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
 @RestController
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/admin/users")
+public class AdminUserController {
 
     @Autowired
     private UserService userService;

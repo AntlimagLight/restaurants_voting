@@ -14,7 +14,6 @@ public class UserTo {
     private LocalDate registered;
     private Set<Role> roles;
     private Boolean enabled;
-    private Boolean enable_vote;
 
     public UserTo() {
     }
@@ -25,7 +24,6 @@ public class UserTo {
         this.email = user.getEmail();
         this.registered = user.getRegistered();
         this.enabled = user.getEnabled();
-        this.enable_vote = user.getEnableVote();
         this.roles = user.getRoles();
     }
 
@@ -36,7 +34,6 @@ public class UserTo {
                 ", registered=" + registered +
                 ", roles=" + roles +
                 ", enabled=" + enabled +
-                ", enable_vote=" + enable_vote +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';
@@ -74,11 +71,4 @@ public class UserTo {
         this.enabled = enabled;
     }
 
-    public Boolean getEnable_vote() {
-        return enable_vote;
-    }
-
-    public void setEnable_vote(Boolean enable_vote) {
-        this.enable_vote = enable_vote;
-    }
 }

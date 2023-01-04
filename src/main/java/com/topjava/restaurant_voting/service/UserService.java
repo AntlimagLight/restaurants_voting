@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.topjava.restaurant_voting.util.InitiateUtil.VOTING_END_TIME;
-
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
 public class UserService {
@@ -29,7 +27,6 @@ public class UserService {
         user.setEnabled(true);
         LocalDateTime now = LocalDateTime.now();
         user.setRegistered(now.toLocalDate());
-        user.setEnableVote(now.toLocalTime().isBefore(VOTING_END_TIME));
         userRepository.save(user);
     }
 
@@ -41,7 +38,7 @@ public class UserService {
         user.setId(id);
         User oldUser = opt.get();
         user.setRegistered(oldUser.getRegistered());
-        user.setEnableVote(oldUser.getEnableVote());
+        user.setVote(oldUser.getVote());
         userRepository.save(user);
     }
 

@@ -4,6 +4,7 @@ import com.topjava.restaurant_voting.model.*;
 import com.topjava.restaurant_voting.repository.MealRepository;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import com.topjava.restaurant_voting.repository.UserRepository;
+import com.topjava.restaurant_voting.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
 
-@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection"})
+@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "OptionalGetWithoutIsPresent"})
 @Service
 public class InitiateUtil implements CommandLineRunner {
 
@@ -23,7 +24,10 @@ public class InitiateUtil implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
 
-    public static final LocalTime VOTING_END_TIME = LocalTime.of(11, 0);
+    @Autowired
+    private VoteService voteService;
+
+    public static final LocalTime VOTING_END_TIME = LocalTime.of(23, 0);
 
     public static final User GUEST = new User(null, "Guest", "guest@gmail.com",
             "{noop}guest", LocalDate.of(2022, Calendar.DECEMBER, 10));
@@ -69,5 +73,7 @@ public class InitiateUtil implements CommandLineRunner {
         mealRepository.save(MEAL_6);
         mealRepository.save(MEAL_7);
         mealRepository.save(MEAL_8);
+        voteService.makeVote(userRepository.findById(100001).get(), 100003);
+        voteService.makeVote(userRepository.findById(100002).get(), 100004);
     }
 }

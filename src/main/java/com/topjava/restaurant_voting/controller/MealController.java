@@ -14,16 +14,16 @@ import static com.topjava.restaurant_voting.service.MealService.MEAL_ENTITY_NAME
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
 @RestController
-@RequestMapping("/restaurant")
+@RequestMapping("/admin/restaurant")
 public class MealController {
 
     @Autowired
     private MealService mealService;
 
-    @PostMapping("/{id}")
-    public ResponseEntity createMeal(@RequestBody Meal meal, @PathVariable Integer id) {
+    @PostMapping("/{restaurant_id}")
+    public ResponseEntity createMeal(@RequestBody Meal meal, @PathVariable Integer restaurant_id) {
         try {
-            mealService.create(meal, id);
+            mealService.create(meal, restaurant_id);
             return ResponseEntity.ok(MEAL_ENTITY_NAME + " saved:\n" + meal);
         } catch (AlreadyExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -32,10 +32,10 @@ public class MealController {
         }
     }
 
-    @PutMapping("/{id}/menu")
-    public ResponseEntity updateMeal(@RequestBody Meal meal, @PathVariable Integer id, @RequestParam Integer meal_id) {
+    @PutMapping("/{restaurant_id}/menu/{meal_id}")
+    public ResponseEntity updateMeal(@RequestBody Meal meal, @PathVariable Integer restaurant_id, @PathVariable Integer meal_id) {
         try {
-            mealService.update(meal, meal_id, id);
+            mealService.update(meal, meal_id, restaurant_id);
             return ResponseEntity.ok(MEAL_ENTITY_NAME + " updated:\n" + meal);
         } catch (NotExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -44,10 +44,10 @@ public class MealController {
         }
     }
 
-    @GetMapping("/{id}/menu/{meal_id}")
-    public ResponseEntity getMeal(@PathVariable Integer id, @PathVariable Integer meal_id) {
+    @GetMapping("/{restaurant_id}/menu/{meal_id}")
+    public ResponseEntity getMeal(@PathVariable Integer restaurant_id, @PathVariable Integer meal_id) {
         try {
-            return ResponseEntity.ok(mealService.getById(meal_id, id));
+            return ResponseEntity.ok(mealService.getById(meal_id, restaurant_id));
         } catch (NotExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -55,10 +55,10 @@ public class MealController {
         }
     }
 
-    @DeleteMapping("/{id}/menu")
-    public ResponseEntity deleteRestaurant(@PathVariable Integer id, @RequestParam Integer meal_id) {
+    @DeleteMapping("/{restaurant_id}/menu/{meal_id}")
+    public ResponseEntity deleteRestaurant(@PathVariable Integer restaurant_id, @PathVariable Integer meal_id) {
         try {
-            return ResponseEntity.ok(MEAL_ENTITY_NAME + " deleted:\n" + mealService.delete(meal_id, id));
+            return ResponseEntity.ok(MEAL_ENTITY_NAME + " deleted:\n" + mealService.delete(meal_id, restaurant_id));
         } catch (NotExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -66,10 +66,10 @@ public class MealController {
         }
     }
 
-    @GetMapping("/{id}/menu")
-    public ResponseEntity getAll(@PathVariable Integer id) {
+    @GetMapping("/{restaurant_id}/menu")
+    public ResponseEntity getAll(@PathVariable Integer restaurant_id) {
         try {
-            return ResponseEntity.ok(mealService.getRestaurantMenu(id));
+            return ResponseEntity.ok(mealService.getRestaurantMenu(restaurant_id));
         } catch (NotExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
