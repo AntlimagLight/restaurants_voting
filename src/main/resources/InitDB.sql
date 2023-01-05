@@ -48,8 +48,10 @@ CREATE INDEX meals_restaurant_idx
 
 CREATE TABLE votes
 (
-    id            INTEGER AUTO_INCREMENT PRIMARY KEY,
+    id            LONG AUTO_INCREMENT PRIMARY KEY,
+    date          TIMESTAMP DEFAULT now() NOT NULL,
     user_id       INTEGER NOT NULL,
     restaurant_id INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES USERS (id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES USERS (id) ON DELETE CASCADE,
+    FOREIGN KEY (restaurant_id) REFERENCES RESTAURANTS (id) ON DELETE CASCADE
 );

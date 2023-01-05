@@ -1,5 +1,6 @@
 package com.topjava.restaurant_voting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.util.CollectionUtils;
 
@@ -23,8 +24,9 @@ public class User extends AbstractNamedEntity {
 
     private Boolean enabled;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    private Vote vote;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private List<Vote> votes;
 
     public User() {
     }
@@ -39,7 +41,6 @@ public class User extends AbstractNamedEntity {
         this.password = password;
         this.registered = registered;
         this.enabled = true;
-        this.vote = null;
         setRoles(roles);
     }
 
@@ -87,12 +88,12 @@ public class User extends AbstractNamedEntity {
         this.enabled = enabled;
     }
 
-    public Vote getVote() {
-        return vote;
+    public List<Vote> getVotes() {
+        return votes;
     }
 
-    public void setVote(Vote vote) {
-        this.vote = vote;
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
     }
 
     @Override
@@ -103,7 +104,7 @@ public class User extends AbstractNamedEntity {
                 ", registered=" + registered +
                 ", roles=" + roles +
                 ", enabled=" + enabled +
-                ", vote=" + vote +
+                ", votes=" + votes +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';

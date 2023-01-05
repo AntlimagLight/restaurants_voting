@@ -25,28 +25,22 @@ public class VoteService {
     private RestaurantRepository restaurantRepository;
 
     public Boolean makeVote(User user, Integer restaurant_id) {
-        if (LocalDateTime.now().toLocalTime().isBefore(VOTING_END_TIME)) {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.toLocalTime().isBefore(VOTING_END_TIME)) {
             Optional<Restaurant> opt = restaurantRepository.findById(restaurant_id);
             if (opt.isEmpty()) {
                 throw new NotExistException(RESTAURANT_ENTITY_NAME);
             }
-            Vote actualVote = voteRepository.findByUser(user);
+            Vote actualVote = voteRepository.findByUserAndDate(user, now.toLocalDate());
             if (actualVote == null) {
-                voteRepository.save(new Vote(null, user, restaurant_id));
+                voteRepository.save(new Vote(null, user, opt.get(), now.toLocalDate()));
             } else {
-                @SuppressWarnings("OptionalGetWithoutIsPresent")
-                Restaurant oldRestaurant = restaurantRepository.findById(actualVote.getRestaurant_id()).get();
-                oldRestaurant.setVoteCounter(oldRestaurant.getVoteCounter() - 1);
-                restaurantRepository.save(oldRestaurant);
-                actualVote.setRestaurant_id(restaurant_id);
+                actualVote.setRestaurant(opt.get());
                 voteRepository.save(actualVote);
             }
-            Restaurant restaurant = opt.get();
-            restaurant.setVoteCounter(restaurant.getVoteCounter() + 1);
-            restaurantRepository.save(restaurant);
             return true;
         } else {
-//            Голосование уже завершено
+//            Голосование уже завершено сегодня
             return false;
         }
     }

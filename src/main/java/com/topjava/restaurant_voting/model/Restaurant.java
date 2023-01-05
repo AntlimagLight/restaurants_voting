@@ -9,7 +9,9 @@ import java.util.List;
 @Table(name = "restaurants")
 public class Restaurant extends AbstractNamedEntity {
 
-    private Integer voteCounter;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "restaurant")
+    @JsonIgnore
+    private List<Vote> votes;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "restaurant")
     @JsonIgnore
@@ -20,15 +22,6 @@ public class Restaurant extends AbstractNamedEntity {
 
     public Restaurant(Integer id, String name) {
         super(id, name);
-        this.voteCounter = 0;
-    }
-
-    public Integer getVoteCounter() {
-        return voteCounter;
-    }
-
-    public void setVoteCounter(Integer votes) {
-        this.voteCounter = votes;
     }
 
     public List<Meal> getMenu() {
@@ -39,10 +32,18 @@ public class Restaurant extends AbstractNamedEntity {
         this.menu = menu;
     }
 
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
+    }
+
     @Override
     public String toString() {
         return "Restaurant{" +
-                "votes=" + voteCounter +
+                "votes=" + votes +
                 ", menu=" + menu +
                 ", name='" + name + '\'' +
                 ", id=" + id +

@@ -38,7 +38,6 @@ public class UserService {
         user.setId(id);
         User oldUser = opt.get();
         user.setRegistered(oldUser.getRegistered());
-        user.setVote(oldUser.getVote());
         userRepository.save(user);
     }
 

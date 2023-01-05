@@ -4,6 +4,7 @@ import com.topjava.restaurant_voting.model.*;
 import com.topjava.restaurant_voting.repository.MealRepository;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import com.topjava.restaurant_voting.repository.UserRepository;
+import com.topjava.restaurant_voting.repository.VoteRepository;
 import com.topjava.restaurant_voting.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -23,9 +24,8 @@ public class InitiateUtil implements CommandLineRunner {
     private MealRepository mealRepository;
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    private VoteService voteService;
+    private VoteRepository voteRepository;
 
     public static final LocalTime VOTING_END_TIME = LocalTime.of(23, 0);
 
@@ -57,6 +57,8 @@ public class InitiateUtil implements CommandLineRunner {
     public static final Meal MEAL_8 =
             new Meal(null, "Wok", 180, new Restaurant(AbstractBaseEntity.START_SEQ + 5, REST_3.getName()));
 
+
+
     @Override
     public void run(String... args) {
         userRepository.save(GUEST);
@@ -73,7 +75,11 @@ public class InitiateUtil implements CommandLineRunner {
         mealRepository.save(MEAL_6);
         mealRepository.save(MEAL_7);
         mealRepository.save(MEAL_8);
-        voteService.makeVote(userRepository.findById(100001).get(), 100003);
-        voteService.makeVote(userRepository.findById(100002).get(), 100004);
+        Vote oldVote = new Vote(null, userRepository.findById(100001).get(),
+                restaurantRepository.findById(100003).get(), LocalDate.of(2023,1,1));
+        Vote newVote = new Vote(null, userRepository.findById(100002).get(),
+                restaurantRepository.findById(100004).get(), LocalDate.now());
+        voteRepository.save(oldVote);
+        voteRepository.save(newVote);
     }
 }
