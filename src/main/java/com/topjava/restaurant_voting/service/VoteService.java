@@ -9,7 +9,11 @@ import com.topjava.restaurant_voting.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
@@ -43,5 +47,20 @@ public class VoteService {
 //            Голосование уже завершено сегодня
             return false;
         }
+    }
+
+    public Map<String, Integer> getStatistic(LocalDate date) {
+        List<Vote> voteList = voteRepository.findAllByDate(date);
+        Map<String, Integer> result = new HashMap<>();
+        for (Vote vote: voteList) {
+            String restaurant_name = vote.getRestaurant().getName();
+            if (result.containsKey(restaurant_name)) {
+                //noinspection ConstantConditions
+                result.compute(restaurant_name, (key, counter) -> counter + 1);
+            } else {
+                result.put(restaurant_name, 1);
+            }
+        }
+        return result;
     }
 }

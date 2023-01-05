@@ -58,7 +58,6 @@ public class InitiateUtil implements CommandLineRunner {
             new Meal(null, "Wok", 180, new Restaurant(AbstractBaseEntity.START_SEQ + 5, REST_3.getName()));
 
 
-
     @Override
     public void run(String... args) {
         userRepository.save(GUEST);
@@ -76,7 +75,7 @@ public class InitiateUtil implements CommandLineRunner {
         mealRepository.save(MEAL_7);
         mealRepository.save(MEAL_8);
         Vote oldVote = new Vote(null, userRepository.findById(100001).get(),
-                restaurantRepository.findById(100003).get(), LocalDate.of(2023,1,1));
+                restaurantRepository.findById(100003).get(), LocalDate.of(2023, 1, 1));
         Vote newVote = new Vote(null, userRepository.findById(100002).get(),
                 restaurantRepository.findById(100004).get(), LocalDate.now());
         voteRepository.save(oldVote);

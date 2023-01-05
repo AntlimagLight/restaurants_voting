@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 import static com.topjava.restaurant_voting.exeption.ExceptionMassages.BAD_REQUEST_MASSAGE;
 import static com.topjava.restaurant_voting.service.VoteService.VOTE_ENTITY_NAME;
 import static com.topjava.restaurant_voting.util.InitiateUtil.VOTING_END_TIME;
@@ -35,6 +37,15 @@ public class VoteController {
             }
         } catch (NotExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
+        }
+    }
+
+    @GetMapping("/statistic")
+    public ResponseEntity viewStatistic (@RequestParam LocalDate date) {
+        try {
+            return ResponseEntity.ok(voteService.getStatistic(date));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
         }
