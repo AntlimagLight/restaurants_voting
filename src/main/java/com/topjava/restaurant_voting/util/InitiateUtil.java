@@ -5,7 +5,6 @@ import com.topjava.restaurant_voting.repository.MealRepository;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.repository.VoteRepository;
-import com.topjava.restaurant_voting.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class InitiateUtil implements CommandLineRunner {
     @Autowired
     private VoteRepository voteRepository;
 
-    public static final LocalTime VOTING_END_TIME = LocalTime.of(23, 0);
+    public static final LocalTime MAX_CHANGE_VOTE_TIME = LocalTime.of(11, 0);
 
     public static final User GUEST = new User(null, "Guest", "guest@gmail.com",
             "{noop}guest", LocalDate.of(2022, Calendar.DECEMBER, 10));
