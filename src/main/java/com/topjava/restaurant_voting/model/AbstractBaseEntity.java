@@ -1,9 +1,16 @@
 package com.topjava.restaurant_voting.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.util.Assert;
 
 @MappedSuperclass
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractBaseEntity {
     public static final int START_SEQ = 100000;
 
@@ -12,19 +19,8 @@ public abstract class AbstractBaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
     protected Integer id;
 
-    protected AbstractBaseEntity() {
-    }
-
     protected AbstractBaseEntity(Integer id) {
         this.id = id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public int id() {

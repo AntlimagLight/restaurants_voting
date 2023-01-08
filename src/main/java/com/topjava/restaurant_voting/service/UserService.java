@@ -7,6 +7,7 @@ import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.to.UserTo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,11 +16,13 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
+@Transactional(readOnly = true)
 public class UserService {
     public static final String USER_ENTITY_NAME = "User";
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional
     public void create(User user) throws AlreadyExistException {
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new AlreadyExistException(USER_ENTITY_NAME + " with this email");
@@ -30,6 +33,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void update(Integer id, User user) throws NotExistException {
         Optional<User> opt = userRepository.findById(id);
         if (opt.isEmpty()) {
@@ -57,6 +61,7 @@ public class UserService {
         return new UserTo(user);
     }
 
+    @Transactional
     public Integer delete(int id) throws NotExistException {
         if (userRepository.findById(id).isEmpty()) {
             throw new NotExistException(USER_ENTITY_NAME);

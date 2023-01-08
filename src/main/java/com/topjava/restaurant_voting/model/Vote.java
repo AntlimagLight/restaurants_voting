@@ -1,7 +1,9 @@
 package com.topjava.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -13,13 +15,14 @@ public class Vote {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
-
+    @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
+    @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate date;
 
     public Vote(Long id, User user, Restaurant restaurant, LocalDate date) {

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ import static com.topjava.restaurant_voting.util.InitiateUtil.MAX_CHANGE_VOTE_TI
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
+@Transactional(readOnly = true)
 public class VoteService {
     private static final Logger log = LoggerFactory.getLogger(VoteService.class);
     public static final String VOTE_ENTITY_NAME = "Vote";
@@ -31,6 +33,7 @@ public class VoteService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Transactional
     public Boolean makeVote(User user, Integer restaurant_id) {
         LocalDateTime now = LocalDateTime.now();
         Optional<Restaurant> opt = restaurantRepository.findById(restaurant_id);
@@ -57,7 +60,7 @@ public class VoteService {
     public Map<String, Integer> getStatistic(LocalDate date) {
         List<Vote> voteList = voteRepository.findAllByDate(date);
         Map<String, Integer> result = new HashMap<>();
-        for (Vote vote: voteList) {
+        for (Vote vote : voteList) {
             String restaurant_name = vote.getRestaurant().getName();
             if (result.containsKey(restaurant_name)) {
                 //noinspection ConstantConditions

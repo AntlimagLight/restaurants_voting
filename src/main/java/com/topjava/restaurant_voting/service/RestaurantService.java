@@ -6,17 +6,20 @@ import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
+@Transactional(readOnly = true)
 public class RestaurantService {
     public static final String RESTAURANT_ENTITY_NAME = "Restaurant";
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Transactional
     public void create(Restaurant restaurant) throws AlreadyExistException {
         if (restaurantRepository.findByName(restaurant.getName()) != null) {
             throw new AlreadyExistException(RESTAURANT_ENTITY_NAME);
@@ -24,6 +27,7 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
     }
 
+    @Transactional
     public void update(Integer id, Restaurant restaurant) throws NotExistException {
         if (restaurantRepository.findById(id).isEmpty()) {
             throw new NotExistException(RESTAURANT_ENTITY_NAME);
@@ -40,6 +44,7 @@ public class RestaurantService {
         return opt.get();
     }
 
+    @Transactional
     public Integer delete(int id) throws NotExistException {
         if (restaurantRepository.findById(id).isEmpty()) {
             throw new NotExistException(RESTAURANT_ENTITY_NAME);

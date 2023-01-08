@@ -2,10 +2,17 @@ package com.topjava.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Table(name = "restaurants")
 public class Restaurant extends AbstractNamedEntity {
 
@@ -17,27 +24,8 @@ public class Restaurant extends AbstractNamedEntity {
     @JsonIgnore
     private List<Meal> menu;
 
-    public Restaurant() {
-    }
-
     public Restaurant(Integer id, String name) {
         super(id, name);
-    }
-
-    public List<Meal> getMenu() {
-        return menu;
-    }
-
-    public void setMenu(List<Meal> menu) {
-        this.menu = menu;
-    }
-
-    public List<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(List<Vote> votes) {
-        this.votes = votes;
     }
 
     @Override

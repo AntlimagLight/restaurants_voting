@@ -7,6 +7,7 @@ import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.repository.MealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
+@Transactional(readOnly = true)
 public class MealService {
     public static final String MEAL_ENTITY_NAME = "Meal";
     @Autowired
@@ -21,6 +23,7 @@ public class MealService {
     @Autowired
     private RestaurantService restaurantService;
 
+    @Transactional
     public void create(Meal meal, Integer restaurant_id) throws AlreadyExistException {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
         if (mealRepository.findByRestaurantAndName(restaurant, meal.getName()) != null) {
@@ -30,6 +33,7 @@ public class MealService {
         mealRepository.save(meal);
     }
 
+    @Transactional
     public void update(Meal meal, Integer id, Integer restaurant_id) throws NotExistException {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
         if (mealRepository.findByRestaurantAndId(restaurant, id) == null) {
@@ -49,6 +53,7 @@ public class MealService {
         return meal;
     }
 
+    @Transactional
     public Integer delete(Integer id, Integer restaurant_id) throws NotExistException {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
         if (mealRepository.findByRestaurantAndId(restaurant, id) == null) {

@@ -30,7 +30,7 @@ public class VoteController {
     @PutMapping("/{restaurant_id}/vote")
     public ResponseEntity makeVote(@RequestParam Integer user_id, @PathVariable Integer restaurant_id) {
         try {
-            log.info(USER_ENTITY_NAME + " make vote for "+ RESTAURANT_ENTITY_NAME + " " + restaurant_id);
+            log.info(USER_ENTITY_NAME + " make vote for " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
             Boolean voteSuccess = voteService.makeVote(userRepository.findById(user_id).get(), restaurant_id);
             // Тут использовать авторизацию
             if (voteSuccess) {
@@ -49,7 +49,7 @@ public class VoteController {
     }
 
     @GetMapping("/statistic")
-    public ResponseEntity viewStatistic (@RequestParam LocalDate date) {
+    public ResponseEntity viewStatistic(@RequestParam LocalDate date) {
         try {
             log.info("view statistics for the " + date);
             return ResponseEntity.ok(voteService.getStatistic(date));
