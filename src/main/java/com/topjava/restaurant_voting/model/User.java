@@ -1,6 +1,7 @@
 package com.topjava.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -16,6 +17,8 @@ import org.springframework.util.CollectionUtils;
 import java.time.LocalDate;
 import java.util.*;
 
+import static com.topjava.restaurant_voting.config.WebSecurityConfig.PASSWORD_ENCODER;
+
 @Entity
 @Getter
 @Setter
@@ -27,10 +30,12 @@ public class User extends AbstractNamedEntity {
     @Email
     @NotBlank
     private String email;
+
     @NotBlank
     @Size(min = 3, max = 256)
     @Column(name = "password", nullable = false)
     private String password;
+
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -41,6 +46,7 @@ public class User extends AbstractNamedEntity {
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private Boolean enabled;
 
@@ -49,11 +55,11 @@ public class User extends AbstractNamedEntity {
     @JsonIgnore
     private List<Vote> votes;
 
-    public User(Integer id, String name, String email, String password, LocalDate registered, Role... roles) {
-        this(id, name, email, password, registered, Arrays.asList((roles)));
+    public User(Integer id, String name, String email, String password, LocalDate registered, Boolean enabled, Role... roles) {
+        this(id, name, email, password, registered, enabled, Arrays.asList((roles)));
     }
 
-    public User(Integer id, String name, String email, String password, LocalDate registered, Collection<Role> roles) {
+    public User(Integer id, String name, String email, String password, LocalDate registered, Boolean enabled, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
@@ -62,8 +68,17 @@ public class User extends AbstractNamedEntity {
         setRoles(roles);
     }
 
-    public User(Integer id, String name, String email, String password, LocalDate registered) {
-        this(id, name, email, password, registered, Collections.emptyList());
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+    @JsonProperty
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public User(Integer id, String name, String email, String password, LocalDate registered, Boolean enabled) {
+        this(id, name, email, password, registered, enabled, Collections.emptyList());
     }
 
     public void setRoles(Collection<Role> roles) {

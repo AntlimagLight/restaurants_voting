@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
+import static com.topjava.restaurant_voting.util.ValidationUtils.assertExistence;
+import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExistence;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
@@ -26,9 +28,8 @@ public class MealService {
     @Transactional
     public void create(Meal meal, Integer restaurant_id) throws AlreadyExistException {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
-        if (mealRepository.findByRestaurantAndName(restaurant, meal.getName()) != null) {
-            throw new AlreadyExistException("In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
-        }
+        assertNotExistence(mealRepository.findByRestaurantAndName(restaurant, meal.getName()),
+                "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         meal.setRestaurant(restaurant);
         mealRepository.save(meal);
     }
@@ -36,9 +37,8 @@ public class MealService {
     @Transactional
     public void update(Meal meal, Integer id, Integer restaurant_id) throws NotExistException {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
-        if (mealRepository.findByRestaurantAndId(restaurant, id) == null) {
-            throw new NotExistException("In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
-        }
+        assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
+                "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         meal.setId(id);
         meal.setRestaurant(restaurant);
         mealRepository.save(meal);
@@ -46,19 +46,15 @@ public class MealService {
 
     public Meal getById(Integer id, Integer restaurant_id) throws NotExistException {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
-        Meal meal = mealRepository.findByRestaurantAndId(restaurant, id);
-        if (meal == null) {
-            throw new NotExistException("In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
-        }
-        return meal;
+        return assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
+                "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
     }
 
     @Transactional
     public Integer delete(Integer id, Integer restaurant_id) throws NotExistException {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
-        if (mealRepository.findByRestaurantAndId(restaurant, id) == null) {
-            throw new NotExistException("In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
-        }
+        assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
+                "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         mealRepository.deleteById(id);
         return id;
     }

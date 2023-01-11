@@ -1,12 +1,15 @@
-package com.topjava.restaurant_voting.controller;
+package com.topjava.restaurant_voting.web.controller;
 
 import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.repository.UserRepository;
+import com.topjava.restaurant_voting.service.UserService;
 import com.topjava.restaurant_voting.service.VoteService;
+import com.topjava.restaurant_voting.web.AuthUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -25,18 +28,17 @@ public class VoteController {
     @Autowired
     private VoteService voteService;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @PutMapping("/{restaurant_id}/vote")
-    public ResponseEntity makeVote(@RequestParam Integer user_id, @PathVariable Integer restaurant_id) {
+    public ResponseEntity makeVote(@AuthenticationPrincipal AuthUser authUser, @PathVariable Integer restaurant_id) {
         try {
             log.info(USER_ENTITY_NAME + " make vote for " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
-            Boolean voteSuccess = voteService.makeVote(userRepository.findById(user_id).get(), restaurant_id);
-            // Тут использовать авторизацию
+            Boolean voteSuccess = voteService.makeVote(userService.getById(authUser.getId()), restaurant_id);
             if (voteSuccess) {
                 return ResponseEntity.ok(VOTE_ENTITY_NAME + " saved:\n");
             } else {
-                return ResponseEntity.ok("Voting time is out, you can vote between 0:00 and "
+                return ResponseEntity.ok("Voting change time is out, you can change you vote between 0:00 and "
                         + MAX_CHANGE_VOTE_TIME.toString());
             }
         } catch (NotExistException e) {

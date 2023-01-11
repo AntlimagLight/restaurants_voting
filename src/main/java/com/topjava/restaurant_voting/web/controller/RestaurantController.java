@@ -1,9 +1,9 @@
-package com.topjava.restaurant_voting.controller;
+package com.topjava.restaurant_voting.web.controller;
 
 import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
-import com.topjava.restaurant_voting.model.User;
-import com.topjava.restaurant_voting.service.UserService;
+import com.topjava.restaurant_voting.model.Restaurant;
+import com.topjava.restaurant_voting.service.RestaurantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,22 +11,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.topjava.restaurant_voting.exeption.ExceptionMassages.BAD_REQUEST_MASSAGE;
-import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
+import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection", "DuplicatedCode"})
 @RestController
-@RequestMapping("/admin/users")
-public class AdminUserController {
-    private static final Logger log = LoggerFactory.getLogger(AdminUserController.class);
+@RequestMapping("/admin/restaurant")
+public class RestaurantController {
+    private static final Logger log = LoggerFactory.getLogger(RestaurantController.class);
     @Autowired
-    private UserService userService;
+    private RestaurantService restaurantService;
 
     @PostMapping
-    public ResponseEntity createUser(@RequestBody User user) {
+    public ResponseEntity createRestaurant(@RequestBody Restaurant restaurant) {
         try {
-            log.info("create " + USER_ENTITY_NAME + " " + user.getEmail());
-            userService.create(user);
-            return ResponseEntity.ok(USER_ENTITY_NAME + " saved:\n" + user);
+            log.info("create " + RESTAURANT_ENTITY_NAME + " " + restaurant.getName());
+            restaurantService.create(restaurant);
+            return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " saved:\n" + restaurant);
         } catch (AlreadyExistException e) {
             log.warn(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -37,11 +37,11 @@ public class AdminUserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateUser(@RequestBody User user, @PathVariable Integer id) {
+    public ResponseEntity updateRestaurant(@RequestBody Restaurant restaurant, @PathVariable Integer id) {
         try {
-            log.info("update " + USER_ENTITY_NAME + " " + user.getEmail());
-            userService.update(id, user);
-            return ResponseEntity.ok(USER_ENTITY_NAME + " updated:\n" + user);
+            log.info("update " + RESTAURANT_ENTITY_NAME + " " + restaurant.getName());
+            restaurantService.update(id, restaurant);
+            return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " updated:\n" + restaurant);
         } catch (NotExistException e) {
             log.warn(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -52,24 +52,10 @@ public class AdminUserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getUserByID(@PathVariable Integer id) {
+    public ResponseEntity getRestaurant(@PathVariable Integer id) {
         try {
-            log.info("get " + USER_ENTITY_NAME + " " + id);
-            return ResponseEntity.ok(userService.getById(id));
-        } catch (NotExistException e) {
-            log.warn(e.getMessage());
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            log.warn(BAD_REQUEST_MASSAGE);
-            return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
-        }
-    }
-
-    @GetMapping
-    public ResponseEntity getUserByEmail(@RequestParam String email) {
-        try {
-            log.info("get " + USER_ENTITY_NAME + " " + email);
-            return ResponseEntity.ok(userService.getByEmail(email));
+            log.info("get " + RESTAURANT_ENTITY_NAME + " " + id);
+            return ResponseEntity.ok(restaurantService.getById(id));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -80,10 +66,10 @@ public class AdminUserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable Integer id) {
+    public ResponseEntity deleteRestaurant(@PathVariable Integer id) {
         try {
-            log.info("delete " + USER_ENTITY_NAME + " " + id);
-            return ResponseEntity.ok(USER_ENTITY_NAME + " deleted:\n" + userService.delete(id));
+            log.info("delete " + RESTAURANT_ENTITY_NAME + " " + id);
+            return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " deleted:\n" + restaurantService.delete(id));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -93,11 +79,11 @@ public class AdminUserController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity getAll() {
         try {
-            log.info("get all " + USER_ENTITY_NAME);
-            return ResponseEntity.ok(userService.getAll());
+            log.info("get all " + RESTAURANT_ENTITY_NAME);
+            return ResponseEntity.ok(restaurantService.getAll());
         } catch (Exception e) {
             log.warn(BAD_REQUEST_MASSAGE);
             return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);

@@ -28,12 +28,12 @@ public class InitiateUtil implements CommandLineRunner {
 
     public static final LocalTime MAX_CHANGE_VOTE_TIME = LocalTime.of(11, 0);
 
-    public static final User GUEST = new User(null, "Guest", "guest@gmail.com",
-            "{noop}guest", LocalDate.of(2022, Calendar.DECEMBER, 10));
-    public static final User USER = new User(null, "User", "user@yandex.ru",
-            "{noop}password", LocalDate.of(2022, Calendar.DECEMBER, 15), Role.USER);
+    public static final User USER1 = new User(null, "User1", "user_zero@yandex.ru",
+            "pass12", LocalDate.of(2022, Calendar.DECEMBER, 10), true,  Role.USER);
+    public static final User USER2 = new User(null, "User2", "user@yandex.ru",
+            "password", LocalDate.of(2022, Calendar.DECEMBER, 15), true, Role.USER);
     public static final User ADMIN = new User(null, "Admin", "admin@gmail.com",
-            "{noop}admin", LocalDate.of(2022, Calendar.DECEMBER, 20), Role.USER, Role.ADMIN);
+            "admin", LocalDate.of(2022, Calendar.DECEMBER, 20), true, Role.USER, Role.ADMIN);
 
     public static final Restaurant REST_1 = new Restaurant(null, "Tasty Island");
     public static final Restaurant REST_2 = new Restaurant(null, "Burger Master");
@@ -59,9 +59,9 @@ public class InitiateUtil implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        userRepository.save(GUEST);
-        userRepository.save(USER);
-        userRepository.save(ADMIN);
+        userRepository.save(UserUtils.prepareToSave(USER1));
+        userRepository.save(UserUtils.prepareToSave(USER2));
+        userRepository.save(UserUtils.prepareToSave(ADMIN));
         restaurantRepository.save(REST_1);
         restaurantRepository.save(REST_2);
         restaurantRepository.save(REST_3);
@@ -73,11 +73,20 @@ public class InitiateUtil implements CommandLineRunner {
         mealRepository.save(MEAL_6);
         mealRepository.save(MEAL_7);
         mealRepository.save(MEAL_8);
-        Vote oldVote = new Vote(null, userRepository.findById(100001).get(),
+        Vote oldVote1 = new Vote(null, userRepository.findById(100000).get(),
+                restaurantRepository.findById(100005).get(), LocalDate.of(2022, 6, 10));
+        Vote oldVote2 = new Vote(null, userRepository.findById(100001).get(),
                 restaurantRepository.findById(100003).get(), LocalDate.of(2023, 1, 1));
-        Vote newVote = new Vote(null, userRepository.findById(100002).get(),
+        Vote newVote1 = new Vote(null, userRepository.findById(100000).get(),
                 restaurantRepository.findById(100004).get(), LocalDate.now());
-        voteRepository.save(oldVote);
-        voteRepository.save(newVote);
+        Vote newVote2 = new Vote(null, userRepository.findById(100001).get(),
+                restaurantRepository.findById(100004).get(), LocalDate.now());
+        Vote newVote3 = new Vote(null, userRepository.findById(100002).get(),
+                restaurantRepository.findById(100003).get(), LocalDate.now());
+        voteRepository.save(oldVote1);
+        voteRepository.save(oldVote2);
+        voteRepository.save(newVote1);
+        voteRepository.save(newVote2);
+        voteRepository.save(newVote3);
     }
 }

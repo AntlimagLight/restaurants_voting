@@ -5,12 +5,13 @@ import com.topjava.restaurant_voting.model.Restaurant;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MealRepository extends CrudRepository<Meal, Integer> {
 
-    Meal findByRestaurantAndName(Restaurant restaurant, String name);
+    Optional<Meal> findByRestaurantAndName(Restaurant restaurant, String name);
 
-    Meal findByRestaurantAndId(Restaurant restaurant, Integer id);
+    Optional<Meal> findByRestaurantAndId(Restaurant restaurant, Integer id);
 
     List<Meal> findAllByRestaurant(Restaurant restaurant);
 

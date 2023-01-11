@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.topjava.restaurant_voting.util.ValidationUtils.assertExistence;
+import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExistence;
+
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
 @Transactional(readOnly = true)
@@ -21,34 +24,25 @@ public class RestaurantService {
 
     @Transactional
     public void create(Restaurant restaurant) throws AlreadyExistException {
-        if (restaurantRepository.findByName(restaurant.getName()) != null) {
-            throw new AlreadyExistException(RESTAURANT_ENTITY_NAME);
-        }
+        assertNotExistence(restaurantRepository.findByName(restaurant.getName()),
+                RESTAURANT_ENTITY_NAME + " with this name");
         restaurantRepository.save(restaurant);
     }
 
     @Transactional
     public void update(Integer id, Restaurant restaurant) throws NotExistException {
-        if (restaurantRepository.findById(id).isEmpty()) {
-            throw new NotExistException(RESTAURANT_ENTITY_NAME);
-        }
+        assertExistence(restaurantRepository.findById(id), RESTAURANT_ENTITY_NAME);
         restaurant.setId(id);
         restaurantRepository.save(restaurant);
     }
 
     public Restaurant getById(Integer id) throws NotExistException {
-        Optional<Restaurant> opt = restaurantRepository.findById(id);
-        if (opt.isEmpty()) {
-            throw new NotExistException(RESTAURANT_ENTITY_NAME);
-        }
-        return opt.get();
+        return assertExistence(restaurantRepository.findById(id), RESTAURANT_ENTITY_NAME);
     }
 
     @Transactional
     public Integer delete(int id) throws NotExistException {
-        if (restaurantRepository.findById(id).isEmpty()) {
-            throw new NotExistException(RESTAURANT_ENTITY_NAME);
-        }
+        assertExistence(restaurantRepository.findById(id), RESTAURANT_ENTITY_NAME);
         restaurantRepository.deleteById(id);
         return id;
     }

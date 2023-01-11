@@ -4,15 +4,16 @@ import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.repository.UserRepository;
-import com.topjava.restaurant_voting.to.UserTo;
+import com.topjava.restaurant_voting.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static com.topjava.restaurant_voting.util.ValidationUtils.assertExistence;
+import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExistence;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
@@ -24,57 +25,46 @@ public class UserService {
 
     @Transactional
     public void create(User user) throws AlreadyExistException {
-        if (userRepository.findByEmail(user.getEmail()) != null) {
-            throw new AlreadyExistException(USER_ENTITY_NAME + " with this email");
-        }
+        assertNotExistence(userRepository.findByEmail(user.getEmail()), USER_ENTITY_NAME + " with this email");
         user.setEnabled(true);
         LocalDateTime now = LocalDateTime.now();
         user.setRegistered(now.toLocalDate());
-        userRepository.save(user);
+        userRepository.save(UserUtils.prepareToSave(user));
     }
 
     @Transactional
     public void update(Integer id, User user) throws NotExistException {
-        Optional<User> opt = userRepository.findById(id);
-        if (opt.isEmpty()) {
-            throw new NotExistException(USER_ENTITY_NAME);
-        }
+        User oldUser = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         user.setId(id);
-        User oldUser = opt.get();
         user.setRegistered(oldUser.getRegistered());
+        user.setEnabled(oldUser.getEnabled());
+        userRepository.save(UserUtils.prepareToSave(user));
+    }
+
+    @Transactional
+    public void switchEnable(Integer id) throws NotExistException {
+        User user = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
+        user.setEnabled(!user.getEnabled());
         userRepository.save(user);
     }
 
-    public UserTo getById(Integer id) throws NotExistException {
-        Optional<User> opt = userRepository.findById(id);
-        if (opt.isEmpty()) {
-            throw new NotExistException(USER_ENTITY_NAME);
-        }
-        return new UserTo(opt.get());
+    public User getById(Integer id) throws NotExistException {
+        return assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
     }
 
-    public UserTo getByEmail(String email) throws NotExistException {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new NotExistException(USER_ENTITY_NAME);
-        }
-        return new UserTo(user);
+    public User getByEmail(String email) throws NotExistException {
+        return assertExistence(userRepository.findByEmail(email), USER_ENTITY_NAME);
     }
 
     @Transactional
     public Integer delete(int id) throws NotExistException {
-        if (userRepository.findById(id).isEmpty()) {
-            throw new NotExistException(USER_ENTITY_NAME);
-        }
+        assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         userRepository.deleteById(id);
         return id;
     }
 
-    public List<UserTo> getAll() {
-        List<User> srcList = (List<User>) userRepository.findAll();
-        return srcList.stream()
-                .map(UserTo::new)
-                .collect(Collectors.toList());
+    public List<User> getAll() {
+        return (List<User>) userRepository.findAll();
     }
 
 }
