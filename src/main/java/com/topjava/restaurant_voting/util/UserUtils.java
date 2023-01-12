@@ -43,7 +43,7 @@ public class UserUtils {
         return user;
     }
 
-    public static List<SimpleGrantedAuthority> convertToAuthorities (Set<Role> roles) {
+    public static List<SimpleGrantedAuthority> convertToAuthorities(Set<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority())).toList();
     }
 }

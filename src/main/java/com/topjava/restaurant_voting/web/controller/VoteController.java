@@ -1,7 +1,6 @@
 package com.topjava.restaurant_voting.web.controller;
 
 import com.topjava.restaurant_voting.exeption.NotExistException;
-import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.service.UserService;
 import com.topjava.restaurant_voting.service.VoteService;
 import com.topjava.restaurant_voting.web.AuthUser;

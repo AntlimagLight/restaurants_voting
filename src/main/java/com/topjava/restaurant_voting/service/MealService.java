@@ -6,6 +6,7 @@ import com.topjava.restaurant_voting.model.Meal;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.repository.MealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +45,7 @@ public class MealService {
         mealRepository.save(meal);
     }
 
+    @Cacheable(cacheNames = "mealCache", key = "#id")
     public Meal getById(Integer id, Integer restaurant_id) throws NotExistException {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
         return assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
@@ -59,6 +61,7 @@ public class MealService {
         return id;
     }
 
+    @Cacheable(cacheNames = "menuCache", key = "#restaurant_id")
     public List<Meal> getRestaurantMenu(Integer restaurant_id) {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
         return mealRepository.findAllByRestaurant(restaurant);

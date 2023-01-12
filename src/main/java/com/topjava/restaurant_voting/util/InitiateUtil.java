@@ -29,7 +29,7 @@ public class InitiateUtil implements CommandLineRunner {
     public static final LocalTime MAX_CHANGE_VOTE_TIME = LocalTime.of(11, 0);
 
     public static final User USER1 = new User(null, "User1", "user_zero@yandex.ru",
-            "pass12", LocalDate.of(2022, Calendar.DECEMBER, 10), true,  Role.USER);
+            "pass12", LocalDate.of(2022, Calendar.DECEMBER, 10), true, Role.USER);
     public static final User USER2 = new User(null, "User2", "user@yandex.ru",
             "password", LocalDate.of(2022, Calendar.DECEMBER, 15), true, Role.USER);
     public static final User ADMIN = new User(null, "Admin", "admin@gmail.com",
@@ -73,6 +73,7 @@ public class InitiateUtil implements CommandLineRunner {
         mealRepository.save(MEAL_6);
         mealRepository.save(MEAL_7);
         mealRepository.save(MEAL_8);
+
         Vote oldVote1 = new Vote(null, userRepository.findById(100000).get(),
                 restaurantRepository.findById(100005).get(), LocalDate.of(2022, 6, 10));
         Vote oldVote2 = new Vote(null, userRepository.findById(100001).get(),
@@ -83,6 +84,7 @@ public class InitiateUtil implements CommandLineRunner {
                 restaurantRepository.findById(100004).get(), LocalDate.now());
         Vote newVote3 = new Vote(null, userRepository.findById(100002).get(),
                 restaurantRepository.findById(100003).get(), LocalDate.now());
+
         voteRepository.save(oldVote1);
         voteRepository.save(oldVote2);
         voteRepository.save(newVote1);

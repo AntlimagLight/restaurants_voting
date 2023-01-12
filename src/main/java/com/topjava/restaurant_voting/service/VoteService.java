@@ -1,6 +1,5 @@
 package com.topjava.restaurant_voting.service;
 
-import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.model.Vote;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 import static com.topjava.restaurant_voting.util.InitiateUtil.MAX_CHANGE_VOTE_TIME;

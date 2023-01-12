@@ -3,11 +3,9 @@ package com.topjava.restaurant_voting.web;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.topjava.restaurant_voting.model.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
 import static com.topjava.restaurant_voting.util.UserUtils.convertToAuthorities;
 
@@ -20,7 +18,7 @@ public class AuthUser implements UserDetails {
     @JsonIgnore
     private String password;
     private Boolean enabled;
-    private Collection <? extends GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities;
 
     public AuthUser(Integer id, String userName, String email, String password, Boolean enabled, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;

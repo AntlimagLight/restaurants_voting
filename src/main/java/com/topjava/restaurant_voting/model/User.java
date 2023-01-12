@@ -1,7 +1,6 @@
 package com.topjava.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -16,8 +15,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.util.*;
-
-import static com.topjava.restaurant_voting.config.WebSecurityConfig.PASSWORD_ENCODER;
 
 @Entity
 @Getter
@@ -72,6 +69,7 @@ public class User extends AbstractNamedEntity {
     public String getPassword() {
         return password;
     }
+
     @JsonProperty
     public void setPassword(String password) {
         this.password = password;

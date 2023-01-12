@@ -1,4 +1,4 @@
-package com.topjava.restaurant_voting.web.controller;
+package com.topjava.restaurant_voting.web.controller.restaurant;
 
 import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
@@ -16,8 +16,8 @@ import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection", "DuplicatedCode"})
 @RestController
 @RequestMapping("/admin/restaurant")
-public class RestaurantController {
-    private static final Logger log = LoggerFactory.getLogger(RestaurantController.class);
+public class AdminRestaurantController {
+    private static final Logger log = LoggerFactory.getLogger(AdminRestaurantController.class);
     @Autowired
     private RestaurantService restaurantService;
 
@@ -36,11 +36,11 @@ public class RestaurantController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity updateRestaurant(@RequestBody Restaurant restaurant, @PathVariable Integer id) {
+    @PutMapping("/{restaurant_id}")
+    public ResponseEntity updateRestaurant(@RequestBody Restaurant restaurant, @PathVariable Integer restaurant_id) {
         try {
             log.info("update " + RESTAURANT_ENTITY_NAME + " " + restaurant.getName());
-            restaurantService.update(id, restaurant);
+            restaurantService.update(restaurant_id, restaurant);
             return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " updated:\n" + restaurant);
         } catch (NotExistException e) {
             log.warn(e.getMessage());
@@ -51,39 +51,14 @@ public class RestaurantController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity getRestaurant(@PathVariable Integer id) {
+    @DeleteMapping("/{restaurant_id}")
+    public ResponseEntity deleteRestaurant(@PathVariable Integer restaurant_id) {
         try {
-            log.info("get " + RESTAURANT_ENTITY_NAME + " " + id);
-            return ResponseEntity.ok(restaurantService.getById(id));
+            log.info("delete " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
+            return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " deleted:\n" + restaurantService.delete(restaurant_id));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            log.warn(BAD_REQUEST_MASSAGE);
-            return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteRestaurant(@PathVariable Integer id) {
-        try {
-            log.info("delete " + RESTAURANT_ENTITY_NAME + " " + id);
-            return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " deleted:\n" + restaurantService.delete(id));
-        } catch (NotExistException e) {
-            log.warn(e.getMessage());
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            log.warn(BAD_REQUEST_MASSAGE);
-            return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
-        }
-    }
-
-    @GetMapping
-    public ResponseEntity getAll() {
-        try {
-            log.info("get all " + RESTAURANT_ENTITY_NAME);
-            return ResponseEntity.ok(restaurantService.getAll());
         } catch (Exception e) {
             log.warn(BAD_REQUEST_MASSAGE);
             return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
