@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.topjava.restaurant_voting.config.WebSecurityConfig.PASSWORD_ENCODER;
 
@@ -21,12 +22,6 @@ public class UserUtils {
 
     static {
         STARTING_ROLES.add(Role.USER);
-    }
-
-    public static void assureRoleImmutability(User user, Collection<? extends GrantedAuthority> roles) {
-        if (!convertToAuthorities(user.getRoles()).equals(roles)) {
-            throw new IllegalRequestDataException(user.getEmail() + " must has next roles:\n " + roles);
-        }
     }
 
     public static void assureIdConsistent(User user, int id) {
@@ -43,7 +38,21 @@ public class UserUtils {
         return user;
     }
 
+    public Role stringToRole(String string) {
+        return switch (string) {
+            case ("ROLE_USER") -> Role.USER;
+            case ("ROLE_ADMIN") -> Role.ADMIN;
+            default -> null;
+        };
+    }
+
+    public static Set<Role> convertToRoles(Collection<? extends GrantedAuthority> authorities) {
+        return authorities.stream().map(authority -> stringToRole(authority.getAuthority())).collect(Collectors.toSet());
+    }
+
     public static List<SimpleGrantedAuthority> convertToAuthorities(Set<Role> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority())).toList();
     }
+
+
 }

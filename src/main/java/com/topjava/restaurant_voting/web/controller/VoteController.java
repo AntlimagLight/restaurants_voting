@@ -29,7 +29,7 @@ public class VoteController {
     @Autowired
     private UserService userService;
 
-    @PutMapping("/{restaurant_id}/vote")
+    @PostMapping("/{restaurant_id}/vote")
     public ResponseEntity makeVote(@AuthenticationPrincipal AuthUser authUser, @PathVariable Integer restaurant_id) {
         try {
             log.info(USER_ENTITY_NAME + " make vote for " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);

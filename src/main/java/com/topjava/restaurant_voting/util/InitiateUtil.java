@@ -77,18 +77,15 @@ public class InitiateUtil implements CommandLineRunner {
         Vote oldVote1 = new Vote(null, userRepository.findById(100000).get(),
                 restaurantRepository.findById(100005).get(), LocalDate.of(2022, 6, 10));
         Vote oldVote2 = new Vote(null, userRepository.findById(100001).get(),
-                restaurantRepository.findById(100003).get(), LocalDate.of(2023, 1, 1));
-        Vote newVote1 = new Vote(null, userRepository.findById(100000).get(),
+                restaurantRepository.findById(100003).get(), LocalDate.of(2022, 6, 10));
+        Vote newVote1 = new Vote(null, userRepository.findById(100001).get(),
                 restaurantRepository.findById(100004).get(), LocalDate.now());
-        Vote newVote2 = new Vote(null, userRepository.findById(100001).get(),
-                restaurantRepository.findById(100004).get(), LocalDate.now());
-        Vote newVote3 = new Vote(null, userRepository.findById(100002).get(),
+        Vote newVote2 = new Vote(null, userRepository.findById(100002).get(),
                 restaurantRepository.findById(100003).get(), LocalDate.now());
 
         voteRepository.save(oldVote1);
         voteRepository.save(oldVote2);
         voteRepository.save(newVote1);
         voteRepository.save(newVote2);
-        voteRepository.save(newVote3);
     }
 }

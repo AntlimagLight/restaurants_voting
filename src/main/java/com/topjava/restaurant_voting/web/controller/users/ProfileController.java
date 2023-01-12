@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
 import static com.topjava.restaurant_voting.util.UserUtils.assureIdConsistent;
-import static com.topjava.restaurant_voting.util.UserUtils.assureRoleImmutability;
+import static com.topjava.restaurant_voting.util.UserUtils.convertToRoles;
 
 @SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "rawtypes"})
 @RestController
@@ -32,14 +32,15 @@ public class ProfileController {
     @DeleteMapping
     public ResponseEntity delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("delete from profile " + USER_ENTITY_NAME + " " + authUser.getEmail());
-        return ResponseEntity.ok(userService.delete(authUser.getId()));
+        return ResponseEntity.ok("profile deleted " + userService.delete(authUser.getId()));
     }
 
     @PutMapping
-    public void update(@RequestBody User user, @AuthenticationPrincipal AuthUser authUser) {
+    public ResponseEntity update(@RequestBody User user, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update from profile " + USER_ENTITY_NAME + " " + authUser.getEmail());
         assureIdConsistent(user, authUser.getId());
-        assureRoleImmutability(user, authUser.getAuthorities());
+        user.setRoles(convertToRoles(authUser.getAuthorities()));
         userService.update(authUser.getId(), user);
+        return ResponseEntity.ok("profile updated");
     }
 }
