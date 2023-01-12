@@ -10,12 +10,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Calendar;
 
 @SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "OptionalGetWithoutIsPresent"})
 @Service
-public class InitiateUtil implements CommandLineRunner {
+public class InitiateDataUtil implements CommandLineRunner {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
@@ -25,8 +24,6 @@ public class InitiateUtil implements CommandLineRunner {
     private UserRepository userRepository;
     @Autowired
     private VoteRepository voteRepository;
-
-    public static final LocalTime MAX_CHANGE_VOTE_TIME = LocalTime.of(11, 0);
 
     public static final User USER1 = new User(null, "User1", "user_zero@yandex.ru",
             "pass12", LocalDate.of(2022, Calendar.DECEMBER, 10), true, Role.USER);

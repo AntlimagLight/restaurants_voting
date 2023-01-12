@@ -17,7 +17,7 @@ import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
 @RestController
-@RequestMapping("/admin/restaurant/{restaurant_id}")
+@RequestMapping("/admin/restaurant/{restaurant_id}/menu")
 public class AdminMealController {
     private static final Logger log = LoggerFactory.getLogger(AdminMealController.class);
     @Autowired
@@ -39,7 +39,7 @@ public class AdminMealController {
         }
     }
 
-    @PutMapping("/menu/{meal_id}")
+    @PutMapping("/{meal_id}")
     public ResponseEntity updateMeal(@RequestBody Meal meal, @PathVariable Integer restaurant_id, @PathVariable Integer meal_id) {
         try {
             log.info("update " + MEAL_ENTITY_NAME + " " + meal.getName() +
@@ -55,7 +55,7 @@ public class AdminMealController {
         }
     }
 
-    @DeleteMapping("/menu/{meal_id}")
+    @DeleteMapping("/{meal_id}")
     public ResponseEntity deleteRestaurant(@PathVariable Integer restaurant_id, @PathVariable Integer meal_id) {
         try {
             log.info("delete " + MEAL_ENTITY_NAME + " " + meal_id +

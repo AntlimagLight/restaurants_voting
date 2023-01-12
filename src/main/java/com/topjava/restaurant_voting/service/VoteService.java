@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
-import static com.topjava.restaurant_voting.util.InitiateUtil.MAX_CHANGE_VOTE_TIME;
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertExistence;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
@@ -27,6 +27,7 @@ import static com.topjava.restaurant_voting.util.ValidationUtils.assertExistence
 public class VoteService {
     private static final Logger log = LoggerFactory.getLogger(VoteService.class);
     public static final String VOTE_ENTITY_NAME = "Vote";
+    public static final LocalTime MAX_CHANGE_VOTE_TIME = LocalTime.of(11, 0);
     @Autowired
     private VoteRepository voteRepository;
     @Autowired

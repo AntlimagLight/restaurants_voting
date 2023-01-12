@@ -51,7 +51,7 @@ public class AdminUserController {
         }
     }
 
-    @PutMapping("/{id}/enable")
+    @PutMapping("/{id}/block")
     public ResponseEntity SwitchEnabled(@PathVariable Integer id) {
         try {
             log.info("switch enabled for " + USER_ENTITY_NAME + " " + id);

@@ -16,8 +16,9 @@ import java.time.LocalDate;
 import static com.topjava.restaurant_voting.exeption.ExceptionMassages.BAD_REQUEST_MASSAGE;
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
+import static com.topjava.restaurant_voting.service.VoteService.MAX_CHANGE_VOTE_TIME;
 import static com.topjava.restaurant_voting.service.VoteService.VOTE_ENTITY_NAME;
-import static com.topjava.restaurant_voting.util.InitiateUtil.MAX_CHANGE_VOTE_TIME;
+
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
 @RestController
