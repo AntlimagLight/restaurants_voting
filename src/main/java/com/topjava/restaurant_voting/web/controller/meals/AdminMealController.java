@@ -17,7 +17,7 @@ import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
 @RestController
-@RequestMapping("/admin/restaurant/{restaurant_id}/menu")
+@RequestMapping("/admin/restaurants/{restaurant_id}/menu")
 public class AdminMealController {
     private static final Logger log = LoggerFactory.getLogger(AdminMealController.class);
     @Autowired

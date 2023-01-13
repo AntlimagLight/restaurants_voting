@@ -6,6 +6,7 @@ import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +49,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Cacheable(cacheNames = "userCache", key = "#id")
     public User getById(Integer id) throws NotExistException {
         return assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
     }

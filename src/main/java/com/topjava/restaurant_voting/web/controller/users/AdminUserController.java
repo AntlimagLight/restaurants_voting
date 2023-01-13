@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.topjava.restaurant_voting.exeption.ExceptionMassages.BAD_REQUEST_MASSAGE;
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
+import static com.topjava.restaurant_voting.util.UserUtils.assureDefaultRole;
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection", "DuplicatedCode"})
 @RestController
@@ -25,7 +26,7 @@ public class AdminUserController {
     public ResponseEntity createUser(@RequestBody User user) {
         try {
             log.info("create " + USER_ENTITY_NAME + " " + user.getEmail());
-            userService.create(user);
+            userService.create(assureDefaultRole(user));
             return ResponseEntity.ok(USER_ENTITY_NAME + " saved:\n" + user.getEmail());
         } catch (AlreadyExistException e) {
             log.warn(e.getMessage());
@@ -40,7 +41,7 @@ public class AdminUserController {
     public ResponseEntity updateUser(@RequestBody User user, @PathVariable Integer id) {
         try {
             log.info("update " + USER_ENTITY_NAME + " " + user.getEmail());
-            userService.update(id, user);
+            userService.update(id, assureDefaultRole(user));
             return ResponseEntity.ok(USER_ENTITY_NAME + " updated:\n" + user.getEmail());
         } catch (NotExistException e) {
             log.warn(e.getMessage());

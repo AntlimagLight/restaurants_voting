@@ -16,7 +16,7 @@ import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection", "DuplicatedCode"})
 @RestController
-@RequestMapping("/user/restaurant")
+@RequestMapping("/user/restaurants")
 public class UserRestaurantController {
     private static final Logger log = LoggerFactory.getLogger(UserRestaurantController.class);
     @Autowired

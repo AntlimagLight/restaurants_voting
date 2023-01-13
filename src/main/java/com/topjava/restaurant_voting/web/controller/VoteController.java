@@ -22,7 +22,7 @@ import static com.topjava.restaurant_voting.service.VoteService.VOTE_ENTITY_NAME
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
 @RestController
-@RequestMapping("/user/restaurant")
+@RequestMapping("/user/restaurants")
 public class VoteController {
     private static final Logger log = LoggerFactory.getLogger(VoteController.class);
     @Autowired
@@ -36,7 +36,7 @@ public class VoteController {
             log.info(USER_ENTITY_NAME + " make vote for " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
             Boolean voteSuccess = voteService.makeVote(userService.getById(authUser.getId()), restaurant_id);
             if (voteSuccess) {
-                return ResponseEntity.ok(VOTE_ENTITY_NAME + " saved:\n");
+                return ResponseEntity.ok(VOTE_ENTITY_NAME + " saved");
             } else {
                 return ResponseEntity.ok("Voting change time is out, you can change you vote between 0:00 and "
                         + MAX_CHANGE_VOTE_TIME.toString());

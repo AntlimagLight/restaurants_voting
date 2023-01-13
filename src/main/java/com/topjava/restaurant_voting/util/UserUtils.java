@@ -32,6 +32,16 @@ public class UserUtils {
         }
     }
 
+    public static User assureDefaultRole(User user) {
+        Set<Role> roles = user.getRoles();
+        if (roles == null || roles.isEmpty()) {
+            roles = new HashSet<>();
+            roles.add(Role.USER);
+            user.setRoles(roles);
+        }
+        return user;
+    }
+
     public static User prepareToSave(User user) {
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
         user.setEmail(user.getEmail().toLowerCase());
