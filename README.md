@@ -9,6 +9,7 @@ Designed by [AntimagLight](https://github.com/AntlimagLight)
 ------------------
 - Stack: [JDK 17](http://jdk.java.net/17/), [Maven](https://maven.apache.org/), Spring Boot 3.0 (web, datajpa, validation, security, cache, tests), Lombok, H2, [SoapUI](https://www.soapui.org/).
 - Run: `mvn spring-boot:run` in root directory.
+
 ------------------
 ##  _Technical requirement_ 
 Design and implement a REST API using Hibernate/Spring/SpringMVC (Spring-Boot preferred!) **without frontend**.
@@ -31,6 +32,7 @@ As a result, provide a link to GitHub repository. It should contain the code, RE
 
 P.S.: Make sure everything works with the latest version that is on github :)  
 P.P.S.: Assume that your API will be used by a frontend developer to build frontend on top of that.
+
 ------------------
 ## _REST API documentation_
 ```
@@ -60,6 +62,7 @@ Registers a user and adds it to the database. The user will automatically be ass
 ```
 **Test:**
 ```curl -XPOST -H "Content-type: application/json" -d "{\"name\": \"RegistratedUser\", \"email\": \"reguser12@new.ru\", \"password\": \"regpass\"}" "http://localhost:8080/registration"```
+
 ------------------
 #### _USER API_
 
@@ -122,6 +125,7 @@ Changes the data of an authorized user in the database.
 Removes an authorized user from the database.
 **Tests:**
 ```curl -XDELETE -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/profile"```
+
 ------------------
 #### _ADMIN API_
 
