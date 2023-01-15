@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 
 import static com.topjava.restaurant_voting.model.AbstractBaseEntity.START_SEQ;
 import static com.topjava.restaurant_voting.testutils.TestData.*;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -46,4 +46,5 @@ public class ProfileControllerTest extends RestaurantVotingApplicationTests {
                 .andExpect(status().isOk());
         USER_MATCHER.assertMatch(userRepository.findById(START_SEQ).get(), setIdForTests(UPD_USER, START_SEQ));
     }
+
 }

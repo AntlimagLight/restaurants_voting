@@ -2,11 +2,9 @@ package com.topjava.restaurant_voting.testutils;
 
 import com.topjava.restaurant_voting.util.JsonUtil;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 import java.util.function.BiConsumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,12 +20,6 @@ public class MatcherFactory {
 
     public static <T> Matcher<T> usingAssertions(Class<T> clazz, BiConsumer<T, T> assertion, BiConsumer<Iterable<T>, Iterable<T>> iterableAssertion) {
         return new Matcher<>(clazz, assertion, iterableAssertion);
-    }
-
-    public static <T> Matcher<T> usingEqualsComparator(Class<T> clazz) {
-        return usingAssertions(clazz,
-                (a, e) -> assertThat(a).isEqualTo(e),
-                (a, e) -> assertThat(a).isEqualTo(e));
     }
 
     public static <T> Matcher<T> usingIgnoringFieldsComparator(Class<T> clazz, String... fieldsToIgnore) {
@@ -51,11 +43,6 @@ public class MatcherFactory {
             assertion.accept(actual, expected);
         }
 
-        @SafeVarargs
-        public final void assertMatch(Iterable<T> actual, T... expected) {
-            assertMatch(actual, List.of(expected));
-        }
-
         public void assertMatch(Iterable<T> actual, Iterable<T> expected) {
             iterableAssertion.accept(actual, expected);
         }
@@ -64,17 +51,8 @@ public class MatcherFactory {
             return result -> assertMatch(JsonUtil.readValue(getContent(result), clazz), expected);
         }
 
-        @SafeVarargs
-        public final ResultMatcher contentJson(T... expected) {
-            return contentJson(List.of(expected));
-        }
-
         public ResultMatcher contentJson(Iterable<T> expected) {
             return result -> assertMatch(JsonUtil.readValues(getContent(result), clazz), expected);
-        }
-
-        public T readFromJson(ResultActions action) throws UnsupportedEncodingException {
-            return JsonUtil.readValue(getContent(action.andReturn()), clazz);
         }
 
         private static String getContent(MvcResult result) throws UnsupportedEncodingException {

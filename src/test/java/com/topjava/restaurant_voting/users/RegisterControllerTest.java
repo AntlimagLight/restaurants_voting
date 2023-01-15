@@ -7,8 +7,8 @@ import org.springframework.http.MediaType;
 
 import static com.topjava.restaurant_voting.testutils.TestData.*;
 import static com.topjava.restaurant_voting.util.UserUtils.STARTING_ROLES;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
