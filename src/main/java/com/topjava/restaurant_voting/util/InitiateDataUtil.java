@@ -53,9 +53,7 @@ public class InitiateDataUtil implements CommandLineRunner {
     public static final Meal MEAL_8 =
             new Meal(null, "Wok", 180, new Restaurant(AbstractBaseEntity.START_SEQ + 5, REST_3.getName()));
 
-
-    @Override
-    public void run(String... args) {
+    public void saveInitData() {
         userRepository.save(UserUtils.prepareToSave(USER1));
         userRepository.save(UserUtils.prepareToSave(USER2));
         userRepository.save(UserUtils.prepareToSave(ADMIN));
@@ -84,5 +82,10 @@ public class InitiateDataUtil implements CommandLineRunner {
         voteRepository.save(oldVote2);
         voteRepository.save(newVote1);
         voteRepository.save(newVote2);
+    }
+
+    @Override
+    public void run(String... args) {
+        saveInitData();
     }
 }
