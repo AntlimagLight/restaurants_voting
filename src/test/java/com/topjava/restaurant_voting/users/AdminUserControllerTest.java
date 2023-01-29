@@ -5,7 +5,7 @@ import com.topjava.restaurant_voting.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import static com.topjava.restaurant_voting.testutils.TestData.*;
+import static com.topjava.restaurant_voting.test_utils.TestData.*;
 import static com.topjava.restaurant_voting.util.InitiateDataUtil.USER2;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;

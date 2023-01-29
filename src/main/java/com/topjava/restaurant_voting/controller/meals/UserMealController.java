@@ -1,4 +1,4 @@
-package com.topjava.restaurant_voting.web.controller.meals;
+package com.topjava.restaurant_voting.controller.meals;
 
 import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.service.MealService;

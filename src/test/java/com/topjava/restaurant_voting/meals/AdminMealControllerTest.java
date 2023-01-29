@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import static com.topjava.restaurant_voting.model.AbstractBaseEntity.START_SEQ;
-import static com.topjava.restaurant_voting.testutils.TestData.*;
+import static com.topjava.restaurant_voting.test_utils.TestData.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;

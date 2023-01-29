@@ -66,29 +66,44 @@ Registers a user and adds it to the database. The user will automatically be ass
 ------------------
 #### _USER API_
 
+##### Get All User Votes (GET)
+```http://localhost:8080/user/votes```
+Gets the full list of authorized user's votes
+**Test:**
+```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/votes"```
+##### Get Vote (GET)
+```http://localhost:8080/user/votes/YYYY-MM-DD```
+Gets the user's vote for the specified date
+**Test:**
+```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/votes/2022-06-10"```
+##### Make Vote (POST)
+```http://localhost:8080/user/votes?restaurant_id={restaurant_id}```
+The user votes today for the restaurant with {restaurant_id}.
+**Test:**
+```curl -XPOST -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/votes?restaurant_id=100004"```
+##### Change Vote (PUT)
+```http://localhost:8080/user/votes?restaurant_id={restaurant_id}```
+The user changes their today's vote to a restaurant with id {restaurant_id}.
+Two cases are possible:
+- The time is less than 11:00 -> the previous vote for today is deleted, it is replaced by the vote for the restaurant with {restaurant_id}.
+- Time 11:00 and more -> the vote will simply not be counted.
+  **Test:**
+  ```curl -XPUT -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/votes?restaurant_id=100005"```
+  ```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/restaurants/100004"```
+##### Get Statistic (GET)
+```http://localhost:8080/user/votes/statistic?date=YYYY-MM-DD```
+In response to the request, a map will be sent, the key is the unique name of the restaurant, the value is the number of votes. The calculation is relevant for the date specified in the parameters.
+**Test:**
+```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/votes/statistic?date=2022-06-10"```
 ##### Get One Restaurant (GET)
 ```http://localhost:8080/user/restaurants/{restaurant_id}```
 In response to the request, a restaurant with {restaurant_id} will be sent.
 **Test:**
-```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/restaurants/100004"```
-##### Vote (POST)
-```http://localhost:8080/user/restaurants/{restaurant_id}/vote```
-The user votes today for the restaurant with {restaurant_id}. If he has already voted today, two cases are possible:
-- The time is less than 11:00 -> the previous vote for today is deleted, it is replaced by the vote for the restaurant with {restaurant_id}.
-- Time 11:00 and more -> the vote will simply not be counted.
-
-**Test:**
-```curl -XPOST -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/restaurants/100004/vote"```
 ##### Get All Restaurants (GET)
 ```http://localhost:8080/user/restaurants```
 In response to the request, a list of all restaurants from the database was sent.
 **Test:**
 ```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/restaurant"```
-##### Get Statistic (GET)
-```http://localhost:8080/user/restaurants/statistic?date=YYYY-MM-DD```
-In response to the request, a map will be sent, the key is the unique name of the restaurant, the value is the number of votes. The calculation is relevant for the date specified in the parameters.
-**Test:**
-```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/restaurants/statistic?date=2022-06-10"```
 ##### Get One Meal (GET)
 ```http://localhost:8080/user/restaurants/{restaurant_id}/menu/{meal_id}```
 In response to the request, a meal with {meal_id} belonging to the restaurant with {restaurant_id} will be sent.

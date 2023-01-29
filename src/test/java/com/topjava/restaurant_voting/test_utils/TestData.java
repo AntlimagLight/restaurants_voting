@@ -1,8 +1,10 @@
-package com.topjava.restaurant_voting.testutils;
+package com.topjava.restaurant_voting.test_utils;
 
+import com.topjava.restaurant_voting.dto.VoteDto;
 import com.topjava.restaurant_voting.model.*;
 import com.topjava.restaurant_voting.util.JsonUtil;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,8 @@ public class TestData {
     @SuppressWarnings("rawtypes")
     public static final MatcherFactory.Matcher<HashMap> MAP_MATCHER
             = MatcherFactory.usingIgnoringFieldsComparator(HashMap.class);
+    public static final MatcherFactory.Matcher<VoteDto> VOTE_DTO_MATCHER
+            = MatcherFactory.usingIgnoringFieldsComparator(VoteDto.class, "user");
 
     public static final User USER_100000 = setIdForTests(USER1, START_SEQ);
     public static final User USER_100001 = setIdForTests(USER2, START_SEQ + 1);
@@ -55,6 +59,11 @@ public class TestData {
     public static final Meal NEW_MEAL = new Meal(null, "New Meal", 111, null);
     public static final Meal UPDATED_MEAL = new Meal(null, "Upd Meal", 99, null);
     public static final List<Meal> ALL_MEALS_FROM_REST_100004 = List.of(MEAL_100009, MEAL_100010, MEAL_100011);
+
+    public static final VoteDto VOTE_DTO_1 = new VoteDto(null, USER_100000,
+            REST_100004, LocalDate.of(2021, 12, 1));
+    public static final VoteDto VOTE_DTO_2 = new VoteDto(null, USER_100000,
+            REST_100005, LocalDate.of(2022, 6, 10));
 
     public final static Map<String, Integer> STATISTIC = new HashMap<>();
 

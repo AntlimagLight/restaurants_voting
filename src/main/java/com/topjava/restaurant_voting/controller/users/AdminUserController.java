@@ -1,4 +1,4 @@
-package com.topjava.restaurant_voting.web.controller.users;
+package com.topjava.restaurant_voting.controller.users;
 
 import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;

@@ -3,7 +3,7 @@ package com.topjava.restaurant_voting.config;
 import com.topjava.restaurant_voting.model.Role;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.repository.UserRepository;
-import com.topjava.restaurant_voting.web.AuthUser;
+import com.topjava.restaurant_voting.security.AuthUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.topjava.restaurant_voting.testutils;
+package com.topjava.restaurant_voting.test_utils;
 
 import com.topjava.restaurant_voting.util.JsonUtil;
 import org.springframework.test.web.servlet.MvcResult;

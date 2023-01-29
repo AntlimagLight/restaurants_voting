@@ -1,8 +1,8 @@
-package com.topjava.restaurant_voting.web.controller.users;
+package com.topjava.restaurant_voting.controller.users;
 
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.service.UserService;
-import com.topjava.restaurant_voting.web.AuthUser;
+import com.topjava.restaurant_voting.security.AuthUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

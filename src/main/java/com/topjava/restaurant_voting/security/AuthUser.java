@@ -1,4 +1,4 @@
-package com.topjava.restaurant_voting.web;
+package com.topjava.restaurant_voting.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.topjava.restaurant_voting.model.User;
