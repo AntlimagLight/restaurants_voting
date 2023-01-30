@@ -21,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 public class VoteControllerTest extends RestaurantVotingApplicationTests {
+
+    // TODO Get methods tests for vote
 //    @Test
 //    void getVote() throws Exception {
 //        this.mockMvc.perform(get("/user/votes/2022-06-10")

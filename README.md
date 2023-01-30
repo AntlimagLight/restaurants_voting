@@ -212,15 +212,15 @@ In response, the data of user with {user_id} is received.
 **Tests:**
 ```curl -XGET -H "Content-type: application/json" -u "admin@gmail.com:admin" "http://localhost:8080/admin/users/100001"```
 ##### Find User By Email (GET)
-```http://localhost:8080/admin/users?email=XXXX@XXXX.XX```
-In response, the user's data comes with the email specified in the parameter.
+```http://localhost:8080/admin/users/by-email?email=XXXX@XXXX.XX```
+In response, the user's data comes with the email specified in the param.
 **Test:**
-```curl -XGET -H "Content-type: application/json" -u "admin@gmail.com:admin" "http://localhost:8080/admin/users?email=user@yandex.ru"```
+```curl -XGET -H "Content-type: application/json" -u "admin@gmail.com:admin" "http://localhost:8080/admin/users/by-email?email=user@yandex.ru"```
 ##### Get All Users (GET)
-```http://localhost:8080/admin/users/list```
+```http://localhost:8080/admin/users```
 The response is a list of all users.
 **Tests:**
-```curl -XGET -H "Content-type: application/json" -u "admin@gmail.com:admin" "http://localhost:8080/admin/users/list"```
+```curl -XGET -H "Content-type: application/json" -u "admin@gmail.com:admin" "http://localhost:8080/admin/users"```
 ##### Create User (POST)
 ```http://localhost:8080/admin/users```
 Creates a user and adds it to the database. You can specify user roles. If no roles are specified, the USER role will be set by default.
@@ -263,11 +263,11 @@ Updates a user with ID it to the database. You can specify user roles. If no rol
 ```
 **Test:**
 ```curl -XPUT -H "Content-type: application/json" -u "admin@gmail.com:admin" -d "{\"name\": \"UpdatedUser\", \"email\": \"updated_user@yandex.ru\", \"password\": \"updpass\", \"roles\": [\"USER\", \"ADMIN\"]}" "http://localhost:8080/admin/users/100001"```
-##### Block/Unblock User (PUT)
-```http://localhost:8080/admin/users/{user_id}/block```
+##### Block/Unblock User (PATCH)
+```http://localhost:8080/admin/users/{user_id}```
 Blocks access to the application for the user with {user_id}. If the user is already blocked, unblocks him.
 **Test:**
-```curl -XPUT -H "Content-type: application/json" -u "admin@gmail.com:admin" "http://localhost:8080/admin/users/100001/block"```
+```curl -XPATCH -H "Content-type: application/json" -u "admin@gmail.com:admin" "http://localhost:8080/admin/users/100001"```
 ##### Delete User (DELETE)
 ```http://localhost:8080/admin/users/{user_id}```
 Removes the user with {user_id} from the database

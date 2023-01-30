@@ -65,7 +65,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void SwitchEnabled() throws Exception {
-        this.mockMvc.perform(put("/admin/users/" + TESTING_USER_ID + "/block")
+        this.mockMvc.perform(patch("/admin/users/" + TESTING_USER_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -74,7 +74,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void SwitchEnabledNotAdmin() throws Exception {
-        this.mockMvc.perform(put("/admin/users/" + TESTING_USER_ID + "/block")
+        this.mockMvc.perform(patch("/admin/users/" + TESTING_USER_ID)
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().is(403));
@@ -101,7 +101,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void getByEmail() throws Exception {
-        this.mockMvc.perform(get("/admin/users?email=" + USER_100001.getEmail())
+        this.mockMvc.perform(get("/admin/users/by-email?email=" + USER_100001.getEmail())
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -111,7 +111,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void getNonExistenceByEmail() throws Exception {
-        this.mockMvc.perform(get("/admin/users?email=nonexmail@mail.ru")
+        this.mockMvc.perform(get("/admin/users/by-email?email=nonexmail@mail.ru")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().is(400));
@@ -136,7 +136,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void getAll() throws Exception {
-        this.mockMvc.perform(get("/admin/users/list")
+        this.mockMvc.perform(get("/admin/users")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())

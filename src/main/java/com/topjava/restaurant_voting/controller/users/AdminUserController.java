@@ -52,7 +52,7 @@ public class AdminUserController {
         }
     }
 
-    @PutMapping("/{id}/block")
+    @PatchMapping("/{id}")
     public ResponseEntity SwitchEnabled(@PathVariable Integer id) {
         try {
             log.info("switch enabled for " + USER_ENTITY_NAME + " " + id);
@@ -81,7 +81,7 @@ public class AdminUserController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/by-email")
     public ResponseEntity getUserByEmail(@RequestParam String email) {
         try {
             log.info("get " + USER_ENTITY_NAME + " " + email);
@@ -109,7 +109,7 @@ public class AdminUserController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity getAll() {
         try {
             log.info("get all " + USER_ENTITY_NAME);
