@@ -4,8 +4,7 @@ import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.service.RestaurantService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +15,8 @@ import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection", "DuplicatedCode"})
 @RestController
 @RequestMapping("/admin/restaurants")
+@Slf4j
 public class AdminRestaurantController {
-    private static final Logger log = LoggerFactory.getLogger(AdminRestaurantController.class);
     @Autowired
     private RestaurantService restaurantService;
 

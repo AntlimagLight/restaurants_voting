@@ -1,10 +1,9 @@
 package com.topjava.restaurant_voting.controller.users;
 
 import com.topjava.restaurant_voting.model.User;
-import com.topjava.restaurant_voting.service.UserService;
 import com.topjava.restaurant_voting.security.AuthUser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.topjava.restaurant_voting.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,9 @@ import static com.topjava.restaurant_voting.util.UserUtils.convertToRoles;
 
 @SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "rawtypes"})
 @RestController
+@Slf4j
 @RequestMapping(value = "/user/profile", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController {
-    private static final Logger log = LoggerFactory.getLogger(ProfileController.class);
     @Autowired
     private UserService userService;
 

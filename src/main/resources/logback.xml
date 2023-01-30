@@ -6,7 +6,7 @@
 
     <appender name="file" class="ch.qos.logback.core.FileAppender">
         <file>log/restaurant_voting.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <rollingPolicy class="ch.qos.logback.core.rolling.RollingFileAppender">
             <fileNamePattern>slf4jlogbackexample.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>90</maxHistory>
             <totalSizeCap>5GB</totalSizeCap>

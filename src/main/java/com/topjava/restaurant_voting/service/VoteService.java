@@ -6,7 +6,6 @@ import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.model.Vote;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import com.topjava.restaurant_voting.repository.VoteRepository;
-import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

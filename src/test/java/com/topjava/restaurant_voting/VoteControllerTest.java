@@ -9,7 +9,8 @@ import java.util.HashMap;
 
 import static com.topjava.restaurant_voting.model.AbstractBaseEntity.START_SEQ;
 import static com.topjava.restaurant_voting.service.VoteService.MAX_CHANGE_VOTE_TIME;
-import static com.topjava.restaurant_voting.test_utils.TestData.*;
+import static com.topjava.restaurant_voting.test_utils.TestData.MAP_MATCHER;
+import static com.topjava.restaurant_voting.test_utils.TestData.STATISTIC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;

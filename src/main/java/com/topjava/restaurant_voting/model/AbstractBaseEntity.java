@@ -1,15 +1,13 @@
 package com.topjava.restaurant_voting.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.util.Assert;
 
 @MappedSuperclass
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractBaseEntity {
     public static final int START_SEQ = 100000;
@@ -47,8 +45,4 @@ public abstract class AbstractBaseEntity {
         return id == null ? 0 : id;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + ":" + id;
-    }
 }

@@ -5,8 +5,7 @@ import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.security.AuthUser;
 import com.topjava.restaurant_voting.service.UserService;
 import com.topjava.restaurant_voting.service.VoteService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,9 +22,9 @@ import static com.topjava.restaurant_voting.service.VoteService.VOTE_ENTITY_NAME
 
 @SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
 @RestController
+@Slf4j
 @RequestMapping("/user/votes")
 public class VoteController {
-    private static final Logger log = LoggerFactory.getLogger(VoteController.class);
     @Autowired
     private VoteService voteService;
     @Autowired

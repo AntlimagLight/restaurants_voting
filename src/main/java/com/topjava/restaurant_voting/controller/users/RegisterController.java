@@ -3,11 +3,13 @@ package com.topjava.restaurant_voting.controller.users;
 import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import static com.topjava.restaurant_voting.exeption.ExceptionMassages.BAD_REQUEST_MASSAGE;
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
@@ -15,9 +17,9 @@ import static com.topjava.restaurant_voting.util.UserUtils.STARTING_ROLES;
 
 @SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "rawtypes"})
 @RestController
+@Slf4j
 @RequestMapping("/registration")
 public class RegisterController {
-    private static final Logger log = LoggerFactory.getLogger(RegisterController.class);
     @Autowired
     private UserService userService;
 

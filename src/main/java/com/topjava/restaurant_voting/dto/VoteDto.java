@@ -35,6 +35,7 @@ public class VoteDto {
         this.date = vote.getDate();
     }
 
-    public VoteDto() {}
+    public VoteDto() {
+    }
 
 }

@@ -3,13 +3,16 @@ package com.topjava.restaurant_voting.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 @Table(name = "votes")
 public class Vote {
@@ -33,8 +36,5 @@ public class Vote {
         this.user = user;
         this.restaurant = restaurant;
         this.date = date;
-    }
-
-    public Vote() {
     }
 }
