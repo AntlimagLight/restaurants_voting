@@ -24,19 +24,19 @@ public class ProfileController {
 
     @GetMapping
     public ResponseEntity get(@AuthenticationPrincipal AuthUser authUser) {
-        log.info("get from profile " + USER_ENTITY_NAME + " " + authUser.getEmail());
+        log.info("get from profile {} {}", USER_ENTITY_NAME, authUser.getEmail());
         return ResponseEntity.ok(userService.getById(authUser.getId()));
     }
 
     @DeleteMapping
     public ResponseEntity delete(@AuthenticationPrincipal AuthUser authUser) {
-        log.info("delete from profile " + USER_ENTITY_NAME + " " + authUser.getEmail());
+        log.info("delete from profile {} {}", USER_ENTITY_NAME, authUser.getEmail());
         return ResponseEntity.ok("profile deleted " + userService.delete(authUser.getId()));
     }
 
     @PutMapping
     public ResponseEntity update(@RequestBody User user, @AuthenticationPrincipal AuthUser authUser) {
-        log.info("update from profile " + USER_ENTITY_NAME + " " + authUser.getEmail());
+        log.info("update from profile {} {}", USER_ENTITY_NAME, authUser.getEmail());
         assureIdConsistent(user, authUser.getId());
         user.setRoles(convertToRoles(authUser.getAuthorities()));
         userService.update(authUser.getId(), user);

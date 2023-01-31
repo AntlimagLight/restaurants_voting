@@ -26,7 +26,7 @@ public class RegisterController {
     @PostMapping()
     public ResponseEntity registration(@RequestBody User user) {
         try {
-            log.info("registration " + USER_ENTITY_NAME + " " + user.getEmail());
+            log.info("registration {} {}", USER_ENTITY_NAME, user.getEmail());
             user.setRoles(STARTING_ROLES);
             userService.create(user);
             return ResponseEntity.ok("registration success:\n" + user.getEmail());

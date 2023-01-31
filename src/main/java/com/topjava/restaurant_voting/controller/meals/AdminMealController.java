@@ -26,8 +26,7 @@ public class AdminMealController {
     @PostMapping()
     public ResponseEntity createMeal(@RequestBody Meal meal, @PathVariable Integer restaurant_id) {
         try {
-            log.info("create " + MEAL_ENTITY_NAME + " " + meal.getName() +
-                    " in " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
+            log.info("create {} {} in {} {}", MEAL_ENTITY_NAME, meal.getName(), RESTAURANT_ENTITY_NAME, restaurant_id);
             mealService.create(meal, restaurant_id);
             return ResponseEntity.ok(MEAL_ENTITY_NAME + " saved:\n" + meal);
         } catch (AlreadyExistException e) {
@@ -42,8 +41,7 @@ public class AdminMealController {
     @PutMapping("/{meal_id}")
     public ResponseEntity updateMeal(@RequestBody Meal meal, @PathVariable Integer restaurant_id, @PathVariable Integer meal_id) {
         try {
-            log.info("update " + MEAL_ENTITY_NAME + " " + meal.getName() +
-                    " in " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
+            log.info("update {} {} in {} {}", MEAL_ENTITY_NAME, meal.getName(), RESTAURANT_ENTITY_NAME, restaurant_id);
             mealService.update(meal, meal_id, restaurant_id);
             return ResponseEntity.ok(MEAL_ENTITY_NAME + " updated:\n" + meal);
         } catch (NotExistException e) {
@@ -58,8 +56,7 @@ public class AdminMealController {
     @DeleteMapping("/{meal_id}")
     public ResponseEntity deleteRestaurant(@PathVariable Integer restaurant_id, @PathVariable Integer meal_id) {
         try {
-            log.info("delete " + MEAL_ENTITY_NAME + " " + meal_id +
-                    " in " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
+            log.info("delete {} {} in {} {}", MEAL_ENTITY_NAME, meal_id, RESTAURANT_ENTITY_NAME, restaurant_id);
             return ResponseEntity.ok(MEAL_ENTITY_NAME + " deleted:\n" + mealService.delete(meal_id, restaurant_id));
         } catch (NotExistException e) {
             log.warn(e.getMessage());

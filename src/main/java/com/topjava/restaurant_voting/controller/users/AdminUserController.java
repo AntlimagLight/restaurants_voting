@@ -24,7 +24,7 @@ public class AdminUserController {
     @PostMapping
     public ResponseEntity createUser(@RequestBody User user) {
         try {
-            log.info("create " + USER_ENTITY_NAME + " " + user.getEmail());
+            log.info("create {} {}", USER_ENTITY_NAME, user.getEmail());
             userService.create(assureDefaultRole(user));
             return ResponseEntity.ok(USER_ENTITY_NAME + " saved:\n" + user.getEmail());
         } catch (AlreadyExistException e) {
@@ -39,7 +39,7 @@ public class AdminUserController {
     @PutMapping("/{id}")
     public ResponseEntity updateUser(@RequestBody User user, @PathVariable Integer id) {
         try {
-            log.info("update " + USER_ENTITY_NAME + " " + user.getEmail());
+            log.info("update {} {}", USER_ENTITY_NAME, user.getEmail());
             userService.update(id, assureDefaultRole(user));
             return ResponseEntity.ok(USER_ENTITY_NAME + " updated:\n" + user.getEmail());
         } catch (NotExistException e) {
@@ -54,7 +54,7 @@ public class AdminUserController {
     @PatchMapping("/{id}")
     public ResponseEntity SwitchEnabled(@PathVariable Integer id) {
         try {
-            log.info("switch enabled for " + USER_ENTITY_NAME + " " + id);
+            log.info("switch enabled for {} {}", USER_ENTITY_NAME, id);
             userService.switchEnable(id);
             return ResponseEntity.ok("'enable' switched for " + USER_ENTITY_NAME + " " + id);
         } catch (NotExistException e) {
@@ -69,7 +69,7 @@ public class AdminUserController {
     @GetMapping("/{id}")
     public ResponseEntity getUserByID(@PathVariable Integer id) {
         try {
-            log.info("get " + USER_ENTITY_NAME + " " + id);
+            log.info("get {} {}", USER_ENTITY_NAME, id);
             return ResponseEntity.ok(userService.getById(id));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
@@ -83,7 +83,7 @@ public class AdminUserController {
     @GetMapping("/by-email")
     public ResponseEntity getUserByEmail(@RequestParam String email) {
         try {
-            log.info("get " + USER_ENTITY_NAME + " " + email);
+            log.info("get {} {}", USER_ENTITY_NAME, email);
             return ResponseEntity.ok(userService.getByEmail(email));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
@@ -97,7 +97,7 @@ public class AdminUserController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable Integer id) {
         try {
-            log.info("delete " + USER_ENTITY_NAME + " " + id);
+            log.info("delete {} {}", USER_ENTITY_NAME, id);
             return ResponseEntity.ok(USER_ENTITY_NAME + " deleted:\n" + userService.delete(id));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
@@ -111,7 +111,7 @@ public class AdminUserController {
     @GetMapping
     public ResponseEntity getAll() {
         try {
-            log.info("get all " + USER_ENTITY_NAME);
+            log.info("get all {}", USER_ENTITY_NAME);
             return ResponseEntity.ok(userService.getAll());
         } catch (Exception e) {
             log.warn(BAD_REQUEST_MASSAGE);

@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
-    void createRestaurant() throws Exception {
+    void createMeal() throws Exception {
         this.mockMvc.perform(post("/admin/restaurants/" + TESTING_RESTAURANT_ID + "/menu")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)

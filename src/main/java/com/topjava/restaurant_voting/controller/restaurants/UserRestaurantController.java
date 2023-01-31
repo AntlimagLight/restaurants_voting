@@ -24,7 +24,7 @@ public class UserRestaurantController {
     @GetMapping("/{restaurant_id}")
     public ResponseEntity getRestaurant(@PathVariable Integer restaurant_id) {
         try {
-            log.info("get " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
+            log.info("get {} {}", RESTAURANT_ENTITY_NAME, restaurant_id);
             return ResponseEntity.ok(restaurantService.getById(restaurant_id));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
@@ -38,7 +38,7 @@ public class UserRestaurantController {
     @GetMapping
     public ResponseEntity getAll() {
         try {
-            log.info("get all " + RESTAURANT_ENTITY_NAME);
+            log.info("get all {}", RESTAURANT_ENTITY_NAME);
             return ResponseEntity.ok(restaurantService.getAll());
         } catch (Exception e) {
             log.warn(BAD_REQUEST_MASSAGE);

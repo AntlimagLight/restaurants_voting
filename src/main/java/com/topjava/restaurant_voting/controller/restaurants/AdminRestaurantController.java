@@ -23,7 +23,7 @@ public class AdminRestaurantController {
     @PostMapping
     public ResponseEntity createRestaurant(@RequestBody Restaurant restaurant) {
         try {
-            log.info("create " + RESTAURANT_ENTITY_NAME + " " + restaurant.getName());
+            log.info("create {} {}", RESTAURANT_ENTITY_NAME, restaurant.getName());
             restaurantService.create(restaurant);
             return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " saved:\n" + restaurant);
         } catch (AlreadyExistException e) {
@@ -38,7 +38,7 @@ public class AdminRestaurantController {
     @PutMapping("/{restaurant_id}")
     public ResponseEntity updateRestaurant(@RequestBody Restaurant restaurant, @PathVariable Integer restaurant_id) {
         try {
-            log.info("update " + RESTAURANT_ENTITY_NAME + " " + restaurant.getName());
+            log.info("update {} {}", RESTAURANT_ENTITY_NAME, restaurant.getName());
             restaurantService.update(restaurant_id, restaurant);
             return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " updated:\n" + restaurant);
         } catch (NotExistException e) {
@@ -53,7 +53,7 @@ public class AdminRestaurantController {
     @DeleteMapping("/{restaurant_id}")
     public ResponseEntity deleteRestaurant(@PathVariable Integer restaurant_id) {
         try {
-            log.info("delete " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
+            log.info("delete {} {}", RESTAURANT_ENTITY_NAME, restaurant_id);
             return ResponseEntity.ok(RESTAURANT_ENTITY_NAME + " deleted:\n" + restaurantService.delete(restaurant_id));
         } catch (NotExistException e) {
             log.warn(e.getMessage());

@@ -33,7 +33,7 @@ public class VoteController {
     @GetMapping("/{vote_date}")
     public ResponseEntity getVote(@AuthenticationPrincipal AuthUser authUser, @PathVariable LocalDate vote_date) {
         try {
-            log.info("get " + VOTE_ENTITY_NAME + " by " + vote_date);
+            log.info("get {} by {}", VOTE_ENTITY_NAME, vote_date);
             return ResponseEntity.ok(voteService.getByDate(userService.getById(authUser.getId()), vote_date));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
@@ -47,7 +47,7 @@ public class VoteController {
     @PostMapping("")
     public ResponseEntity makeVote(@AuthenticationPrincipal AuthUser authUser, @RequestParam Integer restaurant_id) {
         try {
-            log.info(USER_ENTITY_NAME + " make vote for " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
+            log.info("{} make vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
             voteService.makeVote(userService.getById(authUser.getId()), restaurant_id);
             return ResponseEntity.ok(VOTE_ENTITY_NAME + " saved");
         } catch (AlreadyExistException e) {
@@ -62,7 +62,7 @@ public class VoteController {
     @PutMapping("")
     public ResponseEntity changeVote(@AuthenticationPrincipal AuthUser authUser, @RequestParam Integer restaurant_id) {
         try {
-            log.info(USER_ENTITY_NAME + " change vote to " + RESTAURANT_ENTITY_NAME + " " + restaurant_id);
+            log.info("{} change vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
             boolean voteSuccess = voteService.changeVote(userService.getById(authUser.getId()), restaurant_id);
             if (voteSuccess) {
                 return ResponseEntity.ok(VOTE_ENTITY_NAME + " changed");
@@ -82,7 +82,7 @@ public class VoteController {
     @GetMapping
     public ResponseEntity getAllUserVotes(@AuthenticationPrincipal AuthUser authUser) {
         try {
-            log.info("get all " + VOTE_ENTITY_NAME + " made by " + authUser.getId());
+            log.info("get all {} made by {}", VOTE_ENTITY_NAME, authUser.getId());
             return ResponseEntity.ok(voteService.getAllByUser(userService.getById(authUser.getId())));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
@@ -96,7 +96,7 @@ public class VoteController {
     @GetMapping("/statistic")
     public ResponseEntity viewStatistic(@RequestParam LocalDate date) {
         try {
-            log.info("view statistics for the " + date);
+            log.info("view statistics for the {}", date);
             return ResponseEntity.ok(voteService.getStatistic(date));
         } catch (Exception e) {
             log.warn(BAD_REQUEST_MASSAGE);

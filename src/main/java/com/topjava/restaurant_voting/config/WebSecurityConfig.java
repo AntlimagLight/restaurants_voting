@@ -34,7 +34,7 @@ public class WebSecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> {
-            log.debug("Authenticating " + email);
+            log.debug("Authenticating {}", email);
             User user = userRepository.findByEmailIgnoreCase(email).
                     orElseThrow(() -> new UsernameNotFoundException("User with this email not found: " + email));
             return AuthUser.build(user);
