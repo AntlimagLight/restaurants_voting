@@ -9,8 +9,7 @@ import java.util.HashMap;
 
 import static com.topjava.restaurant_voting.model.AbstractBaseEntity.START_SEQ;
 import static com.topjava.restaurant_voting.service.VoteService.MAX_CHANGE_VOTE_TIME;
-import static com.topjava.restaurant_voting.test_utils.TestData.MAP_MATCHER;
-import static com.topjava.restaurant_voting.test_utils.TestData.STATISTIC;
+import static com.topjava.restaurant_voting.test_utils.TestData.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -23,16 +22,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 public class VoteControllerTest extends RestaurantVotingApplicationTests {
 
-    // TODO Get methods tests for vote
-//    @Test
-//    void getVote() throws Exception {
-//        this.mockMvc.perform(get("/user/votes/2022-06-10")
-//                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(VOTE_DTO_MATCHER.contentJson(VOTE_DTO_2));
-//    }
+
+    @Test
+    void getVote() throws Exception {
+        this.mockMvc.perform(get("/user/votes/2022-06-10")
+                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(VOTE_DTO_MATCHER.contentJson(VOTE_DTO_2));
+    }
+
+    @Test
+    void getNonExistent() throws Exception {
+        this.mockMvc.perform(get("/user/votes/2010-10-10")
+                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
+                .andDo(print())
+                .andExpect(status().is(400));
+    }
 
     @Test
     void makeVote() throws Exception {
@@ -66,6 +73,16 @@ public class VoteControllerTest extends RestaurantVotingApplicationTests {
                 .andDo(print())
                 .andExpect(status().is(401));
         assertFalse(voteRepository.findById(6).isPresent());
+    }
+
+    @Test
+    void getAllUserVotes() throws Exception {
+        this.mockMvc.perform(get("/user/restaurants")
+                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(VOTE_DTO_MATCHER.contentJson(VOTES_BY_USER100000));
     }
 
     @SuppressWarnings("rawtypes")

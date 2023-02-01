@@ -5,6 +5,7 @@ import com.topjava.restaurant_voting.model.*;
 import com.topjava.restaurant_voting.util.JsonUtil;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +18,14 @@ public class TestData {
     public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER
             = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class);
     public static final MatcherFactory.Matcher<Meal> MEAL_MATCHER
-            = MatcherFactory.usingIgnoringFieldsComparator(Meal.class, "restaurant");
+            = MatcherFactory.usingIgnoringFieldsComparator(Meal.class, "restaurant", "date");
     public static final MatcherFactory.Matcher<User> USER_MATCHER
             = MatcherFactory.usingIgnoringFieldsComparator(User.class, "password", "votes", "registered");
     @SuppressWarnings("rawtypes")
     public static final MatcherFactory.Matcher<HashMap> MAP_MATCHER
             = MatcherFactory.usingIgnoringFieldsComparator(HashMap.class);
     public static final MatcherFactory.Matcher<VoteDto> VOTE_DTO_MATCHER
-            = MatcherFactory.usingIgnoringFieldsComparator(VoteDto.class, "user");
+            = MatcherFactory.usingIgnoringFieldsComparator(VoteDto.class);
 
     public static final User USER_100000 = setIdForTests(USER1, START_SEQ);
     public static final User USER_100001 = setIdForTests(USER2, START_SEQ + 1);
@@ -56,24 +57,42 @@ public class TestData {
     public static final Meal MEAL_100011 = setIdForTests(MEAL_6, START_SEQ + 11);
     public static final Meal MEAL_100012 = setIdForTests(MEAL_7, START_SEQ + 12);
     public static final Meal MEAL_100013 = setIdForTests(MEAL_8, START_SEQ + 13);
-    public static final Meal NEW_MEAL = new Meal(null, "New Meal", 111, null);
-    public static final Meal UPDATED_MEAL = new Meal(null, "Upd Meal", 99, null);
+    public static final Meal NEW_MEAL = new Meal(null, "New Meal", 111, null, null);
+    public static final Meal UPDATED_MEAL = new Meal(null, "Upd Meal", 99, null, null);
     public static final List<Meal> ALL_MEALS_FROM_REST_100004 = List.of(MEAL_100009, MEAL_100010, MEAL_100011);
-
-    public static final VoteDto VOTE_DTO_1 = new VoteDto(null, USER_100000,
-            REST_100004, LocalDate.of(2021, 12, 1));
-    public static final VoteDto VOTE_DTO_2 = new VoteDto(null, USER_100000,
-            REST_100005, LocalDate.of(2022, 6, 10));
-
-    public final static Map<String, Integer> STATISTIC = new HashMap<>();
+    public final static Map<Integer, List<Meal>> ALL_REST_MENU = new HashMap<>();
 
     static {
-        STATISTIC.put(REST_100005.getName(), 1);
-        STATISTIC.put(REST_100003.getName(), 1);
+        List<Meal> REST_100003_TODAY_MENU = new ArrayList<>();
+        REST_100003_TODAY_MENU.add(MEAL_100006);
+        REST_100003_TODAY_MENU.add(MEAL_100008);
+        List<Meal> REST_100004_TODAY_MENU = new ArrayList<>();
+        REST_100004_TODAY_MENU.add(MEAL_100009);
+        REST_100004_TODAY_MENU.add(MEAL_100010);
+        REST_100004_TODAY_MENU.add(MEAL_100011);
+        List<Meal> REST_100005_TODAY_MENU = new ArrayList<>();
+        REST_100005_TODAY_MENU.add(MEAL_100012);
+        ALL_REST_MENU.put(REST_100003.getId(),REST_100003_TODAY_MENU);
+        ALL_REST_MENU.put(REST_100004.getId(),REST_100004_TODAY_MENU);
+        ALL_REST_MENU.put(REST_100005.getId(),REST_100005_TODAY_MENU);
     }
 
-    public static <T extends AbstractBaseEntity> T setIdForTests(T entity, Integer Id) {
-        entity.setId(Id);
+    public static final VoteDto VOTE_DTO_1 = new VoteDto(null, USER_100000.getId(),
+            REST_100004.getId(), LocalDate.of(2021, 12, 1));
+    public static final VoteDto VOTE_DTO_2 = new VoteDto(null, USER_100000.getId(),
+            REST_100005.getId(), LocalDate.of(2022, 6, 10));
+    public final static List<VoteDto> VOTES_BY_USER100000 = new ArrayList<VoteDto>();
+    public final static Map<Integer, Integer> STATISTIC = new HashMap<>();
+
+    static {
+        VOTES_BY_USER100000.add(VOTE_DTO_1);
+        VOTES_BY_USER100000.add(VOTE_DTO_2);
+        STATISTIC.put(REST_100005.getId(), 1);
+        STATISTIC.put(REST_100003.getId(), 1);
+    }
+
+    public static <T extends AbstractBaseEntity> T setIdForTests(T entity, Integer id) {
+        entity.setId(id);
         return entity;
     }
 

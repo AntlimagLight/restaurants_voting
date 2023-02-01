@@ -34,7 +34,7 @@ public class UserMealControllerTest extends RestaurantVotingApplicationTests {
     }
 
     @Test
-    void getAll() throws Exception {
+    void getRestaurantMenu() throws Exception {
         this.mockMvc.perform(get("/user/restaurants/" + TESTING_RESTAURANT_ID + "/menu")
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
@@ -42,5 +42,16 @@ public class UserMealControllerTest extends RestaurantVotingApplicationTests {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEAL_MATCHER.contentJson(ALL_MEALS_FROM_REST_100004));
     }
+
+    // TODO Fix MATCHER
+//    @Test
+//    void getTodayMenu() throws Exception {
+//        this.mockMvc.perform(get("/user/restaurants/today_menu")
+//                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andExpect(MAP_MATCHER.contentJson((HashMap<Integer, List<Meal>>) ALL_REST_MENU));
+//    }
 
 }

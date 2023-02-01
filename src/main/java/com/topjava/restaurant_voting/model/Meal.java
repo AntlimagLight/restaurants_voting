@@ -1,10 +1,16 @@
 package com.topjava.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -21,10 +27,16 @@ public class Meal extends AbstractNamedEntity {
     @Range(min = 0, max = 50000)
     private Integer cost;
 
-    public Meal(Integer id, String name, Integer cost, Restaurant restaurant) {
+    @Column(name = "meal_date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
+    @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDate date;
+
+    public Meal(Integer id, String name, Integer cost, Restaurant restaurant, LocalDate date) {
         super(id, name);
         this.cost = cost;
         this.restaurant = restaurant;
+        this.date = date;
     }
 
     @Override

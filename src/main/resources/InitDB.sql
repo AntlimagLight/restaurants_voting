@@ -39,6 +39,7 @@ CREATE TABLE meals
 (
     id            INTEGER DEFAULT nextval('GLOBAL_SEQ') PRIMARY KEY,
     name          VARCHAR(255) NOT NULL,
+    meal_date     TIMESTAMP DEFAULT now() NOT NULL,
     cost          INTEGER      NOT NULL,
     restaurant_id INTEGER      NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES RESTAURANTS (id) ON DELETE CASCADE
@@ -49,7 +50,7 @@ CREATE INDEX meals_restaurant_idx
 CREATE TABLE votes
 (
     id            LONG AUTO_INCREMENT PRIMARY KEY,
-    date          TIMESTAMP DEFAULT now() NOT NULL,
+    vote_date     TIMESTAMP DEFAULT now() NOT NULL,
     user_id       INTEGER                 NOT NULL,
     restaurant_id INTEGER                 NOT NULL,
     FOREIGN KEY (user_id) REFERENCES USERS (id) ON DELETE CASCADE,

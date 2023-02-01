@@ -5,9 +5,9 @@ import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.model.Vote;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
+import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.repository.VoteRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,9 +27,9 @@ import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExiste
 
 @SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "OptionalGetWithoutIsPresent"})
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 public class VoteService {
-    private static final Logger log = LoggerFactory.getLogger(VoteService.class);
     public static final String VOTE_ENTITY_NAME = "Vote";
     public static final LocalTime MAX_CHANGE_VOTE_TIME = LocalTime.of(11, 0);
     @Autowired
@@ -37,7 +37,11 @@ public class VoteService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    public VoteDto getByDate(User user, LocalDate localDate) {
+    @Autowired
+    private UserRepository userRepository;
+
+    public VoteDto getUsersVoteByDate(Integer user_id, LocalDate localDate) {
+        User user = userRepository.findById(user_id).get();
         Optional<Vote> voteOpt = voteRepository.findByUserAndDate(user, localDate);
         assertExistence(voteOpt, VOTE_ENTITY_NAME);
         return new VoteDto(voteOpt.get());
@@ -64,26 +68,27 @@ public class VoteService {
             voteRepository.save(actualVote);
             return true;
         } else {
-            log.info("The ability to change the voice is only available until" + MAX_CHANGE_VOTE_TIME);
+            log.info("The ability to change the voice is only available until {}", MAX_CHANGE_VOTE_TIME);
             return false;
         }
     }
 
-    public List<VoteDto> getAllByUser(User user) {
+    public List<VoteDto> getAllByUser(Integer user_id) {
+        User user = userRepository.findById(user_id).get();
         return voteRepository.findAllByUser(user).stream().map(VoteDto::new).toList();
     }
 
-    public Map<String, Integer> getStatistic(LocalDate date) {
+    public Map<Integer, Integer> getStatistic(LocalDate date) {
         List<Vote> voteList = voteRepository.findAllByDate(date);
-        Map<String, Integer> result = new HashMap<>();
+        Map<Integer, Integer> result = new HashMap<>();
         for (Vote vote : voteList) {
-            String restaurant_name = vote.getRestaurant().getName();
-            if (result.containsKey(restaurant_name)) {
+            Integer restaurant_id = vote.getRestaurant().getId();
+            if (result.containsKey(restaurant_id)) {
                 //noinspection ConstantConditions
-                result.compute(restaurant_name, (key, counter) -> counter + 1);
+                result.compute(restaurant_id, (key, counter) -> counter + 1);
             } else {
-                log.debug(RESTAURANT_ENTITY_NAME + " " + restaurant_name + " was found");
-                result.put(restaurant_name, 1);
+                log.debug("{} {} was found", RESTAURANT_ENTITY_NAME, restaurant_id );
+                result.put(restaurant_id, 1);
             }
         }
         return result;

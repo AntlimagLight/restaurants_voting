@@ -34,7 +34,7 @@ public class VoteController {
     public ResponseEntity getVote(@AuthenticationPrincipal AuthUser authUser, @PathVariable LocalDate vote_date) {
         try {
             log.info("get {} by {}", VOTE_ENTITY_NAME, vote_date);
-            return ResponseEntity.ok(voteService.getByDate(userService.getById(authUser.getId()), vote_date));
+            return ResponseEntity.ok(voteService.getUsersVoteByDate(authUser.getId(), vote_date));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -83,7 +83,7 @@ public class VoteController {
     public ResponseEntity getAllUserVotes(@AuthenticationPrincipal AuthUser authUser) {
         try {
             log.info("get all {} made by {}", VOTE_ENTITY_NAME, authUser.getId());
-            return ResponseEntity.ok(voteService.getAllByUser(userService.getById(authUser.getId())));
+            return ResponseEntity.ok(voteService.getAllByUser(authUser.getId()));
         } catch (NotExistException e) {
             log.warn(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -103,5 +103,7 @@ public class VoteController {
             return ResponseEntity.badRequest().body(BAD_REQUEST_MASSAGE);
         }
     }
+
+    //TODO Make new Mappers for Json
 
 }

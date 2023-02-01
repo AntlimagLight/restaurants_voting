@@ -23,10 +23,10 @@ public class Vote {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
-    @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
+    @Column(name = "vote_date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate date;

@@ -114,6 +114,12 @@ In response to the request, a meal with {meal_id} belonging to the restaurant wi
 In response to the request, you will receive a complete list of food belonging to the restaurant with {restaurant_id}.
 **Test:**
 ```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/restaurants/100004/menu"```
+##### Get Today Menu in All Restaurants (GET)
+```http://localhost:8080/user/restaurants/today_menu```
+In response to the request will receive a Map with today's menu of each restaurant.
+**Test:**
+```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/restaurants/today_menu"```
+
 ##### Get User Profile (GET)
 ```http://localhost:8080/user/profile```
 In response, the data of the authorized user is received.
