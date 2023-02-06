@@ -5,8 +5,8 @@ import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.security.AuthUser;
 import com.topjava.restaurant_voting.service.UserService;
 import com.topjava.restaurant_voting.service.VoteService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +20,14 @@ import static com.topjava.restaurant_voting.service.VoteService.MAX_CHANGE_VOTE_
 import static com.topjava.restaurant_voting.service.VoteService.VOTE_ENTITY_NAME;
 
 
-@SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
+@SuppressWarnings({"rawtypes"})
 @RestController
 @Slf4j
 @RequestMapping("/user/votes")
+@RequiredArgsConstructor
 public class VoteController {
-    @Autowired
-    private VoteService voteService;
-    @Autowired
-    private UserService userService;
+    private final VoteService voteService;
+    private final UserService userService;
 
     @GetMapping("/{vote_date}")
     public ResponseEntity getVote(@AuthenticationPrincipal AuthUser authUser, @PathVariable LocalDate vote_date) {

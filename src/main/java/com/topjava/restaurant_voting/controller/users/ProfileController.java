@@ -3,8 +3,8 @@ package com.topjava.restaurant_voting.controller.users;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.security.AuthUser;
 import com.topjava.restaurant_voting.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,13 +14,13 @@ import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME
 import static com.topjava.restaurant_voting.util.UserUtils.assureIdConsistent;
 import static com.topjava.restaurant_voting.util.UserUtils.convertToRoles;
 
-@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping(value = "/user/profile", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity get(@AuthenticationPrincipal AuthUser authUser) {

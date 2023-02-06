@@ -5,8 +5,8 @@ import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.model.Meal;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.repository.MealRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,16 +22,15 @@ import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertExistence;
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExistence;
 
-@SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
 @Slf4j
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class MealService {
     public static final String MEAL_ENTITY_NAME = "Meal";
-    @Autowired
-    private MealRepository mealRepository;
-    @Autowired
-    private RestaurantService restaurantService;
+
+    private final MealRepository mealRepository;
+    private final RestaurantService restaurantService;
 
     @Transactional
     public void create(Meal meal, Integer restaurant_id) throws AlreadyExistException {
@@ -87,7 +86,7 @@ public class MealService {
             if (result.containsKey(restaurant_id)) {
                 menu = result.get(restaurant_id);
             } else {
-                log.debug("{} {} was found", RESTAURANT_ENTITY_NAME, restaurant_id );
+                log.debug("{} {} was found", RESTAURANT_ENTITY_NAME, restaurant_id);
                 menu = new ArrayList<>();
             }
             menu.add(meal);

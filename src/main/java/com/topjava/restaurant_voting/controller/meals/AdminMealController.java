@@ -4,8 +4,8 @@ import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.model.Meal;
 import com.topjava.restaurant_voting.service.MealService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +14,14 @@ import static com.topjava.restaurant_voting.service.MealService.MEAL_ENTITY_NAME
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 
 
-@SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection"})
+@SuppressWarnings({"rawtypes"})
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/admin/restaurants/{restaurant_id}/menu")
 public class AdminMealController {
 
-    @Autowired
-    private MealService mealService;
+    private final MealService mealService;
 
     @PostMapping()
     public ResponseEntity createMeal(@RequestBody Meal meal, @PathVariable Integer restaurant_id) {

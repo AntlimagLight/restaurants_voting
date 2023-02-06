@@ -8,9 +8,9 @@ import com.topjava.restaurant_voting.model.Vote;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.repository.VoteRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,21 +27,19 @@ import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertExistence;
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExistence;
 
-@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "OptionalGetWithoutIsPresent"})
+@SuppressWarnings({"OptionalGetWithoutIsPresent"})
 @Service
 @Slf4j
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class VoteService {
     public static final String VOTE_ENTITY_NAME = "Vote";
     public static final LocalTime MAX_CHANGE_VOTE_TIME = LocalTime.of(11, 0);
     public static final VoteMapper voteMapper = Mappers.getMapper(VoteMapper.class);
 
-    @Autowired
-    private VoteRepository voteRepository;
-    @Autowired
-    private RestaurantRepository restaurantRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private final VoteRepository voteRepository;
+    private final RestaurantRepository restaurantRepository;
+    private final UserRepository userRepository;
 
     public VoteDto getUsersVoteByDate(Integer user_id, LocalDate localDate) {
         User user = userRepository.findById(user_id).get();
@@ -90,7 +88,7 @@ public class VoteService {
                 //noinspection ConstantConditions
                 result.compute(restaurant_id, (key, counter) -> counter + 1);
             } else {
-                log.debug("{} {} was found", RESTAURANT_ENTITY_NAME, restaurant_id );
+                log.debug("{} {} was found", RESTAURANT_ENTITY_NAME, restaurant_id);
                 result.put(restaurant_id, 1);
             }
         }

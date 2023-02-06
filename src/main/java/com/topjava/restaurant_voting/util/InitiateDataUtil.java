@@ -5,7 +5,7 @@ import com.topjava.restaurant_voting.repository.MealRepository;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.repository.VoteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +13,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
-@SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "OptionalGetWithoutIsPresent"})
+@SuppressWarnings({"OptionalGetWithoutIsPresent"})
 @Service
+@RequiredArgsConstructor
 public class InitiateDataUtil implements CommandLineRunner {
-
-    @Autowired
-    private RestaurantRepository restaurantRepository;
-    @Autowired
-    private MealRepository mealRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private VoteRepository voteRepository;
+    private final RestaurantRepository restaurantRepository;
+    private final MealRepository mealRepository;
+    private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
 
     public static final LocalDate START_DATE = LocalDateTime.now().toLocalDate();
 

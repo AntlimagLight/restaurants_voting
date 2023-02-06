@@ -4,8 +4,8 @@ import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +13,13 @@ import static com.topjava.restaurant_voting.exeption.ExceptionMassages.BAD_REQUE
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
 import static com.topjava.restaurant_voting.util.UserUtils.assureDefaultRole;
 
-@SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection", "DuplicatedCode"})
+@SuppressWarnings({"rawtypes"})
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/admin/users")
 public class AdminUserController {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity createUser(@RequestBody User user) {

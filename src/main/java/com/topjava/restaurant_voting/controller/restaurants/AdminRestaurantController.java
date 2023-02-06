@@ -4,21 +4,21 @@ import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.service.RestaurantService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.topjava.restaurant_voting.exeption.ExceptionMassages.BAD_REQUEST_MASSAGE;
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 
-@SuppressWarnings({"rawtypes", "SpringJavaAutowiredFieldsWarningInspection", "DuplicatedCode"})
+@SuppressWarnings({"rawtypes"})
 @RestController
 @RequestMapping("/admin/restaurants")
+@RequiredArgsConstructor
 @Slf4j
 public class AdminRestaurantController {
-    @Autowired
-    private RestaurantService restaurantService;
+    private final RestaurantService restaurantService;
 
     @PostMapping
     public ResponseEntity createRestaurant(@RequestBody Restaurant restaurant) {

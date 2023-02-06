@@ -4,7 +4,7 @@ import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,13 +14,12 @@ import java.util.List;
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertExistence;
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExistence;
 
-@SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class RestaurantService {
     public static final String RESTAURANT_ENTITY_NAME = "Restaurant";
-    @Autowired
-    private RestaurantRepository restaurantRepository;
+    private final RestaurantRepository restaurantRepository;
 
     @Transactional
     public void create(Restaurant restaurant) throws AlreadyExistException {

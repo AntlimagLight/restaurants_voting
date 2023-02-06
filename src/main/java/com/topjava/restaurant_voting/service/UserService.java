@@ -5,7 +5,7 @@ import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.util.UserUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +16,12 @@ import java.util.List;
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertExistence;
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExistence;
 
-@SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserService {
     public static final String USER_ENTITY_NAME = "User";
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void create(User user) throws AlreadyExistException {
