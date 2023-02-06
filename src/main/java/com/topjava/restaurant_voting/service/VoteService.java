@@ -1,6 +1,7 @@
 package com.topjava.restaurant_voting.service;
 
 import com.topjava.restaurant_voting.dto.VoteDto;
+import com.topjava.restaurant_voting.mapper.VoteMapper;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.model.Vote;
@@ -8,6 +9,7 @@ import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.repository.VoteRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,11 +34,12 @@ import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExiste
 public class VoteService {
     public static final String VOTE_ENTITY_NAME = "Vote";
     public static final LocalTime MAX_CHANGE_VOTE_TIME = LocalTime.of(11, 0);
+    public static final VoteMapper voteMapper = Mappers.getMapper(VoteMapper.class);
+
     @Autowired
     private VoteRepository voteRepository;
     @Autowired
     private RestaurantRepository restaurantRepository;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -44,7 +47,7 @@ public class VoteService {
         User user = userRepository.findById(user_id).get();
         Optional<Vote> voteOpt = voteRepository.findByUserAndDate(user, localDate);
         assertExistence(voteOpt, VOTE_ENTITY_NAME);
-        return new VoteDto(voteOpt.get());
+        return voteMapper.toDTO(voteOpt.get());
     }
 
     @Transactional
@@ -75,7 +78,7 @@ public class VoteService {
 
     public List<VoteDto> getAllByUser(Integer user_id) {
         User user = userRepository.findById(user_id).get();
-        return voteRepository.findAllByUser(user).stream().map(VoteDto::new).toList();
+        return voteRepository.findAllByUser(user).stream().map(voteMapper::toDTO).toList();
     }
 
     public Map<Integer, Integer> getStatistic(LocalDate date) {
