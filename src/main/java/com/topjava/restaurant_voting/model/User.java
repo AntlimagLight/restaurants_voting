@@ -7,10 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
@@ -20,6 +17,7 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@ToString
 @Table(name = "users", indexes = @Index(columnList = "email", name = "users_unique_email_idx", unique = true))
 public class User extends AbstractNamedEntity {
 
@@ -50,6 +48,7 @@ public class User extends AbstractNamedEntity {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     @OrderBy("date DESC")
     @JsonIgnore
+    @ToString.Exclude
     private List<Vote> votes;
 
     public User(Integer id, String name, String email, String password, LocalDate registered, Boolean enabled, Role... roles) {
@@ -65,6 +64,10 @@ public class User extends AbstractNamedEntity {
         setRoles(roles);
     }
 
+    public User(Integer id, String name, String email, String password, LocalDate registered, Boolean enabled) {
+        this(id, name, email, password, registered, enabled, Collections.emptyList());
+    }
+
     @JsonIgnore
     public String getPassword() {
         return password;
@@ -75,25 +78,8 @@ public class User extends AbstractNamedEntity {
         this.password = password;
     }
 
-    public User(Integer id, String name, String email, String password, LocalDate registered, Boolean enabled) {
-        this(id, name, email, password, registered, enabled, Collections.emptyList());
-    }
-
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", registered=" + registered +
-                ", roles=" + roles +
-                ", enabled=" + enabled +
-                ", votes=" + votes +
-                ", name='" + name + '\'' +
-                ", id=" + id +
-                '}';
-    }
 }

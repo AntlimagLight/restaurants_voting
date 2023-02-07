@@ -28,7 +28,6 @@ import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExiste
 @RequiredArgsConstructor
 public class MealService {
     public static final String MEAL_ENTITY_NAME = "Meal";
-
     private final MealRepository mealRepository;
     private final RestaurantService restaurantService;
 

@@ -11,7 +11,7 @@ CREATE TABLE restaurants
 (
     id    INTEGER DEFAULT nextval('GLOBAL_SEQ') PRIMARY KEY,
     name  VARCHAR(255)      NOT NULL,
-    votes INTEGER DEFAULT 0 NOT NULL
+    CONSTRAINT restaurants UNIQUE (name)
 );
 
 CREATE TABLE users
@@ -21,7 +21,6 @@ CREATE TABLE users
     email       VARCHAR(255)            NOT NULL,
     password    VARCHAR(255)            NOT NULL,
     registered  TIMESTAMP DEFAULT now() NOT NULL,
-    enable_vote BOOLEAN   DEFAULT TRUE  NOT NULL,
     enabled     BOOLEAN   DEFAULT TRUE  NOT NULL
 );
 CREATE UNIQUE INDEX users_unique_email_idx
