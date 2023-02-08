@@ -41,15 +41,14 @@ public class RestaurantService {
     }
 
     @Transactional
-    public Integer delete(int id) throws NotExistException {
+    public void delete(int id) throws NotExistException {
         assertExistence(restaurantRepository.findById(id), RESTAURANT_ENTITY_NAME);
         restaurantRepository.deleteById(id);
-        return id;
     }
 
     @Cacheable(cacheNames = "restaurantList")
     public List<Restaurant> getAll() {
-        return (List<Restaurant>) restaurantRepository.findAll();
+        return restaurantRepository.findAll();
     }
 
 }

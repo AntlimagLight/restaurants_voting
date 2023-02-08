@@ -61,12 +61,11 @@ public class MealService {
     }
 
     @Transactional
-    public Integer delete(Integer id, Integer restaurant_id) throws NotExistException {
+    public void delete(Integer id, Integer restaurant_id) throws NotExistException {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
         assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         mealRepository.deleteById(id);
-        return id;
     }
 
     @Cacheable(cacheNames = "menuCache", key = "#restaurant_id")

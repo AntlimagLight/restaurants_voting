@@ -58,10 +58,9 @@ public class UserService {
     }
 
     @Transactional
-    public Integer delete(int id) throws NotExistException {
+    public void delete(int id) throws NotExistException {
         assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         userRepository.deleteById(id);
-        return id;
     }
 
     public List<User> getAll() {
