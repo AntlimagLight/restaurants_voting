@@ -23,7 +23,7 @@ public class RegisterControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(NEW_USER, NEW_USER.getPassword())))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is(201));
         User user = userRepository.findByEmail(NEW_USER.getEmail()).get();
         USER_MATCHER.assertMatch(user, setIdForTests(NEW_USER, user.getId()));
     }
@@ -36,7 +36,7 @@ public class RegisterControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(newUser, NEW_USER.getPassword())))
                 .andDo(print())
-                .andExpect(status().is(400));
+                .andExpect(status().is(422));
         assertFalse(userRepository.findById(NEW_ENTITY_ID).isPresent());
     }
 
@@ -46,7 +46,7 @@ public class RegisterControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(NEW_ADMIN, NEW_ADMIN.getPassword())))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is(201));
         assertEquals(userRepository.findByEmail(NEW_ADMIN.getEmail()).get().getRoles(), STARTING_ROLES);
     }
 }

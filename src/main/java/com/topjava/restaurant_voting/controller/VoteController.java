@@ -1,6 +1,7 @@
 package com.topjava.restaurant_voting.controller;
 
 import com.topjava.restaurant_voting.dto.VoteDto;
+import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.security.AuthUser;
 import com.topjava.restaurant_voting.service.UserService;
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -37,10 +40,13 @@ public class VoteController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> makeVote(@AuthenticationPrincipal AuthUser authUser, @RequestParam Integer restaurant_id) {
+    public ResponseEntity<URI> makeVote(@AuthenticationPrincipal AuthUser authUser, @RequestParam Integer restaurant_id) {
         log.info("{} make vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
-        voteService.makeVote(userService.getById(authUser.getId()), restaurant_id);
-        return ResponseEntity.ok(VOTE_ENTITY_NAME + " saved");
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/user/votes/{vote_date}")
+                .buildAndExpand(voteService.makeVote(userService.getById(authUser.getId()),
+                        restaurant_id).getDate()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(uriOfNewResource);
     }
 
     @PutMapping()
@@ -48,9 +54,9 @@ public class VoteController {
         log.info("{} change vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
         boolean voteSuccess = voteService.changeVote(userService.getById(authUser.getId()), restaurant_id);
         if (voteSuccess) {
-            return ResponseEntity.ok(VOTE_ENTITY_NAME + " changed");
+            return ResponseEntity.status(204).body(VOTE_ENTITY_NAME + " changed");
         } else {
-            return ResponseEntity.ok("Voting change time is out, you can change you vote between 0:00 and "
+            return ResponseEntity.status(422).body("Voting change time is out, you can change you vote between 0:00 and "
                     + MAX_CHANGE_VOTE_TIME.toString());
         }
     }
@@ -69,9 +75,16 @@ public class VoteController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseError handle(Exception exception) {
+    public ResponseError badRequestHandle(Exception exception) {
         log.error(exception.getMessage(), exception);
         return new ResponseError(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseError notExistHandle(NotExistException exception) {
+        log.error(exception.getMessage(), exception);
+        return new ResponseError(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
 }

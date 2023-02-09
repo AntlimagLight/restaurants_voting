@@ -32,14 +32,14 @@ public class MealService {
     private final RestaurantService restaurantService;
 
     @Transactional
-    public void create(Meal meal, Integer restaurant_id) throws AlreadyExistException {
+    public Meal create(Meal meal, Integer restaurant_id) throws AlreadyExistException {
         Restaurant restaurant = restaurantService.getById(restaurant_id);
         assertNotExistence(mealRepository.findByRestaurantAndName(restaurant, meal.getName()),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         meal.setRestaurant(restaurant);
         LocalDateTime now = LocalDateTime.now();
         meal.setDate(now.toLocalDate());
-        mealRepository.save(meal);
+        return mealRepository.save(meal);
     }
 
     @Transactional

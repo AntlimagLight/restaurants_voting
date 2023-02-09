@@ -1,5 +1,7 @@
 package com.topjava.restaurant_voting.controller.users;
 
+import com.topjava.restaurant_voting.exeption.AlreadyExistException;
+import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.service.UserService;
@@ -8,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
@@ -22,24 +26,26 @@ public class AdminUserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody User user) {
+    public ResponseEntity<URI> createUser(@RequestBody User user) {
         log.info("create {} {}", USER_ENTITY_NAME, user.getEmail());
-        userService.create(assureDefaultRole(user));
-        return ResponseEntity.ok(USER_ENTITY_NAME + " saved:\n" + user.getEmail());
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/admin/users/{id}")
+                .buildAndExpand(userService.create(assureDefaultRole(user)).getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(uriOfNewResource);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@RequestBody User user, @PathVariable Integer id) {
         log.info("update {} {}", USER_ENTITY_NAME, user.getEmail());
         userService.update(id, assureDefaultRole(user));
-        return ResponseEntity.ok(USER_ENTITY_NAME + " updated:\n" + id);
+        return ResponseEntity.status(204).body(USER_ENTITY_NAME + " updated:\n" + id);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<String> SwitchEnabled(@PathVariable Integer id) {
         log.info("switch enabled for {} {}", USER_ENTITY_NAME, id);
         userService.switchEnable(id);
-        return ResponseEntity.ok("'enable' switched for " + USER_ENTITY_NAME + " " + id);
+        return ResponseEntity.status(204).body("'enable' switched for " + USER_ENTITY_NAME + " " + id);
     }
 
     @GetMapping("/{id}")
@@ -58,7 +64,7 @@ public class AdminUserController {
     public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
         log.info("delete {} {}", USER_ENTITY_NAME, id);
         userService.delete(id);
-        return ResponseEntity.ok(USER_ENTITY_NAME + " deleted:\n" + id);
+        return ResponseEntity.status(204).body(USER_ENTITY_NAME + " deleted:\n" + id);
     }
 
     @GetMapping
@@ -69,8 +75,22 @@ public class AdminUserController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseError handle(Exception exception) {
+    public ResponseError badRequestHandle(Exception exception) {
         log.error(exception.getMessage(), exception);
         return new ResponseError(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseError notExistHandle(NotExistException exception) {
+        log.error(exception.getMessage(), exception);
+        return new ResponseError(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ResponseError alreadyExistHandle(AlreadyExistException exception) {
+        log.error(exception.getMessage(), exception);
+        return new ResponseError(exception.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }

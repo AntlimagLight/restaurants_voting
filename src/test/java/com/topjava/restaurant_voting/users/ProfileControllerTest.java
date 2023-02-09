@@ -32,7 +32,7 @@ public class ProfileControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(delete("/user/profile")
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is(204));
         assertFalse(userRepository.findById(START_SEQ).isPresent());
     }
 
@@ -43,7 +43,7 @@ public class ProfileControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(UPD_USER, UPD_USER.getPassword())))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is(204));
         USER_MATCHER.assertMatch(userRepository.findById(START_SEQ).get(), setIdForTests(UPD_USER, START_SEQ));
     }
 

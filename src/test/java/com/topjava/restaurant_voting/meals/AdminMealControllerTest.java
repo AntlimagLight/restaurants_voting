@@ -26,7 +26,7 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(NEW_MEAL)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
         Meal meal = mealRepository.findByRestaurantAndName(restaurantRepository.findById(TESTING_RESTAURANT_ID).get(),
                 NEW_MEAL.getName()).get();
         MEAL_MATCHER.assertMatch(meal, setIdForTests(NEW_MEAL, meal.getId()));
@@ -41,7 +41,7 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(newMeal)))
                 .andDo(print())
-                .andExpect(status().is(400));
+                .andExpect(status().is(422));
         assertFalse(mealRepository.findById(NEW_ENTITY_ID).isPresent());
     }
 
@@ -52,7 +52,7 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(UPDATED_MEAL)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is(204));
         Meal meal = mealRepository.findById(TESTING_MEAL_ID).get();
         MEAL_MATCHER.assertMatch(meal, setIdForTests(UPDATED_MEAL, meal.getId()));
     }
@@ -64,7 +64,7 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(UPDATED_MEAL)))
                 .andDo(print())
-                .andExpect(status().is(400));
+                .andExpect(status().is(404));
         Meal meal = mealRepository.findById(START_SEQ + 6).get();
         MEAL_MATCHER.assertMatch(meal, MEAL_100006);
     }
@@ -74,7 +74,7 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(delete("/admin/restaurants/" + TESTING_RESTAURANT_ID + "/menu/" + TESTING_MEAL_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is(204));
         assertFalse(mealRepository.findById(TESTING_MEAL_ID).isPresent());
     }
 
@@ -83,7 +83,7 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(delete("/admin/restaurants/" + TESTING_RESTAURANT_ID + "/menu/" + START_SEQ + 6)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(400));
+                .andExpect(status().is(404));
         assertTrue(mealRepository.findById(START_SEQ + 6).isPresent());
     }
 

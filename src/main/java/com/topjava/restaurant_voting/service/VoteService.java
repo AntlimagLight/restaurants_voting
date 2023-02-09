@@ -49,12 +49,12 @@ public class VoteService {
     }
 
     @Transactional
-    public void makeVote(User user, Integer restaurantId) {
+    public Vote makeVote(User user, Integer restaurantId) {
         LocalDate now = LocalDateTime.now().toLocalDate();
         Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurantId), RESTAURANT_ENTITY_NAME);
         assertNotExistence(voteRepository.findByUserAndDate(user, now),
                 "today for this " + USER_ENTITY_NAME + " " + VOTE_ENTITY_NAME);
-        voteRepository.save(new Vote(null, user, restaurant, now));
+        return voteRepository.save(new Vote(null, user, restaurant, now));
     }
 
     @Transactional

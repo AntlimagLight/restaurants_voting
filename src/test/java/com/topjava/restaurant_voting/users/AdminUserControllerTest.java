@@ -25,7 +25,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(NEW_ADMIN, NEW_ADMIN.getPassword())))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
         User user = userRepository.findByEmail(NEW_ADMIN.getEmail()).get();
         USER_MATCHER.assertMatch(user, setIdForTests(NEW_ADMIN, user.getId()));
     }
@@ -37,7 +37,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(DUPLICATE_EMAIL_USER, DUPLICATE_EMAIL_USER.getPassword())))
                 .andDo(print())
-                .andExpect(status().is(400));
+                .andExpect(status().is(422));
         assertFalse(userRepository.findById(NEW_ENTITY_ID).isPresent());
     }
 
@@ -48,7 +48,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(UPD_USER_TO_ADMIN, UPD_USER_TO_ADMIN.getPassword())))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is(204));
         User user = userRepository.findById(TESTING_USER_ID).get();
         USER_MATCHER.assertMatch(user, setIdForTests(UPD_USER_TO_ADMIN, user.getId()));
     }
@@ -60,7 +60,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(UPD_USER_TO_ADMIN, UPD_USER_TO_ADMIN.getPassword())))
                 .andDo(print())
-                .andExpect(status().is(400));
+                .andExpect(status().is(404));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(patch("/admin/users/" + TESTING_USER_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is(204));
         assertNotSame(userRepository.findById(TESTING_USER_ID).get().getEnabled(), USER2.getEnabled());
     }
 
@@ -96,7 +96,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(get("/admin/users/" + NOT_EXISTING_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(400));
+                .andExpect(status().is(404));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(get("/admin/users/by-email?email=nonexmail@mail.ru")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(400));
+                .andExpect(status().is(404));
     }
 
     @Test
@@ -122,7 +122,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(delete("/admin/users/" + TESTING_USER_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is(204));
         assertFalse(userRepository.findById(TESTING_USER_ID).isPresent());
     }
 
@@ -131,7 +131,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(delete("/admin/users/" + NOT_EXISTING_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(400));
+                .andExpect(status().is(404));
     }
 
     @Test

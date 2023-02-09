@@ -24,12 +24,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void create(User user) throws AlreadyExistException {
+    public User create(User user) throws AlreadyExistException {
         assertNotExistence(userRepository.findByEmail(user.getEmail()), USER_ENTITY_NAME + " with this email");
         user.setEnabled(true);
         LocalDateTime now = LocalDateTime.now();
         user.setRegistered(now.toLocalDate());
-        userRepository.save(UserUtils.prepareToSave(user));
+        return userRepository.save(UserUtils.prepareToSave(user));
     }
 
     @Transactional

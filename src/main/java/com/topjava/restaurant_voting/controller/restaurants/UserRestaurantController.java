@@ -1,5 +1,6 @@
 package com.topjava.restaurant_voting.controller.restaurants;
 
+import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.service.RestaurantService;
@@ -36,8 +37,15 @@ public class UserRestaurantController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseError handle(Exception exception) {
+    public ResponseError badRequestHandle(Exception exception) {
         log.error(exception.getMessage(), exception);
         return new ResponseError(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseError notExistHandle(NotExistException exception) {
+        log.error(exception.getMessage(), exception);
+        return new ResponseError(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

@@ -22,10 +22,10 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
 
     @Transactional
-    public void create(Restaurant restaurant) throws AlreadyExistException {
+    public Restaurant create(Restaurant restaurant) throws AlreadyExistException {
         assertNotExistence(restaurantRepository.findByName(restaurant.getName()),
                 RESTAURANT_ENTITY_NAME + " with this name");
-        restaurantRepository.save(restaurant);
+        return restaurantRepository.save(restaurant);
     }
 
     @Transactional

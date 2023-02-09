@@ -38,7 +38,7 @@ public class VoteControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(get("/user/votes/2010-10-10")
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(400));
+                .andExpect(status().is(404));
     }
 
     @Test
@@ -46,18 +46,24 @@ public class VoteControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(post("/user/votes?restaurant_id=" + TESTING_RESTAURANT_ID)
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
         assertEquals(voteRepository.findByUserAndDate(userRepository.findById(START_SEQ).get(),
                 LocalDateTime.now().toLocalDate()).get().getRestaurant().getId(), TESTING_RESTAURANT_ID);
     }
 
     @Test
     void changeVote() throws Exception {
+        LocalDateTime now = LocalDateTime.now();
+        int expectingStatus;
+        if (now.toLocalTime().isBefore(MAX_CHANGE_VOTE_TIME)) {
+            expectingStatus = 204;
+        } else {
+            expectingStatus = 422;
+        }
         this.mockMvc.perform(put("/user/votes?restaurant_id=" + TESTING_RESTAURANT_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().isOk());
-        LocalDateTime now = LocalDateTime.now();
+                .andExpect(status().is(expectingStatus));
         Vote vote = voteRepository.findByUserAndDate(userRepository.findById(START_SEQ + 2).get(), now.toLocalDate()).get();
         assertFalse(voteRepository.findById(6).isPresent());
         if (now.toLocalTime().isBefore(MAX_CHANGE_VOTE_TIME)) {
