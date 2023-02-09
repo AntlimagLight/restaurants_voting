@@ -27,7 +27,7 @@ public class AdminMealController {
     private final MealService mealService;
 
     @PostMapping()
-    public ResponseEntity<URI> createMeal(@RequestBody Meal meal, @PathVariable Integer restaurant_id) {
+    public ResponseEntity<URI> createMeal(@Valid @RequestBody Meal meal, @PathVariable Integer restaurant_id) {
         log.info("create {} {} in {} {}", MEAL_ENTITY_NAME, meal.getName(), RESTAURANT_ENTITY_NAME, restaurant_id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/admin/restaurants/" + restaurant_id + "/menu/{id}")
@@ -36,7 +36,7 @@ public class AdminMealController {
     }
 
     @PutMapping("/{meal_id}")
-    public ResponseEntity<String> updateMeal(@RequestBody Meal meal, @PathVariable Integer restaurant_id, @PathVariable Integer meal_id) {
+    public ResponseEntity<String> updateMeal(@Valid @RequestBody Meal meal, @PathVariable Integer restaurant_id, @PathVariable Integer meal_id) {
         log.info("update {} {} in {} {}", MEAL_ENTITY_NAME, meal.getName(), RESTAURANT_ENTITY_NAME, restaurant_id);
         mealService.update(meal, meal_id, restaurant_id);
         return ResponseEntity.status(204).body(MEAL_ENTITY_NAME + " updated:\n" + meal.getId());

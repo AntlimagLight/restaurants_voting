@@ -26,7 +26,6 @@ public class Meal extends AbstractNamedEntity {
     private int cost;
 
     @Column(name = "meal_date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
-    @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate date;
 

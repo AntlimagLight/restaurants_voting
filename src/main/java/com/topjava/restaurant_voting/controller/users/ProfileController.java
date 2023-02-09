@@ -4,6 +4,7 @@ import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.security.AuthUser;
 import com.topjava.restaurant_voting.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,7 @@ public class ProfileController {
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody User user, @AuthenticationPrincipal AuthUser authUser) {
+    public ResponseEntity<String> update(@Valid @RequestBody User user, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update from profile {} {}", USER_ENTITY_NAME, authUser.getEmail());
         assureIdConsistent(user, authUser.getId());
         user.setRoles(convertToRoles(authUser.getAuthorities()));

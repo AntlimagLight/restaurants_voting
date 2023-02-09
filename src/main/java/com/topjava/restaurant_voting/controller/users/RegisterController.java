@@ -4,6 +4,7 @@ import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class RegisterController {
     private final UserService userService;
 
     @PostMapping()
-    public ResponseEntity<URI> registration(@RequestBody User user) {
+    public ResponseEntity<URI> registration(@Valid @RequestBody User user) {
         log.info("registration {} {}", USER_ENTITY_NAME, user.getEmail());
         user.setRoles(STARTING_ROLES);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()

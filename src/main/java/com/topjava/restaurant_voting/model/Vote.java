@@ -27,7 +27,6 @@ public class Vote {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
     @Column(name = "vote_date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
-    @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate date;
 

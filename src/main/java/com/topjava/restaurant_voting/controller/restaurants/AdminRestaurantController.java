@@ -5,6 +5,7 @@ import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.service.RestaurantService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class AdminRestaurantController {
     private final RestaurantService restaurantService;
 
     @PostMapping
-    public ResponseEntity<URI> createRestaurant(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<URI> createRestaurant(@Valid @RequestBody Restaurant restaurant) {
         log.info("create {} {}", RESTAURANT_ENTITY_NAME, restaurant.getName());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/admin/restaurants/{id}")
@@ -33,7 +34,7 @@ public class AdminRestaurantController {
     }
 
     @PutMapping("/{restaurant_id}")
-    public ResponseEntity<String> updateRestaurant(@RequestBody Restaurant restaurant, @PathVariable Integer restaurant_id) {
+    public ResponseEntity<String> updateRestaurant(@Valid @RequestBody Restaurant restaurant, @PathVariable Integer restaurant_id) {
         log.info("update {} {}", RESTAURANT_ENTITY_NAME, restaurant.getName());
         restaurantService.update(restaurant_id, restaurant);
         return ResponseEntity.status(204).body(RESTAURANT_ENTITY_NAME + " updated:\n" + restaurant.getId());

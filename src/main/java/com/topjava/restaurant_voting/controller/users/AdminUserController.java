@@ -5,6 +5,7 @@ import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class AdminUserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<URI> createUser(@RequestBody User user) {
+    public ResponseEntity<URI> createUser(@Valid @RequestBody User user) {
         log.info("create {} {}", USER_ENTITY_NAME, user.getEmail());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/admin/users/{id}")
@@ -35,7 +36,7 @@ public class AdminUserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(@RequestBody User user, @PathVariable Integer id) {
+    public ResponseEntity<String> updateUser(@Valid @RequestBody User user, @PathVariable Integer id) {
         log.info("update {} {}", USER_ENTITY_NAME, user.getEmail());
         userService.update(id, assureDefaultRole(user));
         return ResponseEntity.status(204).body(USER_ENTITY_NAME + " updated:\n" + id);
