@@ -1,17 +1,23 @@
 package com.topjava.restaurant_voting;
 
 import com.topjava.restaurant_voting.model.Vote;
+import com.topjava.restaurant_voting.util.JsonUtil;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 
 import static com.topjava.restaurant_voting.model.AbstractBaseEntity.START_SEQ;
 import static com.topjava.restaurant_voting.service.VoteService.MAX_CHANGE_VOTE_TIME;
+import static com.topjava.restaurant_voting.test_utils.TestData.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -19,15 +25,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class VoteControllerTest extends RestaurantVotingApplicationTests {
 
 
-//    @Test
-//    void getVote() throws Exception {
-//        this.mockMvc.perform(get("/user/votes/2022-06-10")
-//                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(VOTE_DTO_MATCHER.contentJson(VOTE_DTO_2));
-//    }
+    @Test
+    void getVote() throws Exception {
+        this.mockMvc.perform(get("/user/votes/2022-06-10")
+                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(VOTE_DTO_MATCHER.contentJson(VOTE_DTO_2));
+    }
 
     @Test
     void getNonExistent() throws Exception {
@@ -61,7 +67,7 @@ public class VoteControllerTest extends RestaurantVotingApplicationTests {
                 .andDo(print())
                 .andExpect(status().is(expectingStatus));
         Vote vote = voteRepository.findByUserAndDate(userRepository.findById(START_SEQ + 2).get(), now.toLocalDate()).get();
-        assertFalse(voteRepository.findById(100019L).isPresent());
+        assertFalse(voteRepository.findById(NEW_ENTITY_ID).isPresent());
         if (now.toLocalTime().isBefore(MAX_CHANGE_VOTE_TIME)) {
             assertEquals(vote.getRestaurant().getId(), TESTING_RESTAURANT_ID);
         } else {
@@ -74,27 +80,28 @@ public class VoteControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(post("/user/votes/" + TESTING_RESTAURANT_ID))
                 .andDo(print())
                 .andExpect(status().is(401));
-        assertFalse(voteRepository.findById(100019L).isPresent());
+        assertFalse(voteRepository.findById(NEW_ENTITY_ID).isPresent());
     }
 
-//    @Test
-//    void getAllUserVotes() throws Exception {
-//        this.mockMvc.perform(get("/user/restaurants")
-//                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(VOTE_DTO_MATCHER.contentJson(VOTES_BY_USER100000));
-//    }
+    @Test
+    void getAllUserVotes() throws Exception {
+        ResultActions resultActions = this.mockMvc.perform(get("/user/votes")
+                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        JSONAssert.assertEquals(JsonUtil.writeValue(VOTES_BY_USER100000),
+                resultActions.andReturn().getResponse().getContentAsString(), false);
+    }
 
-//    @SuppressWarnings("rawtypes")
-//    @Test
-//    void getStatistic() throws Exception {
-//        this.mockMvc.perform(get("/user/votes/statistic?date=2022-06-10")
-//                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(MAP_MATCHER.contentJson((HashMap) STATISTIC));
-//    }
+    @Test
+    void getStatistic() throws Exception {
+        ResultActions resultActions = this.mockMvc.perform(get("/user/votes/statistic?date=2022-06-10")
+                        .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        JSONAssert.assertEquals(JsonUtil.writeValue(STATISTIC),
+                resultActions.andReturn().getResponse().getContentAsString(), false);
+    }
 }

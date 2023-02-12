@@ -1,6 +1,7 @@
 package com.topjava.restaurant_voting.test_utils;
 
 import com.topjava.restaurant_voting.dto.RestaurantWithMenuDto;
+import com.topjava.restaurant_voting.dto.VoteCountDtoImpl;
 import com.topjava.restaurant_voting.dto.VoteDto;
 import com.topjava.restaurant_voting.model.*;
 import com.topjava.restaurant_voting.util.JsonUtil;
@@ -20,9 +21,6 @@ public class TestData {
             = MatcherFactory.usingIgnoringFieldsComparator(Meal.class, "restaurant", "date");
     public static final MatcherFactory.Matcher<User> USER_MATCHER
             = MatcherFactory.usingIgnoringFieldsComparator(User.class, "password", "votes", "registered");
-
-    public static final MatcherFactory.Matcher<RestaurantWithMenuDto> RESTAURANT_WITH_MENU_MATCHER
-            = MatcherFactory.usingIgnoringFieldsComparator(RestaurantWithMenuDto.class);
     public static final MatcherFactory.Matcher<VoteDto> VOTE_DTO_MATCHER
             = MatcherFactory.usingIgnoringFieldsComparator(VoteDto.class);
 
@@ -67,30 +65,30 @@ public class TestData {
         List<Meal> REST_100003_TODAY_MENU = new ArrayList<>();
         REST_100003_TODAY_MENU.add(MEAL_100006);
         REST_100003_TODAY_MENU.add(MEAL_100008);
-        ALL_REST_MENU.add(new RestaurantWithMenuDto(REST_100003.getId(),REST_100003.getName(),REST_100003_TODAY_MENU));
+        ALL_REST_MENU.add(new RestaurantWithMenuDto(REST_100003.getId(), REST_100003.getName(), REST_100003_TODAY_MENU));
         List<Meal> REST_100004_TODAY_MENU = new ArrayList<>();
         REST_100004_TODAY_MENU.add(MEAL_100009);
         REST_100004_TODAY_MENU.add(MEAL_100010);
         REST_100004_TODAY_MENU.add(MEAL_100011);
-        ALL_REST_MENU.add(new RestaurantWithMenuDto(REST_100004.getId(),REST_100004.getName(),REST_100004_TODAY_MENU));
+        ALL_REST_MENU.add(new RestaurantWithMenuDto(REST_100004.getId(), REST_100004.getName(), REST_100004_TODAY_MENU));
         List<Meal> REST_100005_TODAY_MENU = new ArrayList<>();
         REST_100005_TODAY_MENU.add(MEAL_100012);
-        ALL_REST_MENU.add(new RestaurantWithMenuDto(REST_100005.getId(),REST_100005.getName(),REST_100005_TODAY_MENU));
+        ALL_REST_MENU.add(new RestaurantWithMenuDto(REST_100005.getId(), REST_100005.getName(), REST_100005_TODAY_MENU));
     }
 
     public static final VoteDto VOTE_DTO_1 = new VoteDto(START_SEQ + 14, USER_100000.getId(),
             REST_100004.getId(), LocalDate.of(2021, 12, 1));
     public static final VoteDto VOTE_DTO_2 = new VoteDto(START_SEQ + 15, USER_100000.getId(),
             REST_100005.getId(), LocalDate.of(2022, 6, 10));
-    public final static List<VoteDto> VOTES_BY_USER100000 = new ArrayList<VoteDto>();
-//    public final static Set<RestaurantStatistic> STATISTIC = new HashSet<>();
-//
-//    static {
-//        VOTES_BY_USER100000.add(VOTE_DTO_1);
-//        VOTES_BY_USER100000.add(VOTE_DTO_2);
-//        STATISTIC.add(new RestaurantStatistic(REST_100003.getId(),REST_100003.getName(),1));
-//        STATISTIC.add(new RestaurantStatistic(REST_100005.getId(),REST_100005.getName(),1));
-//    }
+    public final static List<VoteDto> VOTES_BY_USER100000 = new ArrayList<>();
+    public final static List<VoteCountDtoImpl> STATISTIC = new ArrayList<>();
+
+    static {
+        VOTES_BY_USER100000.add(VOTE_DTO_1);
+        VOTES_BY_USER100000.add(VOTE_DTO_2);
+        STATISTIC.add(new VoteCountDtoImpl(REST_100003.getId(), REST_100003.getName(), 2));
+        STATISTIC.add(new VoteCountDtoImpl(REST_100005.getId(), REST_100005.getName(), 1));
+    }
 
     public static <T extends AbstractBaseEntity> T setIdForTests(T entity, Long id) {
         entity.setId(id);

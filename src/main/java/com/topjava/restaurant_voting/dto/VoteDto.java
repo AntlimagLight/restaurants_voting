@@ -1,5 +1,6 @@
 package com.topjava.restaurant_voting.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class VoteDto {
     private long userId;
     private long restaurantId;
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDate date;
 
 }

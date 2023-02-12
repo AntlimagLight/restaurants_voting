@@ -82,6 +82,8 @@ public class InitiateDataUtil implements CommandLineRunner {
                 restaurantRepository.findById(100005L).get(), LocalDate.of(2022, 6, 10));
         Vote oldVote3 = new Vote(null, userRepository.findById(100001L).get(),
                 restaurantRepository.findById(100003L).get(), LocalDate.of(2022, 6, 10));
+        Vote oldVote4 = new Vote(null, userRepository.findById(100002L).get(),
+                restaurantRepository.findById(100003L).get(), LocalDate.of(2022, 6, 10));
         Vote newVote1 = new Vote(null, userRepository.findById(100001L).get(),
                 restaurantRepository.findById(100004L).get(), START_DATE);
         Vote newVote2 = new Vote(null, userRepository.findById(100002L).get(),
@@ -90,6 +92,7 @@ public class InitiateDataUtil implements CommandLineRunner {
         voteRepository.save(oldVote1);
         voteRepository.save(oldVote2);
         voteRepository.save(oldVote3);
+        voteRepository.save(oldVote4);
         voteRepository.save(newVote1);
         voteRepository.save(newVote2);
     }

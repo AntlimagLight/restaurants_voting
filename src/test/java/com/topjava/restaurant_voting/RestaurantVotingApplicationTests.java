@@ -38,7 +38,7 @@ public class RestaurantVotingApplicationTests {
     protected final static Long TESTING_USER_ID = START_SEQ + 1;
     protected final static Long TESTING_RESTAURANT_ID = START_SEQ + 4;
     protected final static Long TESTING_MEAL_ID = START_SEQ + 9;
-    protected final static Long NEW_ENTITY_ID = START_SEQ + 14;
+    protected final static Long NEW_ENTITY_ID = START_SEQ + 20;
     protected final static String USER_LOGIN_EMAIL = USER1.getEmail();
     protected final static String ADMIN_LOGIN_EMAIL = ADMIN.getEmail();
     protected final static String USER_LOGIN_PASSWORD = USER1.getPassword();
