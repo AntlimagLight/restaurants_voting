@@ -12,7 +12,7 @@ import static com.topjava.restaurant_voting.util.UserUtils.convertToAuthorities;
 @SuppressWarnings("FieldMayBeFinal")
 public class AuthUser implements UserDetails {
 
-    private Integer id;
+    private Long id;
     private String userName;
     private String email;
     @JsonIgnore
@@ -20,7 +20,7 @@ public class AuthUser implements UserDetails {
     private Boolean enabled;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public AuthUser(Integer id, String userName, String email, String password, Boolean enabled, Collection<? extends GrantedAuthority> authorities) {
+    public AuthUser(Long id, String userName, String email, String password, Boolean enabled, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -34,7 +34,7 @@ public class AuthUser implements UserDetails {
                 convertToAuthorities(user.getRoles()));
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

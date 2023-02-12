@@ -24,7 +24,7 @@ public class UserUtils {
         STARTING_ROLES.add(Role.USER);
     }
 
-    public static void assureIdConsistent(User user, int id) {
+    public static void assureIdConsistent(User user, long id) {
         if (user.isNew()) {
             user.setId(id);
         } else if (user.id() != id) {

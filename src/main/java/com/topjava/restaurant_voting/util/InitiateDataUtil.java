@@ -76,16 +76,16 @@ public class InitiateDataUtil implements CommandLineRunner {
         mealRepository.save(MEAL_7);
         mealRepository.save(MEAL_8);
 
-        Vote oldVote1 = new Vote(null, userRepository.findById(100000).get(),
-                restaurantRepository.findById(100004).get(), LocalDate.of(2021, 12, 1));
-        Vote oldVote2 = new Vote(null, userRepository.findById(100000).get(),
-                restaurantRepository.findById(100005).get(), LocalDate.of(2022, 6, 10));
-        Vote oldVote3 = new Vote(null, userRepository.findById(100001).get(),
-                restaurantRepository.findById(100003).get(), LocalDate.of(2022, 6, 10));
-        Vote newVote1 = new Vote(null, userRepository.findById(100001).get(),
-                restaurantRepository.findById(100004).get(), START_DATE);
-        Vote newVote2 = new Vote(null, userRepository.findById(100002).get(),
-                restaurantRepository.findById(100003).get(), START_DATE);
+        Vote oldVote1 = new Vote(null, userRepository.findById(100000L).get(),
+                restaurantRepository.findById(100004L).get(), LocalDate.of(2021, 12, 1));
+        Vote oldVote2 = new Vote(null, userRepository.findById(100000L).get(),
+                restaurantRepository.findById(100005L).get(), LocalDate.of(2022, 6, 10));
+        Vote oldVote3 = new Vote(null, userRepository.findById(100001L).get(),
+                restaurantRepository.findById(100003L).get(), LocalDate.of(2022, 6, 10));
+        Vote newVote1 = new Vote(null, userRepository.findById(100001L).get(),
+                restaurantRepository.findById(100004L).get(), START_DATE);
+        Vote newVote2 = new Vote(null, userRepository.findById(100002L).get(),
+                restaurantRepository.findById(100003L).get(), START_DATE);
 
         voteRepository.save(oldVote1);
         voteRepository.save(oldVote2);

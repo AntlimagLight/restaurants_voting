@@ -29,19 +29,19 @@ public class RestaurantService {
     }
 
     @Transactional
-    public void update(Integer id, Restaurant restaurant) throws NotExistException {
+    public void update(Long id, Restaurant restaurant) throws NotExistException {
         assertExistence(restaurantRepository.findById(id), RESTAURANT_ENTITY_NAME);
         restaurant.setId(id);
         restaurantRepository.save(restaurant);
     }
 
     @Cacheable(cacheNames = "restaurantCache", key = "#id")
-    public Restaurant getById(Integer id) throws NotExistException {
+    public Restaurant getById(Long id) throws NotExistException {
         return assertExistence(restaurantRepository.findById(id), RESTAURANT_ENTITY_NAME);
     }
 
     @Transactional
-    public void delete(int id) throws NotExistException {
+    public void delete(long id) throws NotExistException {
         assertExistence(restaurantRepository.findById(id), RESTAURANT_ENTITY_NAME);
         restaurantRepository.deleteById(id);
     }

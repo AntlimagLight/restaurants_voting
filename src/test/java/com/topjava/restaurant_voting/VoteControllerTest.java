@@ -2,20 +2,16 @@ package com.topjava.restaurant_voting;
 
 import com.topjava.restaurant_voting.model.Vote;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 
 import static com.topjava.restaurant_voting.model.AbstractBaseEntity.START_SEQ;
 import static com.topjava.restaurant_voting.service.VoteService.MAX_CHANGE_VOTE_TIME;
-import static com.topjava.restaurant_voting.test_utils.TestData.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -65,11 +61,11 @@ public class VoteControllerTest extends RestaurantVotingApplicationTests {
                 .andDo(print())
                 .andExpect(status().is(expectingStatus));
         Vote vote = voteRepository.findByUserAndDate(userRepository.findById(START_SEQ + 2).get(), now.toLocalDate()).get();
-        assertFalse(voteRepository.findById(6).isPresent());
+        assertFalse(voteRepository.findById(100019L).isPresent());
         if (now.toLocalTime().isBefore(MAX_CHANGE_VOTE_TIME)) {
             assertEquals(vote.getRestaurant().getId(), TESTING_RESTAURANT_ID);
         } else {
-            assertEquals(vote.getRestaurant().getId(), (Integer) 100003);
+            assertEquals(vote.getRestaurant().getId(), 100003L);
         }
     }
 
@@ -78,7 +74,7 @@ public class VoteControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(post("/user/votes/" + TESTING_RESTAURANT_ID))
                 .andDo(print())
                 .andExpect(status().is(401));
-        assertFalse(voteRepository.findById(6).isPresent());
+        assertFalse(voteRepository.findById(100019L).isPresent());
     }
 
 //    @Test

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.util.CollectionUtils;
@@ -50,11 +49,11 @@ public class User extends AbstractNamedEntity {
     @ToString.Exclude
     private List<Vote> votes;
 
-    public User(Integer id, String name, String email, String password, LocalDate registered, Boolean enabled, Role... roles) {
+    public User(Long id, String name, String email, String password, LocalDate registered, Boolean enabled, Role... roles) {
         this(id, name, email, password, registered, enabled, Arrays.asList((roles)));
     }
 
-    public User(Integer id, String name, String email, String password, LocalDate registered, Boolean enabled, Collection<Role> roles) {
+    public User(Long id, String name, String email, String password, LocalDate registered, Boolean enabled, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
@@ -63,7 +62,7 @@ public class User extends AbstractNamedEntity {
         setRoles(roles);
     }
 
-    public User(Integer id, String name, String email, String password, LocalDate registered, Boolean enabled) {
+    public User(Long id, String name, String email, String password, LocalDate registered, Boolean enabled) {
         this(id, name, email, password, registered, enabled, Collections.emptyList());
     }
 

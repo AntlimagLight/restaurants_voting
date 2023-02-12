@@ -18,7 +18,7 @@ public abstract class AbstractNamedEntity extends AbstractBaseEntity {
     @Size(min = 2, max = 128)
     protected String name;
 
-    protected AbstractNamedEntity(Integer id, String name) {
+    protected AbstractNamedEntity(Long id, String name) {
         super(id);
         this.name = name;
     }

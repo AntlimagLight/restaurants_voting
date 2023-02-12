@@ -34,17 +34,17 @@ public class AdminRestaurantController {
     }
 
     @PutMapping("/{restaurant_id}")
-    public ResponseEntity<String> updateRestaurant(@Valid @RequestBody Restaurant restaurant, @PathVariable Integer restaurant_id) {
+    public ResponseEntity<String> updateRestaurant(@Valid @RequestBody Restaurant restaurant, @PathVariable Long restaurant_id) {
         log.info("update {} {}", RESTAURANT_ENTITY_NAME, restaurant.getName());
         restaurantService.update(restaurant_id, restaurant);
-        return ResponseEntity.status(204).body(RESTAURANT_ENTITY_NAME + " updated:\n" + restaurant.getId());
+        return ResponseEntity.status(204).body(null);
     }
 
     @DeleteMapping("/{restaurant_id}")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable Integer restaurant_id) {
+    public ResponseEntity<String> deleteRestaurant(@PathVariable Long restaurant_id) {
         log.info("delete {} {}", RESTAURANT_ENTITY_NAME, restaurant_id);
         restaurantService.delete(restaurant_id);
-        return ResponseEntity.status(204).body(RESTAURANT_ENTITY_NAME + " deleted:\n" + restaurant_id);
+        return ResponseEntity.status(204).body(null);
     }
 
     @ExceptionHandler

@@ -24,7 +24,7 @@ public class Restaurant extends AbstractNamedEntity {
     @ToString.Exclude
     private List<Meal> menu;
 
-    public Restaurant(Integer id, String name) {
+    public Restaurant(Long id, String name) {
         super(id, name);
     }
 

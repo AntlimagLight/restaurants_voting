@@ -1,5 +1,6 @@
 package com.topjava.restaurant_voting.controller;
 
+import com.topjava.restaurant_voting.dto.VoteCountDto;
 import com.topjava.restaurant_voting.dto.VoteDto;
 import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
@@ -17,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
@@ -40,7 +40,7 @@ public class VoteController {
     }
 
     @PostMapping()
-    public ResponseEntity<URI> makeVote(@AuthenticationPrincipal AuthUser authUser, @RequestParam Integer restaurant_id) {
+    public ResponseEntity<URI> makeVote(@AuthenticationPrincipal AuthUser authUser, @RequestParam Long restaurant_id) {
         log.info("{} make vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/user/votes/{vote_date}")
@@ -50,11 +50,10 @@ public class VoteController {
     }
 
     @PutMapping()
-    public ResponseEntity<String> changeVote(@AuthenticationPrincipal AuthUser authUser, @RequestParam Integer restaurant_id) {
+    public ResponseEntity<String> changeVote(@AuthenticationPrincipal AuthUser authUser, @RequestParam Long restaurant_id) {
         log.info("{} change vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
-        boolean voteSuccess = voteService.changeVote(userService.getById(authUser.getId()), restaurant_id);
-        if (voteSuccess) {
-            return ResponseEntity.status(204).body(VOTE_ENTITY_NAME + " changed");
+        if (voteService.changeVote(userService.getById(authUser.getId()), restaurant_id)) {
+            return ResponseEntity.status(204).body(null);
         } else {
             return ResponseEntity.status(422).body("Voting change time is out, you can change you vote between 0:00 and "
                     + MAX_CHANGE_VOTE_TIME.toString());
@@ -68,7 +67,7 @@ public class VoteController {
     }
 
     @GetMapping("/statistic")
-    public ResponseEntity<Map<Integer, Integer>> viewStatistic(@RequestParam LocalDate date) {
+    public ResponseEntity<List<VoteCountDto>> viewStatistic(@RequestParam LocalDate date) {
         log.info("view statistics for the {}", date);
         return ResponseEntity.ok(voteService.getStatistic(date));
     }

@@ -56,14 +56,9 @@ public class MatcherFactory {
         }
 
         private static String getContent(MvcResult result) throws UnsupportedEncodingException {
-            return cutFieldNew(result.getResponse().getContentAsString());
+            return result.getResponse().getContentAsString();
         }
 
-        private static String cutFieldNew(String content) {
-            return content
-                    .replaceAll(",\"new\":false", "")
-                    .replaceAll(",\"new\":true", "");
-        }
     }
 
 }

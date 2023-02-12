@@ -1,12 +1,10 @@
 package com.topjava.restaurant_voting.exeption;
 
-import java.time.LocalDateTime;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import lombok.Getter;
+import java.time.LocalDateTime;
 
 @Getter
 public class ResponseError {

@@ -1,5 +1,6 @@
 package com.topjava.restaurant_voting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.util.Assert;
@@ -10,22 +11,22 @@ import org.springframework.util.Assert;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractBaseEntity {
-    public static final int START_SEQ = 100000;
+    public static final long START_SEQ = 100000;
 
     @Id
-    @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)
+    @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = (int) START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
-    protected Integer id;
+    protected Long id;
 
-    protected AbstractBaseEntity(Integer id) {
+    protected AbstractBaseEntity(Long id) {
         this.id = id;
     }
 
-    public int id() {
+    public long id() {
         Assert.notNull(id, "Entity must have id");
         return id;
     }
-
+    @JsonIgnore
     public boolean isNew() {
         return this.id == null;
     }
@@ -42,7 +43,7 @@ public abstract class AbstractBaseEntity {
 
     @Override
     public int hashCode() {
-        return id == null ? 0 : id;
+        return id == null ? 0 : id.hashCode();
     }
 
 }

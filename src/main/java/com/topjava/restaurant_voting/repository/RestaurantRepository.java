@@ -7,9 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface RestaurantRepository extends CrudRepository<Restaurant, Integer> {
+
+public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
     Optional<Restaurant> findByName(String name);
+
     @Query("select r from Restaurant r order by r.id asc")
     List<Restaurant> findAll();
 }

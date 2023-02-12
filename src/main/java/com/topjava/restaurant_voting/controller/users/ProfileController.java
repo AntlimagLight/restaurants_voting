@@ -34,7 +34,7 @@ public class ProfileController {
     public ResponseEntity<String> delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("delete from profile {} {}", USER_ENTITY_NAME, authUser.getEmail());
         userService.delete(authUser.getId());
-        return ResponseEntity.status(204).body("profile deleted " + authUser.getId());
+        return ResponseEntity.status(204).body(null);
     }
 
     @PutMapping
@@ -43,7 +43,7 @@ public class ProfileController {
         assureIdConsistent(user, authUser.getId());
         user.setRoles(convertToRoles(authUser.getAuthorities()));
         userService.update(authUser.getId(), user);
-        return ResponseEntity.status(204).body("profile updated " + authUser.getId());
+        return ResponseEntity.status(204).body(null);
     }
 
     @ExceptionHandler

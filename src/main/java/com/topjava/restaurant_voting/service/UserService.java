@@ -33,7 +33,7 @@ public class UserService {
     }
 
     @Transactional
-    public void update(Integer id, User user) throws NotExistException {
+    public void update(Long id, User user) throws NotExistException {
         User oldUser = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         user.setId(id);
         user.setRegistered(oldUser.getRegistered());
@@ -42,14 +42,14 @@ public class UserService {
     }
 
     @Transactional
-    public void switchEnable(Integer id) throws NotExistException {
+    public void switchEnable(Long id) throws NotExistException {
         User user = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         user.setEnabled(!user.getEnabled());
         userRepository.save(user);
     }
 
     @Cacheable(cacheNames = "userCache", key = "#id")
-    public User getById(Integer id) throws NotExistException {
+    public User getById(Long id) throws NotExistException {
         return assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
     }
 
@@ -58,7 +58,7 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(int id) throws NotExistException {
+    public void delete(long id) throws NotExistException {
         assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         userRepository.deleteById(id);
     }

@@ -14,9 +14,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class VoteDto {
 
-    private Long id;
-    private Integer user_id;
-    private Integer restaurant_id;
+    private long id;
+    private long user_id;
+    private long restaurant_id;
     @NotNull
     private LocalDate date;
 

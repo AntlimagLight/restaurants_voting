@@ -8,11 +8,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface MealRepository extends CrudRepository<Meal, Integer> {
+public interface MealRepository extends CrudRepository<Meal, Long> {
 
     Optional<Meal> findByRestaurantAndName(Restaurant restaurant, String name);
 
-    Optional<Meal> findByRestaurantAndId(Restaurant restaurant, Integer id);
+    Optional<Meal> findByRestaurantAndId(Restaurant restaurant, Long id);
 
     List<Meal> findAllByRestaurant(Restaurant restaurant);
 

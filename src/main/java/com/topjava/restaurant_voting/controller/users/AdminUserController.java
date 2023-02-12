@@ -36,21 +36,21 @@ public class AdminUserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(@Valid @RequestBody User user, @PathVariable Integer id) {
+    public ResponseEntity<String> updateUser(@Valid @RequestBody User user, @PathVariable Long id) {
         log.info("update {} {}", USER_ENTITY_NAME, user.getEmail());
         userService.update(id, assureDefaultRole(user));
-        return ResponseEntity.status(204).body(USER_ENTITY_NAME + " updated:\n" + id);
+        return ResponseEntity.status(204).body(null);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> SwitchEnabled(@PathVariable Integer id) {
+    public ResponseEntity<String> SwitchEnabled(@PathVariable Long id) {
         log.info("switch enabled for {} {}", USER_ENTITY_NAME, id);
         userService.switchEnable(id);
-        return ResponseEntity.status(204).body("'enable' switched for " + USER_ENTITY_NAME + " " + id);
+        return ResponseEntity.status(204).body(null);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserByID(@PathVariable Integer id) {
+    public ResponseEntity<User> getUserByID(@PathVariable Long id) {
         log.info("get {} {}", USER_ENTITY_NAME, id);
         return ResponseEntity.ok(userService.getById(id));
     }
@@ -62,10 +62,10 @@ public class AdminUserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         log.info("delete {} {}", USER_ENTITY_NAME, id);
         userService.delete(id);
-        return ResponseEntity.status(204).body(USER_ENTITY_NAME + " deleted:\n" + id);
+        return ResponseEntity.status(204).body(null);
     }
 
     @GetMapping

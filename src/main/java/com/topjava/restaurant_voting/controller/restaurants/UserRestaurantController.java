@@ -24,7 +24,7 @@ public class UserRestaurantController {
     private final RestaurantService restaurantService;
 
     @GetMapping("/{restaurant_id}")
-    public ResponseEntity<Restaurant> getRestaurant(@PathVariable Integer restaurant_id) {
+    public ResponseEntity<Restaurant> getRestaurant(@PathVariable Long restaurant_id) {
         log.info("get {} {}", RESTAURANT_ENTITY_NAME, restaurant_id);
         return ResponseEntity.ok(restaurantService.getById(restaurant_id));
     }

@@ -13,7 +13,7 @@ import java.util.Map;
 @UtilityClass
 public class JsonUtil {
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
     public static <T> T readValue(String json, Class<T> clazz) {
         try {

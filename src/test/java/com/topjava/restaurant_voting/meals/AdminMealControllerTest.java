@@ -34,12 +34,10 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void createAlreadyExist() throws Exception {
-        Meal newMeal = MEAL_100009;
-        newMeal.setDate(null);
         this.mockMvc.perform(post("/admin/restaurants/" + TESTING_RESTAURANT_ID + "/menu")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(newMeal)))
+                        .content(JsonUtil.writeValue(NEW_MEAL_ALREADY_EXIST)))
                 .andDo(print())
                 .andExpect(status().is(422));
         assertFalse(mealRepository.findById(NEW_ENTITY_ID).isPresent());
@@ -95,6 +93,5 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
                 .andExpect(status().is(403));
         assertTrue(mealRepository.findById(TESTING_MEAL_ID).isPresent());
     }
-
 
 }

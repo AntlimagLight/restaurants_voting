@@ -2,7 +2,6 @@ package com.topjava.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -10,14 +9,10 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-@AllArgsConstructor
 @Entity
 @ToString
 @Table(name = "votes")
-public class Vote {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Vote extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
@@ -30,4 +25,10 @@ public class Vote {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate date;
 
+    public Vote(Long id, User user, Restaurant restaurant, LocalDate date) {
+        super(id);
+        this.user = user;
+        this.restaurant = restaurant;
+        this.date = date;
+    }
 }
