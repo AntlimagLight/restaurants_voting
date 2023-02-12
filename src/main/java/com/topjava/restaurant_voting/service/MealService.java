@@ -35,7 +35,7 @@ public class MealService {
 
     @Transactional
     public Meal create(Meal meal, Long restaurant_id) throws AlreadyExistException {
-        Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
+        Restaurant restaurant = restaurantRepository.getById(restaurant_id);
         assertNotExistence(mealRepository.findByRestaurantAndName(restaurant, meal.getName()),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         meal.setRestaurant(restaurant);
@@ -46,7 +46,7 @@ public class MealService {
 
     @Transactional
     public void update(Meal meal, Long id, Long restaurant_id) throws NotExistException {
-        Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
+        Restaurant restaurant = restaurantRepository.getById(restaurant_id);
         Meal oldMeal = assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         meal.setId(id);
@@ -55,23 +55,21 @@ public class MealService {
         mealRepository.save(meal);
     }
 
-    @Cacheable(cacheNames = "mealCache", key = "#id")
+    //    @Cacheable(cacheNames = "mealCache", key = "#id")
     public Meal getById(Long id, Long restaurant_id) throws NotExistException {
-        Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
-        return assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
+        return assertExistence(mealRepository.findByRestaurantAndId(restaurantRepository.getById(restaurant_id), id),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
     }
 
     @Transactional
     public void delete(Long id, Long restaurant_id) throws NotExistException {
-        Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
-        assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
+        assertExistence(mealRepository.findByRestaurantAndId(restaurantRepository.getById(restaurant_id), id),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         mealRepository.deleteById(id);
     }
 
     @Cacheable(cacheNames = "menuCache", key = "#restaurant_id")
-    public List<Meal> getRestaurantMenu(Long restaurant_id) {
+    public List<Meal> getRestaurantMenu(Long restaurant_id) throws NotExistException {
         Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
         return mealRepository.findAllByRestaurant(restaurant);
     }

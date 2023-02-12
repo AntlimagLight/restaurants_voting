@@ -14,4 +14,6 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
     @Query("select r from Restaurant r order by r.id asc")
     List<Restaurant> findAll();
+
+    Restaurant getById(Long id);
 }

@@ -26,7 +26,6 @@ public class UserMealController {
 
     private final MealService mealService;
 
-
     @GetMapping("{restaurant_id}/menu/{meal_id}")
     public ResponseEntity<Meal> getMeal(@PathVariable Long restaurant_id, @PathVariable Long meal_id) {
         log.info("get {} {} from {} {}", MEAL_ENTITY_NAME, meal_id, RESTAURANT_ENTITY_NAME, restaurant_id);

@@ -17,6 +17,13 @@ public class ValidationUtils {
         return opt.get();
     }
 
+    public static <T> T assertExistence(T entity, String exceptionMassage) throws NotExistException {
+        if (entity == null) {
+            throw new NotExistException(exceptionMassage);
+        }
+        return entity;
+    }
+
     public static <T> void assertNotExistence(Optional<T> opt, String exceptionMassage) throws AlreadyExistException {
         if (opt.isPresent()) {
             throw new AlreadyExistException(exceptionMassage);
