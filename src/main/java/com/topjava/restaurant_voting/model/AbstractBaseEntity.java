@@ -26,6 +26,7 @@ public abstract class AbstractBaseEntity {
         Assert.notNull(id, "Entity must have id");
         return id;
     }
+
     @JsonIgnore
     public boolean isNew() {
         return this.id == null;

@@ -18,7 +18,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     List<Vote> findAllByUser(User user);
 
     @Query(value = "SELECT v.restaurant.id as restaurantId, COUNT(v.restaurant.id) as count, r.name as name" +
-        " FROM Vote v LEFT JOIN Restaurant r ON v.restaurant.id=r.id WHERE v.date= :date GROUP BY v.restaurant.id")
+            " FROM Vote v LEFT JOIN Restaurant r ON v.restaurant.id=r.id WHERE v.date= :date GROUP BY v.restaurant.id")
     List<VoteCountDto> findAllByDate(@Param("date") LocalDate date);
 
 }

@@ -45,7 +45,6 @@ public class UserService {
     public void switchEnable(Long id) throws NotExistException {
         User user = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         user.setEnabled(!user.getEnabled());
-        userRepository.save(user);
     }
 
     @Cacheable(cacheNames = "userCache", key = "#id")

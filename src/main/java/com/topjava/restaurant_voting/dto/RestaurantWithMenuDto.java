@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class RestaurantWithMenuDto {
-    Long restaurant_id;
-    String restaurant_name;
+    Long restaurantId;
+    String restaurantName;
     private List<Meal> menu;
 }

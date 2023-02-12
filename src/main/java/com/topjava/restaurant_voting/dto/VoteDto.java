@@ -15,8 +15,8 @@ import java.time.LocalDate;
 public class VoteDto {
 
     private long id;
-    private long user_id;
-    private long restaurant_id;
+    private long userId;
+    private long restaurantId;
     @NotNull
     private LocalDate date;
 
