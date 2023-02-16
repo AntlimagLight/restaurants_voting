@@ -43,7 +43,7 @@ public class MealService {
     )
     @Transactional
     public Meal create(Meal meal, Long restaurant_id) throws AlreadyExistException {
-        Restaurant restaurant = restaurantRepository.getById(restaurant_id);
+        Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
         assertNotExistence(mealRepository.findByRestaurantAndName(restaurant, meal.getName()),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         meal.setRestaurant(restaurant);
