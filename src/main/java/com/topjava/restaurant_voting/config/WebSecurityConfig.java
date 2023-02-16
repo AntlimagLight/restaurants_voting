@@ -47,6 +47,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                 .requestMatchers("/user/**", "/admin/**").authenticated()
                 .requestMatchers("/h2/**").permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers(HttpMethod.POST, "/registration").anonymous()
                 .anyRequest().anonymous()
                 .and().httpBasic()

@@ -16,7 +16,6 @@ public class CacheClearUtil {
                     @CacheEvict(value = "menu", allEntries = true),
                     @CacheEvict(value = "restaurantList", allEntries = true),
                     @CacheEvict(value = "restaurant", allEntries = true),
-                    @CacheEvict(value = "userList", allEntries = true),
                     @CacheEvict(value = "user", allEntries = true),
                     @CacheEvict(value = "votesList", allEntries = true),
                     @CacheEvict(value = "stats", allEntries = true)

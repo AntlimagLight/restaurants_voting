@@ -2,6 +2,7 @@ package com.topjava.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -23,10 +24,12 @@ public class User extends AbstractNamedEntity {
     @Size(min = 3, max = 128)
     @Email
     @NotBlank
+    @Schema(example = "email@gmail.com")
     private String email;
 
     @NotBlank
     @Size(min = 3, max = 256)
+    @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -40,6 +43,7 @@ public class User extends AbstractNamedEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private Boolean enabled;
 

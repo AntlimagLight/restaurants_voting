@@ -5,6 +5,9 @@ import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.service.RestaurantService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +27,12 @@ import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT
 public class AdminRestaurantController {
     private final RestaurantService restaurantService;
 
+    @Operation(
+            summary = "Create Restaurant",
+            description = "Registers a new restaurant in the database."
+    )
     @PostMapping
+    @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<URI> createRestaurant(@Valid @RequestBody Restaurant restaurant) {
         log.info("create {} {}", RESTAURANT_ENTITY_NAME, restaurant.getName());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -33,15 +41,26 @@ public class AdminRestaurantController {
         return ResponseEntity.created(uriOfNewResource).body(uriOfNewResource);
     }
 
+    @Operation(
+            summary = "Update Restaurant",
+            description = "Updates the restaurant with {restaurant_id} in the database"
+    )
     @PutMapping("/{restaurant_id}")
-    public ResponseEntity<String> updateRestaurant(@Valid @RequestBody Restaurant restaurant, @PathVariable Long restaurant_id) {
+    @SecurityRequirement(name = "basicAuth")
+    public ResponseEntity<String> updateRestaurant(@Valid @RequestBody Restaurant restaurant,
+                                                   @PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("update {} {}", RESTAURANT_ENTITY_NAME, restaurant.getName());
         restaurantService.update(restaurant_id, restaurant);
         return ResponseEntity.status(204).body(null);
     }
 
+    @Operation(
+            summary = "Delete Restaurant",
+            description = "Removes the restaurant with {restaurant_id} from the database."
+    )
     @DeleteMapping("/{restaurant_id}")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable Long restaurant_id) {
+    @SecurityRequirement(name = "basicAuth")
+    public ResponseEntity<String> deleteRestaurant(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("delete {} {}", RESTAURANT_ENTITY_NAME, restaurant_id);
         restaurantService.delete(restaurant_id);
         return ResponseEntity.status(204).body(null);

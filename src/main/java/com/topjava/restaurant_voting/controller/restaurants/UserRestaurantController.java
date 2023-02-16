@@ -4,6 +4,9 @@ import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.service.RestaurantService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,13 +26,23 @@ public class UserRestaurantController {
 
     private final RestaurantService restaurantService;
 
+    @Operation(
+            summary = "Get One Restaurant",
+            description = "In response to the request, a restaurant with {restaurant_id} will be sent."
+    )
     @GetMapping("/{restaurant_id}")
-    public ResponseEntity<Restaurant> getRestaurant(@PathVariable Long restaurant_id) {
+    @SecurityRequirement(name = "basicAuth")
+    public ResponseEntity<Restaurant> getRestaurant(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("get {} {}", RESTAURANT_ENTITY_NAME, restaurant_id);
         return ResponseEntity.ok(restaurantService.getById(restaurant_id));
     }
 
+    @Operation(
+            summary = "Get All Restaurants",
+            description = "In response to the request, a list of all restaurants from the database was sent."
+    )
     @GetMapping
+    @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<List<Restaurant>> getAll() {
         log.info("get all {}", RESTAURANT_ENTITY_NAME);
         return ResponseEntity.ok(restaurantService.getAll());

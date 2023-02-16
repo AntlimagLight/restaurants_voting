@@ -1,10 +1,10 @@
 _Restaurant voting application_
 ===============================
 
-##### Current Version 1.0
+##### Current Version 1.1
 Application for user voting for the best restaurant for lunch. It is a simple REST API and uses basic authorization. Made according to the technical requirement.
 [Project on GitHub](https://github.com/AntlimagLight/restaurants_voting)
-Designed by [AntimagLight](https://github.com/AntlimagLight)
+Designed by [AntimagLight](https://www.linkedin.com/in/anton-dvorko-53a545263/)
 
 ------------------
 - Stack: [JDK 17](http://jdk.java.net/17/), [Maven](https://maven.apache.org/), Spring Boot 3.0 (web, datajpa, validation, security, cache, tests), JUnit Jupiter API, Lombok, H2, mapstruct, [SoapUI](https://www.soapui.org/).
@@ -35,6 +35,8 @@ P.P.S.: Assume that your API will be used by a frontend developer to build front
 
 ------------------
 ## _REST API documentation_
+[Link to Swagger](http://localhost:8080/swagger-ui/index.html)
+
 ```
 http://localhost:8080/  
 ```
@@ -68,12 +70,12 @@ Registers a user and adds it to the database. The user will automatically be ass
 
 ##### Get All User Votes (GET)
 ```http://localhost:8080/user/votes```
-Gets the full list of authorized user's votes
+Gets the full list of authorized user's votes.
 **Test:**
 ```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/votes"```
 ##### Get Vote (GET)
 ```http://localhost:8080/user/votes/YYYY-MM-DD```
-Gets the user's vote for the specified date
+Gets the user's vote for the specified date.
 **Test:**
 ```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/votes/2022-06-10"```
 ##### Make Vote (POST)
@@ -92,7 +94,7 @@ Two cases are possible:
   ```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/restaurants/100004"```
 ##### Get Statistic (GET)
 ```http://localhost:8080/user/votes/statistic?date=YYYY-MM-DD```
-In response to the request, a map will be sent, the key is the unique name of the restaurant, the value is the number of votes. The calculation is relevant for the date specified in the parameters.
+In response to the request, you get statistic. The calculation is relevant for the date specified in the parameters.
 NOTE! You can see the actual statistics every 5 minutes. When you try to request statistics more often, the same latest version will view.
 **Test:**
 ```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/votes/statistic?date=2022-06-10"```

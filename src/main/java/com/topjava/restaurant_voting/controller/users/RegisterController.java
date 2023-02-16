@@ -4,6 +4,7 @@ import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,11 @@ public class RegisterController {
 
     private final UserService userService;
 
+    @Operation(
+            summary = "User registration",
+            description = "Registers a user and adds it to the database. " +
+                    "The user will automatically be assigned the USER role."
+    )
     @PostMapping()
     public ResponseEntity<URI> registration(@Valid @RequestBody User user) {
         log.info("registration {} {}", USER_ENTITY_NAME, user.getEmail());

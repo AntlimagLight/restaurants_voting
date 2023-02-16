@@ -5,6 +5,9 @@ import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.Meal;
 import com.topjava.restaurant_voting.service.MealService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,19 +29,37 @@ public class UserMealController {
 
     private final MealService mealService;
 
+    @Operation(
+            summary = "Get One Meal",
+            description = "In response to the request, a meal with {meal_id} belonging " +
+                    "to the restaurant with {restaurant_id} will be sent."
+    )
     @GetMapping("{restaurant_id}/menu/{meal_id}")
-    public ResponseEntity<Meal> getMeal(@PathVariable Long restaurant_id, @PathVariable Long meal_id) {
+    @SecurityRequirement(name = "basicAuth")
+    public ResponseEntity<Meal> getMeal(@PathVariable @Parameter(example = "100004") Long restaurant_id,
+                                        @PathVariable @Parameter(example = "100009") Long meal_id) {
         log.info("get {} {} from {} {}", MEAL_ENTITY_NAME, meal_id, RESTAURANT_ENTITY_NAME, restaurant_id);
         return ResponseEntity.ok(mealService.getById(meal_id, restaurant_id));
     }
 
+    @Operation(
+            summary = "Get Restaurant Menu",
+            description = "In response to the request, you will receive a complete list of food" +
+                    " belonging to the restaurant with {restaurant_id}."
+    )
     @GetMapping("{restaurant_id}/menu")
-    public ResponseEntity<List<Meal>> getMenu(@PathVariable Long restaurant_id) {
+    @SecurityRequirement(name = "basicAuth")
+    public ResponseEntity<List<Meal>> getMenu(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("get all {} in {} {}", MEAL_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
         return ResponseEntity.ok(mealService.getRestaurantMenu(restaurant_id));
     }
 
+    @Operation(
+            summary = "Get Today Menu in All Restaurants",
+            description = "In response to the request will receive a Map with today's menu of each restaurant."
+    )
     @GetMapping("/today_menu")
+    @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<List<RestaurantWithMenuDto>> getTodayMenu() {
         log.info("get all {} today", MEAL_ENTITY_NAME);
         return ResponseEntity.ok(mealService.getAllByDateWithRestaurants(LocalDate.now()));

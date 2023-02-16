@@ -27,7 +27,6 @@ public class UserService {
     public static final String USER_ENTITY_NAME = "User";
     private final UserRepository userRepository;
 
-    @CacheEvict(value = "userList", key = "0")
     @Transactional
     public User create(User user) throws AlreadyExistException {
         assertNotExistence(userRepository.findByEmail(user.getEmail()), USER_ENTITY_NAME + " with this email");
@@ -40,7 +39,6 @@ public class UserService {
     @Caching(
             evict = {
                     @CacheEvict(key = "#id"),
-                    @CacheEvict(value = "userList", key = "0")
             }
     )
     @Transactional
@@ -55,7 +53,6 @@ public class UserService {
     @Caching(
             evict = {
                     @CacheEvict(key = "#id"),
-                    @CacheEvict(value = "userList", key = "0")
             }
     )
     @Transactional
@@ -76,7 +73,6 @@ public class UserService {
     @Caching(
             evict = {
                     @CacheEvict(key = "#id"),
-                    @CacheEvict(value = "userList", key = "0")
             }
     )
     @Transactional
@@ -85,7 +81,6 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    @Cacheable(value = "userList", key = "0")
     public List<User> getAll() {
         return (List<User>) userRepository.findAll();
     }
