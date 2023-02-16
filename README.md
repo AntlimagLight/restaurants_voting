@@ -93,6 +93,7 @@ Two cases are possible:
 ##### Get Statistic (GET)
 ```http://localhost:8080/user/votes/statistic?date=YYYY-MM-DD```
 In response to the request, a map will be sent, the key is the unique name of the restaurant, the value is the number of votes. The calculation is relevant for the date specified in the parameters.
+NOTE! You can see the actual statistics every 5 minutes. When you try to request statistics more often, the same latest version will view.
 **Test:**
 ```curl -XGET -H "Content-type: application/json" -u "user_zero@yandex.ru:pass12" "http://localhost:8080/user/votes/statistic?date=2022-06-10"```
 ##### Get One Restaurant (GET)

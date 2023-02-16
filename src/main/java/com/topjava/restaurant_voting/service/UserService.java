@@ -6,7 +6,10 @@ import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.util.UserUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +21,13 @@ import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExiste
 
 @Service
 @Transactional(readOnly = true)
+@CacheConfig(cacheNames = "user")
 @RequiredArgsConstructor
 public class UserService {
     public static final String USER_ENTITY_NAME = "User";
     private final UserRepository userRepository;
 
+    @CacheEvict(value = "userList", key = "0")
     @Transactional
     public User create(User user) throws AlreadyExistException {
         assertNotExistence(userRepository.findByEmail(user.getEmail()), USER_ENTITY_NAME + " with this email");
@@ -32,6 +37,12 @@ public class UserService {
         return userRepository.save(UserUtils.prepareToSave(user));
     }
 
+    @Caching(
+            evict = {
+                    @CacheEvict(key = "#id"),
+                    @CacheEvict(value = "userList", key = "0")
+            }
+    )
     @Transactional
     public void update(Long id, User user) throws NotExistException {
         User oldUser = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
@@ -41,13 +52,19 @@ public class UserService {
         userRepository.save(UserUtils.prepareToSave(user));
     }
 
+    @Caching(
+            evict = {
+                    @CacheEvict(key = "#id"),
+                    @CacheEvict(value = "userList", key = "0")
+            }
+    )
     @Transactional
     public void switchEnable(Long id) throws NotExistException {
         User user = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         user.setEnabled(!user.getEnabled());
     }
 
-    @Cacheable(cacheNames = "userCache", key = "#id")
+    @Cacheable
     public User getById(Long id) throws NotExistException {
         return assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
     }
@@ -56,12 +73,19 @@ public class UserService {
         return assertExistence(userRepository.findByEmail(email), USER_ENTITY_NAME);
     }
 
+    @Caching(
+            evict = {
+                    @CacheEvict(key = "#id"),
+                    @CacheEvict(value = "userList", key = "0")
+            }
+    )
     @Transactional
     public void delete(long id) throws NotExistException {
         assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         userRepository.deleteById(id);
     }
 
+    @Cacheable(value = "userList", key = "0")
     public List<User> getAll() {
         return (List<User>) userRepository.findAll();
     }

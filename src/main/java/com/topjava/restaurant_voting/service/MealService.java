@@ -9,7 +9,9 @@ import com.topjava.restaurant_voting.repository.MealRepository;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,12 @@ public class MealService {
     private final MealRepository mealRepository;
     private final RestaurantRepository restaurantRepository;
 
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "menu", key = "#restaurant_id"),
+                    @CacheEvict(value = "dateMealCache", allEntries = true)
+            }
+    )
     @Transactional
     public Meal create(Meal meal, Long restaurant_id) throws AlreadyExistException {
         Restaurant restaurant = restaurantRepository.getById(restaurant_id);
@@ -44,6 +52,12 @@ public class MealService {
         return mealRepository.save(meal);
     }
 
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "menu", key = "#restaurant_id"),
+                    @CacheEvict(value = "dateMealCache", allEntries = true)
+            }
+    )
     @Transactional
     public void update(Meal meal, Long id, Long restaurant_id) throws NotExistException {
         Restaurant restaurant = restaurantRepository.getById(restaurant_id);
@@ -55,12 +69,17 @@ public class MealService {
         mealRepository.save(meal);
     }
 
-    //    @Cacheable(cacheNames = "mealCache", key = "#id")
     public Meal getById(Long id, Long restaurant_id) throws NotExistException {
         return assertExistence(mealRepository.findByRestaurantAndId(restaurantRepository.getById(restaurant_id), id),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
     }
 
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "menu", key = "#restaurant_id"),
+                    @CacheEvict(value = "dateMealCache", allEntries = true)
+            }
+    )
     @Transactional
     public void delete(Long id, Long restaurant_id) throws NotExistException {
         assertExistence(mealRepository.findByRestaurantAndId(restaurantRepository.getById(restaurant_id), id),
@@ -68,13 +87,13 @@ public class MealService {
         mealRepository.deleteById(id);
     }
 
-    @Cacheable(cacheNames = "menuCache", key = "#restaurant_id")
+    @Cacheable(value = "menu", key = "#restaurant_id")
     public List<Meal> getRestaurantMenu(Long restaurant_id) throws NotExistException {
         Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
         return mealRepository.findAllByRestaurant(restaurant);
     }
 
-    //    @Cacheable(cacheNames = "dateMealCache", key = "#date")
+    @Cacheable(value = "dateMealCache", key = "#date")
     public List<RestaurantWithMenuDto> getAllByDateWithRestaurants(LocalDate date) {
         List<Meal> allMealList = mealRepository.findAllByDate(date);
         Map<Long, RestaurantWithMenuDto> dayMenu = new HashMap<>();

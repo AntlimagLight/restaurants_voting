@@ -27,6 +27,7 @@
     <logger name="com.topjava.restaurant_voting.service" level="debug"/>
     <logger name="org.springframework.security" level="debug"/>
     <logger name="com.topjava.restaurant_voting.config" level="debug"/>
+    <logger name="com.topjava.restaurant_voting.util" level="debug"/>
 
     <root level="info">
         <appender-ref ref="file"/>

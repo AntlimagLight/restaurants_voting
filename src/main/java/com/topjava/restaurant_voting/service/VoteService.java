@@ -12,6 +12,9 @@ import com.topjava.restaurant_voting.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +43,7 @@ public class VoteService {
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
 
+
     public VoteDto getUsersVoteByDate(Long user_id, LocalDate localDate) {
         User user = userRepository.findById(user_id).get();
         Optional<Vote> voteOpt = voteRepository.findByUserAndDate(user, localDate);
@@ -47,6 +51,7 @@ public class VoteService {
         return voteMapper.toDTO(voteOpt.get());
     }
 
+    @CacheEvict(value = "votesList", key = "#user.id()")
     @Transactional
     public Vote makeVote(User user, Long restaurantId) {
         LocalDate now = LocalDateTime.now().toLocalDate();
@@ -56,6 +61,7 @@ public class VoteService {
         return voteRepository.save(new Vote(null, user, restaurant, now));
     }
 
+    @CacheEvict(value = "votesList", key = "#user.id()")
     @Transactional
     public boolean changeVote(User user, Long restaurantId) {
         LocalDateTime now = LocalDateTime.now();
@@ -73,13 +79,20 @@ public class VoteService {
         }
     }
 
+    @Cacheable(value = "votesList", key = "#user_id")
     public List<VoteDto> getAllByUser(Long user_id) {
         User user = userRepository.findById(user_id).get();
         return voteRepository.findAllByUser(user).stream().map(voteMapper::toDTO).toList();
     }
 
+    @Cacheable(value = "stats", key = "0")
     public List<VoteCountDto> getStatistic(LocalDate date) {
         return voteRepository.findAllByDate(date);
     }
 
+    @CacheEvict(value = "stats", key = "0")
+    @Scheduled(initialDelay = 320000, fixedDelay = 300000)
+    public void clearRestaurantListCache() {
+        log.debug("Statistic cache was cleared");
+    }
 }
