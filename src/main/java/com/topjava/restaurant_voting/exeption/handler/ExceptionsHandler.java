@@ -38,10 +38,10 @@ public class ExceptionsHandler {
     @ResponseBody
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseError exception(DataIntegrityViolationException exception) {
-        Throwable specificCase = exception.getMostSpecificCause();
-        log.error(specificCase.getClass() + " : " + specificCase.getMessage());
-        return new ResponseError(specificCase, HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseError dataIntegrityViolationExceptionHandle(DataIntegrityViolationException exception) {
+        Throwable specificCause = exception.getMostSpecificCause();
+        log.error(specificCause.getClass() + " : " + specificCause.getMessage());
+        return new ResponseError(specificCause, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ResponseBody
@@ -55,7 +55,7 @@ public class ExceptionsHandler {
     @ResponseBody
     @ExceptionHandler
     @ResponseStatus(INTERNAL_SERVER_ERROR)
-    public ResponseError DefaultErrorHandle(Throwable throwable) {
+    public ResponseError defaultErrorHandle(Throwable throwable) {
         log.error(throwable.getClass().getName() + " : " + throwable.getMessage());
         return new ResponseError(throwable, HttpStatus.INTERNAL_SERVER_ERROR);
     }
