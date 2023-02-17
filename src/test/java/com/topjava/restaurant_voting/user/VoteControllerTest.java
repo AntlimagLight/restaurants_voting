@@ -1,5 +1,6 @@
-package com.topjava.restaurant_voting;
+package com.topjava.restaurant_voting.user;
 
+import com.topjava.restaurant_voting.RestaurantVotingApplicationTests;
 import com.topjava.restaurant_voting.model.Vote;
 import com.topjava.restaurant_voting.util.JsonUtil;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 
 import static com.topjava.restaurant_voting.model.AbstractBaseEntity.START_SEQ;
 import static com.topjava.restaurant_voting.service.VoteService.MAX_CHANGE_VOTE_TIME;
-import static com.topjava.restaurant_voting.test_utils.TestData.*;
+import static com.topjava.restaurant_voting.utils_for_tests.TestData.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;

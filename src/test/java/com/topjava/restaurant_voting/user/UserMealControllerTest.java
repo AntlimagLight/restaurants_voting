@@ -1,4 +1,4 @@
-package com.topjava.restaurant_voting.meals;
+package com.topjava.restaurant_voting.user;
 
 import com.topjava.restaurant_voting.RestaurantVotingApplicationTests;
 import com.topjava.restaurant_voting.util.JsonUtil;
@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.topjava.restaurant_voting.model.AbstractBaseEntity.START_SEQ;
-import static com.topjava.restaurant_voting.test_utils.TestData.*;
+import static com.topjava.restaurant_voting.utils_for_tests.TestData.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

@@ -1,4 +1,4 @@
-package com.topjava.restaurant_voting.restaurants;
+package com.topjava.restaurant_voting.admin;
 
 import com.topjava.restaurant_voting.RestaurantVotingApplicationTests;
 import com.topjava.restaurant_voting.model.Restaurant;
@@ -6,8 +6,8 @@ import com.topjava.restaurant_voting.util.JsonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import static com.topjava.restaurant_voting.test_utils.TestData.*;
 import static com.topjava.restaurant_voting.util.InitiateDataUtil.REST_2;
+import static com.topjava.restaurant_voting.utils_for_tests.TestData.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;

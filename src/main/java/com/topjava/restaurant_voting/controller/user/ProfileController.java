@@ -1,6 +1,5 @@
-package com.topjava.restaurant_voting.controller.users;
+package com.topjava.restaurant_voting.controller.user;
 
-import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.security.AuthUser;
 import com.topjava.restaurant_voting.service.UserService;
@@ -9,7 +8,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -63,10 +61,4 @@ public class ProfileController {
         return ResponseEntity.status(204).body(null);
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseError handle(Exception exception) {
-        log.error(exception.getMessage(), exception);
-        return new ResponseError(exception.getMessage(), HttpStatus.BAD_REQUEST);
-    }
 }

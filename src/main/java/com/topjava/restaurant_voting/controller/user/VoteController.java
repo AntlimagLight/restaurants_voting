@@ -1,9 +1,7 @@
-package com.topjava.restaurant_voting.controller;
+package com.topjava.restaurant_voting.controller.user;
 
 import com.topjava.restaurant_voting.dto.VoteCountDto;
 import com.topjava.restaurant_voting.dto.VoteDto;
-import com.topjava.restaurant_voting.exeption.NotExistException;
-import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.security.AuthUser;
 import com.topjava.restaurant_voting.service.UserService;
 import com.topjava.restaurant_voting.service.VoteService;
@@ -12,7 +10,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -108,20 +105,6 @@ public class VoteController {
             @RequestParam @Parameter(example = "2022-06-10") LocalDate date) {
         log.info("view statistics for the {}", date);
         return ResponseEntity.ok(voteService.getStatistic(date));
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseError badRequestHandle(Exception exception) {
-        log.error(exception.getMessage(), exception);
-        return new ResponseError(exception.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseError notExistHandle(NotExistException exception) {
-        log.error(exception.getMessage(), exception);
-        return new ResponseError(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 
 }

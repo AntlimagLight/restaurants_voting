@@ -14,7 +14,8 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString
-@Table(name = "meals", indexes = @Index(columnList = "restaurant_id", name = "meals_restaurant_idx"))
+@Table(name = "meals", indexes = @Index(columnList = "restaurant_id", name = "meals_restaurant_idx"),
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "name", "meal_date"})})
 public class Meal extends AbstractNamedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)

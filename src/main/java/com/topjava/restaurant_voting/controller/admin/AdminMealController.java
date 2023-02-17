@@ -1,8 +1,5 @@
-package com.topjava.restaurant_voting.controller.meals;
+package com.topjava.restaurant_voting.controller.admin;
 
-import com.topjava.restaurant_voting.exeption.AlreadyExistException;
-import com.topjava.restaurant_voting.exeption.NotExistException;
-import com.topjava.restaurant_voting.exeption.ResponseError;
 import com.topjava.restaurant_voting.model.Meal;
 import com.topjava.restaurant_voting.service.MealService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +8,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -69,27 +65,6 @@ public class AdminMealController {
         log.info("delete {} {} in {} {}", MEAL_ENTITY_NAME, meal_id, RESTAURANT_ENTITY_NAME, restaurant_id);
         mealService.delete(meal_id, restaurant_id);
         return ResponseEntity.status(204).body(null);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseError badRequestHandle(Exception exception) {
-        log.error(exception.getMessage(), exception);
-        return new ResponseError(exception.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseError notExistHandle(NotExistException exception) {
-        log.error(exception.getMessage(), exception);
-        return new ResponseError(exception.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public ResponseError alreadyExistHandle(AlreadyExistException exception) {
-        log.error(exception.getMessage(), exception);
-        return new ResponseError(exception.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
 }

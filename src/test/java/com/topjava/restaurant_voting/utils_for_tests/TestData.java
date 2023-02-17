@@ -1,4 +1,4 @@
-package com.topjava.restaurant_voting.test_utils;
+package com.topjava.restaurant_voting.utils_for_tests;
 
 import com.topjava.restaurant_voting.dto.RestaurantWithMenuDto;
 import com.topjava.restaurant_voting.dto.VoteCountDtoImpl;

@@ -41,6 +41,7 @@ CREATE TABLE meals
     meal_date     TIMESTAMP DEFAULT now() NOT NULL,
     cost          INTEGER                 NOT NULL,
     restaurant_id INTEGER                 NOT NULL,
+    CONSTRAINT meals UNIQUE (restaurant_id, name, meal_date),
     FOREIGN KEY (restaurant_id) REFERENCES RESTAURANTS (id) ON DELETE CASCADE
 );
 CREATE INDEX meals_restaurant_idx
