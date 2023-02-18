@@ -1,7 +1,7 @@
 package com.topjava.restaurant_voting.controller.user;
 
+import com.topjava.restaurant_voting.dto.MealDto;
 import com.topjava.restaurant_voting.dto.RestaurantWithMenuDto;
-import com.topjava.restaurant_voting.model.Meal;
 import com.topjava.restaurant_voting.service.MealService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,8 +36,8 @@ public class UserMealController {
     )
     @GetMapping("{restaurant_id}/menu/{meal_id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<Meal> getMeal(@PathVariable @Parameter(example = "100004") Long restaurant_id,
-                                        @PathVariable @Parameter(example = "100009") Long meal_id) {
+    public ResponseEntity<MealDto> getMeal(@PathVariable @Parameter(example = "100004") Long restaurant_id,
+                                           @PathVariable @Parameter(example = "100009") Long meal_id) {
         log.info("get {} {} from {} {}", MEAL_ENTITY_NAME, meal_id, RESTAURANT_ENTITY_NAME, restaurant_id);
         return ResponseEntity.ok(mealService.getById(meal_id, restaurant_id));
     }
@@ -49,7 +49,7 @@ public class UserMealController {
     )
     @GetMapping("{restaurant_id}/menu")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<List<Meal>> getMenu(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
+    public ResponseEntity<List<MealDto>> getMenu(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("get all {} in {} {}", MEAL_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
         return ResponseEntity.ok(mealService.getRestaurantMenu(restaurant_id));
     }

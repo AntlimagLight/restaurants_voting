@@ -53,6 +53,7 @@ CREATE TABLE votes
     vote_date     TIMESTAMP DEFAULT now() NOT NULL,
     user_id       INTEGER                 NOT NULL,
     restaurant_id INTEGER                 NOT NULL,
+    CONSTRAINT votes UNIQUE (user_id, vote_date),
     FOREIGN KEY (user_id) REFERENCES USERS (id) ON DELETE CASCADE,
     FOREIGN KEY (restaurant_id) REFERENCES RESTAURANTS (id) ON DELETE CASCADE
 );

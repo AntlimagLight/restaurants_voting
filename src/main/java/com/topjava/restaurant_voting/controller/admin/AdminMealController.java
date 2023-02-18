@@ -1,6 +1,6 @@
 package com.topjava.restaurant_voting.controller.admin;
 
-import com.topjava.restaurant_voting.model.Meal;
+import com.topjava.restaurant_voting.dto.MealDto;
 import com.topjava.restaurant_voting.service.MealService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +31,7 @@ public class AdminMealController {
     )
     @PostMapping()
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<URI> createMeal(@Valid @RequestBody Meal meal,
+    public ResponseEntity<URI> createMeal(@Valid @RequestBody MealDto meal,
                                           @PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("create {} {} in {} {}", MEAL_ENTITY_NAME, meal.getName(), RESTAURANT_ENTITY_NAME, restaurant_id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -46,7 +46,7 @@ public class AdminMealController {
     )
     @PutMapping("/{meal_id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<String> updateMeal(@Valid @RequestBody Meal meal,
+    public ResponseEntity<String> updateMeal(@Valid @RequestBody MealDto meal,
                                              @PathVariable @Parameter(example = "100004") Long restaurant_id,
                                              @PathVariable @Parameter(example = "100009") Long meal_id) {
         log.info("update {} {} in {} {}", MEAL_ENTITY_NAME, meal.getName(), RESTAURANT_ENTITY_NAME, restaurant_id);
@@ -60,8 +60,8 @@ public class AdminMealController {
     )
     @DeleteMapping("/{meal_id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<String> deleteRestaurant(@PathVariable @Parameter(example = "100004") Long restaurant_id,
-                                                   @PathVariable @Parameter(example = "100009") Long meal_id) {
+    public ResponseEntity<String> deleteMeal(@PathVariable @Parameter(example = "100004") Long restaurant_id,
+                                             @PathVariable @Parameter(example = "100009") Long meal_id) {
         log.info("delete {} {} in {} {}", MEAL_ENTITY_NAME, meal_id, RESTAURANT_ENTITY_NAME, restaurant_id);
         mealService.delete(meal_id, restaurant_id);
         return ResponseEntity.status(204).body(null);

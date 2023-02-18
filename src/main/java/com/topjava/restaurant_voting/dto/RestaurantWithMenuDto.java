@@ -1,6 +1,5 @@
 package com.topjava.restaurant_voting.dto;
 
-import com.topjava.restaurant_voting.model.Meal;
 import lombok.*;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class RestaurantWithMenuDto {
-    Long restaurantId;
-    String restaurantName;
-    private List<Meal> menu;
+    private Long restaurantId;
+    private String restaurantName;
+    private List<MealDto> menu;
 }

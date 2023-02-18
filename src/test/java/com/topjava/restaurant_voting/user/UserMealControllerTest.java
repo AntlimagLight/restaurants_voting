@@ -19,12 +19,13 @@ public class UserMealControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void getMeal() throws Exception {
-        this.mockMvc.perform(get("/user/restaurants/" + TESTING_RESTAURANT_ID + "/menu/" + TESTING_MEAL_ID)
+        ResultActions resultActions = this.mockMvc.perform(get("/user/restaurants/" + TESTING_RESTAURANT_ID + "/menu/" + TESTING_MEAL_ID)
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_MATCHER.contentJson(MEAL_100009));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        JSONAssert.assertEquals(JsonUtil.writeValue(MEAL_100009),
+                resultActions.andReturn().getResponse().getContentAsString(), false);
     }
 
     @Test
@@ -37,12 +38,13 @@ public class UserMealControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void getRestaurantMenu() throws Exception {
-        this.mockMvc.perform(get("/user/restaurants/" + TESTING_RESTAURANT_ID + "/menu")
+        ResultActions resultActions = this.mockMvc.perform(get("/user/restaurants/" + TESTING_RESTAURANT_ID + "/menu")
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_MATCHER.contentJson(ALL_MEALS_FROM_REST_100004));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        JSONAssert.assertEquals(JsonUtil.writeValue(ALL_MEALS_FROM_REST_100004),
+                resultActions.andReturn().getResponse().getContentAsString(), false);
     }
 
     @Test

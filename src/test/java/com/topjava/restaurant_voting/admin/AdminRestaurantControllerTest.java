@@ -1,7 +1,7 @@
 package com.topjava.restaurant_voting.admin;
 
 import com.topjava.restaurant_voting.RestaurantVotingApplicationTests;
-import com.topjava.restaurant_voting.model.Restaurant;
+import com.topjava.restaurant_voting.dto.RestaurantDto;
 import com.topjava.restaurant_voting.util.JsonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -24,11 +24,13 @@ public class AdminRestaurantControllerTest extends RestaurantVotingApplicationTe
         this.mockMvc.perform(post("/admin/restaurants")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(NEW_RESTAURANT)))
+                        .content(JsonUtil.writeValue(NEW_RESTAURANT_DTO)))
                 .andDo(print())
                 .andExpect(status().is(201));
-        Restaurant restaurant = restaurantRepository.findByName(NEW_RESTAURANT.getName()).get();
-        RESTAURANT_MATCHER.assertMatch(restaurant, setIdForTests(NEW_RESTAURANT, restaurant.getId()));
+        RestaurantDto restaurant =
+                restaurantMapper.toDTO(restaurantRepository.findByName(NEW_RESTAURANT_DTO.getName()).get());
+        RESTAURANT_DTO_MATCHER.assertMatch(restaurant, setIdForTests(NEW_RESTAURANT_DTO, restaurant.getId()));
+
     }
 
     @Test
@@ -47,11 +49,11 @@ public class AdminRestaurantControllerTest extends RestaurantVotingApplicationTe
         this.mockMvc.perform(put("/admin/restaurants/" + TESTING_RESTAURANT_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(UPDATED_RESTAURANT)))
+                        .content(JsonUtil.writeValue(UPDATED_RESTAURANT_DTO)))
                 .andDo(print())
                 .andExpect(status().is(204));
-        Restaurant restaurant = restaurantRepository.findById(TESTING_RESTAURANT_ID).get();
-        RESTAURANT_MATCHER.assertMatch(restaurant, setIdForTests(UPDATED_RESTAURANT, restaurant.getId()));
+        RestaurantDto restaurant = restaurantMapper.toDTO(restaurantRepository.findById(TESTING_RESTAURANT_ID).get());
+        RESTAURANT_DTO_MATCHER.assertMatch(restaurant, setIdForTests(UPDATED_RESTAURANT_DTO, restaurant.getId()));
     }
 
     @Test

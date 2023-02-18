@@ -55,7 +55,7 @@ public class VoteController {
         log.info("{} make vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/user/votes/{vote_date}")
-                .buildAndExpand(voteService.makeVote(userService.getById(authUser.getId()),
+                .buildAndExpand(voteService.makeVote(userService.getProxyById(authUser.getId()),
                         restaurant_id).getDate()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(uriOfNewResource);
     }
@@ -73,7 +73,7 @@ public class VoteController {
     public ResponseEntity<String> changeVote(@AuthenticationPrincipal AuthUser authUser,
                                              @RequestParam @Parameter(example = "100004") Long restaurant_id) {
         log.info("{} change vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
-        if (voteService.changeVote(userService.getById(authUser.getId()), restaurant_id)) {
+        if (voteService.changeVote(userService.getProxyById(authUser.getId()), restaurant_id)) {
             return ResponseEntity.status(204).body(null);
         } else {
             return ResponseEntity.status(422).body("Voting change time is out, you can change you vote between 0:00 and "

@@ -1,14 +1,17 @@
 package com.topjava.restaurant_voting.service;
 
+import com.topjava.restaurant_voting.dto.MealDto;
 import com.topjava.restaurant_voting.dto.RestaurantWithMenuDto;
 import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
+import com.topjava.restaurant_voting.mapper.MealMapper;
 import com.topjava.restaurant_voting.model.Meal;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.repository.MealRepository;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.factory.Mappers;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -34,6 +37,7 @@ public class MealService {
     public static final String MEAL_ENTITY_NAME = "Meal";
     private final MealRepository mealRepository;
     private final RestaurantRepository restaurantRepository;
+    public static final MealMapper mealMapper = Mappers.getMapper(MealMapper.class);
 
     @Caching(
             evict = {
@@ -42,14 +46,14 @@ public class MealService {
             }
     )
     @Transactional
-    public Meal create(Meal meal, Long restaurant_id) throws AlreadyExistException {
+    public Meal create(MealDto meal, Long restaurant_id) throws AlreadyExistException {
         Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
         assertNotExistence(mealRepository.findByRestaurantAndName(restaurant, meal.getName()),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
-        meal.setRestaurant(restaurant);
-        LocalDateTime now = LocalDateTime.now();
-        meal.setDate(now.toLocalDate());
-        return mealRepository.save(meal);
+        Meal entity = mealMapper.toModel(meal);
+        entity.setRestaurant(restaurant);
+        entity.setDate(LocalDateTime.now().toLocalDate());
+        return mealRepository.save(entity);
     }
 
     @Caching(
@@ -59,19 +63,23 @@ public class MealService {
             }
     )
     @Transactional
-    public void update(Meal meal, Long id, Long restaurant_id) throws NotExistException {
+    public void update(MealDto meal, Long id, Long restaurant_id) throws NotExistException {
         Restaurant restaurant = restaurantRepository.getById(restaurant_id);
         Meal oldMeal = assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
-        meal.setId(id);
-        meal.setRestaurant(restaurant);
-        meal.setDate(oldMeal.getDate());
-        mealRepository.save(meal);
+        Meal entity = mealMapper.toModel(meal);
+        entity.setId(id);
+        entity.setRestaurant(restaurant);
+        entity.setDate(oldMeal.getDate());
+        mealRepository.save(entity);
     }
 
-    public Meal getById(Long id, Long restaurant_id) throws NotExistException {
-        return assertExistence(mealRepository.findByRestaurantAndId(restaurantRepository.getById(restaurant_id), id),
-                "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
+    public MealDto getById(Long id, Long restaurant_id) throws NotExistException {
+        return mealMapper
+                .toDTO(assertExistence(mealRepository
+                                .findByRestaurantAndId(restaurantRepository
+                                        .getById(restaurant_id), id),
+                        "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME));
     }
 
     @Caching(
@@ -88,9 +96,9 @@ public class MealService {
     }
 
     @Cacheable(value = "menu", key = "#restaurant_id")
-    public List<Meal> getRestaurantMenu(Long restaurant_id) throws NotExistException {
+    public List<MealDto> getRestaurantMenu(Long restaurant_id) throws NotExistException {
         Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
-        return mealRepository.findAllByRestaurant(restaurant);
+        return mealRepository.findAllByRestaurant(restaurant).stream().map(mealMapper::toDTO).toList();
     }
 
     @Cacheable(value = "dateMealCache", key = "#date")
@@ -98,7 +106,7 @@ public class MealService {
         List<Meal> allMealList = mealRepository.findAllByDate(date);
         Map<Long, RestaurantWithMenuDto> dayMenu = new HashMap<>();
         for (Meal meal : allMealList) {
-            List<Meal> menu;
+            List<MealDto> menu;
             Long key = meal.getRestaurant().getId();
             if (dayMenu.containsKey(key)) {
                 menu = dayMenu.get(key).getMenu();
@@ -107,7 +115,7 @@ public class MealService {
                 menu = new ArrayList<>();
             }
             log.trace("add meal {} in {} {} ", meal.getName(), RESTAURANT_ENTITY_NAME, key);
-            menu.add(meal);
+            menu.add(mealMapper.toDTO(meal));
             RestaurantWithMenuDto menuDto =
                     new RestaurantWithMenuDto(meal.getRestaurant().getId(), meal.getRestaurant().getName(), menu);
             dayMenu.put(key, menuDto);

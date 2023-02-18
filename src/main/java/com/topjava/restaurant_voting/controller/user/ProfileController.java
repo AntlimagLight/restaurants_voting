@@ -1,6 +1,6 @@
 package com.topjava.restaurant_voting.controller.user;
 
-import com.topjava.restaurant_voting.model.User;
+import com.topjava.restaurant_voting.dto.UserDto;
 import com.topjava.restaurant_voting.security.AuthUser;
 import com.topjava.restaurant_voting.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +30,7 @@ public class ProfileController {
     )
     @GetMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<User> get(@AuthenticationPrincipal AuthUser authUser) {
+    public ResponseEntity<UserDto> get(@AuthenticationPrincipal AuthUser authUser) {
         log.info("get from profile {} {}", USER_ENTITY_NAME, authUser.getEmail());
         return ResponseEntity.ok(userService.getById(authUser.getId()));
     }
@@ -53,7 +53,7 @@ public class ProfileController {
     )
     @PutMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<String> update(@Valid @RequestBody User user, @AuthenticationPrincipal AuthUser authUser) {
+    public ResponseEntity<String> update(@Valid @RequestBody UserDto user, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update from profile {} {}", USER_ENTITY_NAME, authUser.getEmail());
         assureIdConsistent(user, authUser.getId());
         user.setRoles(convertToRoles(authUser.getAuthorities()));

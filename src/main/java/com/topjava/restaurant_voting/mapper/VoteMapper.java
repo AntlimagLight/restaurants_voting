@@ -9,7 +9,13 @@ import org.mapstruct.Mapper;
 public interface VoteMapper {
 
     default VoteDto toDTO(Vote vote) {
-        return new VoteDto(vote.getId(), vote.getUser().getId(), vote.getRestaurant().getId(), vote.getDate());
+        if (vote == null) {
+            return null;
+        }
+        return new VoteDto(vote.getId(),
+                vote.getUser().getId(),
+                vote.getRestaurant().getId(),
+                vote.getDate());
     }
 
 }

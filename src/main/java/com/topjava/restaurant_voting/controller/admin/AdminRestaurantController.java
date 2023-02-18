@@ -1,6 +1,6 @@
 package com.topjava.restaurant_voting.controller.admin;
 
-import com.topjava.restaurant_voting.model.Restaurant;
+import com.topjava.restaurant_voting.dto.RestaurantDto;
 import com.topjava.restaurant_voting.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,7 +29,7 @@ public class AdminRestaurantController {
     )
     @PostMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<URI> createRestaurant(@Valid @RequestBody Restaurant restaurant) {
+    public ResponseEntity<URI> createRestaurant(@Valid @RequestBody RestaurantDto restaurant) {
         log.info("create {} {}", RESTAURANT_ENTITY_NAME, restaurant.getName());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/admin/restaurants/{id}")
@@ -43,7 +43,7 @@ public class AdminRestaurantController {
     )
     @PutMapping("/{restaurant_id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<String> updateRestaurant(@Valid @RequestBody Restaurant restaurant,
+    public ResponseEntity<String> updateRestaurant(@Valid @RequestBody RestaurantDto restaurant,
                                                    @PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("update {} {}", RESTAURANT_ENTITY_NAME, restaurant.getName());
         restaurantService.update(restaurant_id, restaurant);

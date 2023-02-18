@@ -1,9 +1,12 @@
 package com.topjava.restaurant_voting.admin;
 
 import com.topjava.restaurant_voting.RestaurantVotingApplicationTests;
-import com.topjava.restaurant_voting.model.User;
+import com.topjava.restaurant_voting.dto.UserDto;
+import com.topjava.restaurant_voting.util.JsonUtil;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static com.topjava.restaurant_voting.util.InitiateDataUtil.USER2;
 import static com.topjava.restaurant_voting.utils_for_tests.TestData.*;
@@ -23,11 +26,11 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(post("/admin/users")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonWithPassword(NEW_ADMIN, NEW_ADMIN.getPassword())))
+                        .content(jsonWithPassword(NEW_ADMIN_DTO, NEW_ADMIN_DTO.getPassword())))
                 .andDo(print())
                 .andExpect(status().isCreated());
-        User user = userRepository.findByEmail(NEW_ADMIN.getEmail()).get();
-        USER_MATCHER.assertMatch(user, setIdForTests(NEW_ADMIN, user.getId()));
+        UserDto user = sortRoles(userMapper.toDTO(userRepository.findByEmail(NEW_ADMIN.getEmail()).get()));
+        USER_DTO_MATCHER.assertMatch(user, setIdForTests(NEW_ADMIN_DTO, user.getId()));
     }
 
     @Test
@@ -35,7 +38,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(post("/admin/users")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonWithPassword(DUPLICATE_EMAIL_USER, DUPLICATE_EMAIL_USER.getPassword())))
+                        .content(jsonWithPassword(DUPLICATE_EMAIL_USER_DTO, DUPLICATE_EMAIL_USER_DTO.getPassword())))
                 .andDo(print())
                 .andExpect(status().is(422));
         assertFalse(userRepository.findById(NEW_ENTITY_ID).isPresent());
@@ -46,11 +49,11 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(put("/admin/users/" + TESTING_USER_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonWithPassword(UPD_USER_TO_ADMIN, UPD_USER_TO_ADMIN.getPassword())))
+                        .content(jsonWithPassword(UPD_USER_TO_ADMIN_DTO, UPD_USER_TO_ADMIN_DTO.getPassword())))
                 .andDo(print())
                 .andExpect(status().is(204));
-        User user = userRepository.findById(TESTING_USER_ID).get();
-        USER_MATCHER.assertMatch(user, setIdForTests(UPD_USER_TO_ADMIN, user.getId()));
+        UserDto user = sortRoles(userMapper.toDTO(userRepository.findById(TESTING_USER_ID).get()));
+        USER_DTO_MATCHER.assertMatch(user, setIdForTests(UPD_USER_TO_ADMIN_DTO, user.getId()));
     }
 
     @Test
@@ -58,7 +61,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(put("/admin/users/" + NOT_EXISTING_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonWithPassword(UPD_USER_TO_ADMIN, UPD_USER_TO_ADMIN.getPassword())))
+                        .content(jsonWithPassword(UPD_USER_TO_ADMIN_DTO, UPD_USER_TO_ADMIN_DTO.getPassword())))
                 .andDo(print())
                 .andExpect(status().is(404));
     }
@@ -83,12 +86,13 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void getUserById() throws Exception {
-        this.mockMvc.perform(get("/admin/users/" + TESTING_USER_ID)
+        ResultActions resultActions = this.mockMvc.perform(get("/admin/users/" + TESTING_USER_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_MATCHER.contentJson(USER_100001));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        JSONAssert.assertEquals(JsonUtil.writeValue(USER_100001),
+                resultActions.andReturn().getResponse().getContentAsString(), false);
     }
 
     @Test
@@ -101,12 +105,14 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void getByEmail() throws Exception {
-        this.mockMvc.perform(get("/admin/users/by-email?email=" + USER_100001.getEmail())
+        ResultActions resultActions = this.mockMvc.perform(get("/admin/users/by-email?email="
+                        + USER_100001.getEmail())
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_MATCHER.contentJson(USER_100001));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        JSONAssert.assertEquals(JsonUtil.writeValue(USER_100001),
+                resultActions.andReturn().getResponse().getContentAsString(), false);
     }
 
     @Test
@@ -136,11 +142,12 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void getAll() throws Exception {
-        this.mockMvc.perform(get("/admin/users")
+        ResultActions resultActions = this.mockMvc.perform(get("/admin/users")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_MATCHER.contentJson(ALL_USERS));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        JSONAssert.assertEquals(JsonUtil.writeValue(ALL_USERS),
+                resultActions.andReturn().getResponse().getContentAsString(), false);
     }
 }

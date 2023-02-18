@@ -1,5 +1,6 @@
 package com.topjava.restaurant_voting.util;
 
+import com.topjava.restaurant_voting.dto.UserDto;
 import com.topjava.restaurant_voting.exeption.IllegalRequestDataException;
 import com.topjava.restaurant_voting.model.Role;
 import com.topjava.restaurant_voting.model.User;
@@ -24,19 +25,18 @@ public class UserUtils {
         STARTING_ROLES.add(Role.USER);
     }
 
-    public static void assureIdConsistent(User user, long id) {
-        if (user.isNew()) {
+    public static void assureIdConsistent(UserDto user, long id) {
+        if (user.getId() == 0L) {
             user.setId(id);
-        } else if (user.id() != id) {
+        } else if (user.getId() != 0L) {
             throw new IllegalRequestDataException(user.getEmail() + " must has id= " + id);
         }
     }
 
-    public static User assureDefaultRole(User user) {
+    public static UserDto assureDefaultRole(UserDto user) {
         Set<Role> roles = user.getRoles();
         if (roles == null || roles.isEmpty()) {
-            roles = new HashSet<>();
-            roles.add(Role.USER);
+            roles = STARTING_ROLES;
             user.setRoles(roles);
         }
         return user;

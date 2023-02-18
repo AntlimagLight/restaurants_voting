@@ -1,6 +1,6 @@
 package com.topjava.restaurant_voting;
 
-import com.topjava.restaurant_voting.model.User;
+import com.topjava.restaurant_voting.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -20,20 +20,18 @@ public class RegisterControllerTest extends RestaurantVotingApplicationTests {
     void registration() throws Exception {
         this.mockMvc.perform(post("/registration")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonWithPassword(NEW_USER, NEW_USER.getPassword())))
+                        .content(jsonWithPassword(NEW_USER_DTO, NEW_USER_DTO.getPassword())))
                 .andDo(print())
                 .andExpect(status().is(201));
-        User user = userRepository.findByEmail(NEW_USER.getEmail()).get();
-        USER_MATCHER.assertMatch(user, setIdForTests(NEW_USER, user.getId()));
+        UserDto user = userMapper.toDTO(userRepository.findByEmail(NEW_USER_DTO.getEmail()).get());
+        USER_DTO_MATCHER.assertMatch(user, setIdForTests(NEW_USER_DTO, user.getId()));
     }
 
     @Test
     void registrationDuplicate() throws Exception {
-        User newUser = NEW_USER;
-        newUser.setEmail(USER_100001.getEmail());
         this.mockMvc.perform(post("/registration")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonWithPassword(newUser, NEW_USER.getPassword())))
+                        .content(jsonWithPassword(DUPLICATE_EMAIL_USER_DTO, DUPLICATE_EMAIL_USER_DTO.getPassword())))
                 .andDo(print())
                 .andExpect(status().is(422));
         assertFalse(userRepository.findById(NEW_ENTITY_ID).isPresent());
@@ -43,7 +41,7 @@ public class RegisterControllerTest extends RestaurantVotingApplicationTests {
     void registrationAdmin() throws Exception {
         this.mockMvc.perform(post("/registration")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonWithPassword(NEW_ADMIN, NEW_ADMIN.getPassword())))
+                        .content(jsonWithPassword(NEW_ADMIN_DTO, NEW_ADMIN_DTO.getPassword())))
                 .andDo(print())
                 .andExpect(status().is(201));
         assertEquals(userRepository.findByEmail(NEW_ADMIN.getEmail()).get().getRoles(), STARTING_ROLES);

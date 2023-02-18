@@ -28,12 +28,14 @@ public class VoteControllerTest extends RestaurantVotingApplicationTests {
 
     @Test
     void getVote() throws Exception {
-        this.mockMvc.perform(get("/user/votes/2022-06-10")
+        ResultActions resultActions = this.mockMvc.perform(get("/user/votes/2022-06-10")
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_DTO_MATCHER.contentJson(VOTE_DTO_2));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        JSONAssert.assertEquals(JsonUtil.writeValue(VOTE_DTO_2),
+                resultActions.andReturn().getResponse().getContentAsString(), false);
+
     }
 
     @Test

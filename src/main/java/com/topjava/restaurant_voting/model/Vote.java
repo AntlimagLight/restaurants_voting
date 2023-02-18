@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 @ToString
-@Table(name = "votes")
+@Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "vote_date"})})
 public class Vote extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -23,6 +23,7 @@ public class Vote extends AbstractBaseEntity {
     private Restaurant restaurant;
     @Column(name = "vote_date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Temporal(TemporalType.DATE)
     private LocalDate date;
 
     public Vote(Long id, User user, Restaurant restaurant, LocalDate date) {

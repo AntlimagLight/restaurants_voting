@@ -1,6 +1,6 @@
 package com.topjava.restaurant_voting.controller;
 
-import com.topjava.restaurant_voting.model.User;
+import com.topjava.restaurant_voting.dto.UserDto;
 import com.topjava.restaurant_voting.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -32,7 +32,7 @@ public class RegisterController {
                     "The user will automatically be assigned the USER role."
     )
     @PostMapping()
-    public ResponseEntity<URI> registration(@Valid @RequestBody User user) {
+    public ResponseEntity<URI> registration(@Valid @RequestBody UserDto user) {
         log.info("registration {} {}", USER_ENTITY_NAME, user.getEmail());
         user.setRoles(STARTING_ROLES);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()

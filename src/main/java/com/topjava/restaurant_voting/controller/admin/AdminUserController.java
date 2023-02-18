@@ -1,6 +1,6 @@
 package com.topjava.restaurant_voting.controller.admin;
 
-import com.topjava.restaurant_voting.model.User;
+import com.topjava.restaurant_voting.dto.UserDto;
 import com.topjava.restaurant_voting.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +32,7 @@ public class AdminUserController {
     )
     @PostMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<URI> createUser(@Valid @RequestBody User user) {
+    public ResponseEntity<URI> createUser(@Valid @RequestBody UserDto user) {
         log.info("create {} {}", USER_ENTITY_NAME, user.getEmail());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/admin/users/{id}")
@@ -47,7 +47,7 @@ public class AdminUserController {
     )
     @PutMapping("/{id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<String> updateUser(@Valid @RequestBody User user,
+    public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto user,
                                              @PathVariable @Parameter(example = "100001") Long id) {
         log.info("update {} {}", USER_ENTITY_NAME, user.getEmail());
         userService.update(id, assureDefaultRole(user));
@@ -73,7 +73,7 @@ public class AdminUserController {
     )
     @GetMapping("/{id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<User> getUserByID(@PathVariable @Parameter(example = "100001") Long id) {
+    public ResponseEntity<UserDto> getUserByID(@PathVariable @Parameter(example = "100001") Long id) {
         log.info("get {} {}", USER_ENTITY_NAME, id);
         return ResponseEntity.ok(userService.getById(id));
     }
@@ -84,7 +84,7 @@ public class AdminUserController {
     )
     @GetMapping("/by-email")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<User> getUserByEmail(@RequestParam @Parameter(example = "user@yandex.ru") String email) {
+    public ResponseEntity<UserDto> getUserByEmail(@RequestParam @Parameter(example = "user@yandex.ru") String email) {
         log.info("get {} {}", USER_ENTITY_NAME, email);
         return ResponseEntity.ok(userService.getByEmail(email));
     }
@@ -107,7 +107,7 @@ public class AdminUserController {
     )
     @GetMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<List<User>> getAll() {
+    public ResponseEntity<List<UserDto>> getAll() {
         log.info("get all {}", USER_ENTITY_NAME);
         return ResponseEntity.ok(userService.getAll());
     }

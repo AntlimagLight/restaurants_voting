@@ -1,7 +1,7 @@
 package com.topjava.restaurant_voting.admin;
 
 import com.topjava.restaurant_voting.RestaurantVotingApplicationTests;
-import com.topjava.restaurant_voting.model.Meal;
+import com.topjava.restaurant_voting.dto.MealDto;
 import com.topjava.restaurant_voting.util.JsonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -24,12 +24,13 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(post("/admin/restaurants/" + TESTING_RESTAURANT_ID + "/menu")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(NEW_MEAL)))
+                        .content(JsonUtil.writeValue(NEW_MEAL_DTO)))
                 .andDo(print())
                 .andExpect(status().isCreated());
-        Meal meal = mealRepository.findByRestaurantAndName(restaurantRepository.findById(TESTING_RESTAURANT_ID).get(),
-                NEW_MEAL.getName()).get();
-        MEAL_MATCHER.assertMatch(meal, setIdForTests(NEW_MEAL, meal.getId()));
+        MealDto meal = mealMapper.toDTO(mealRepository
+                .findByRestaurantAndName(restaurantRepository
+                        .findById(TESTING_RESTAURANT_ID).get(), NEW_MEAL_DTO.getName()).get());
+        MEAL_DTO_MATCHER.assertMatch(meal, setIdForTests(NEW_MEAL_DTO, meal.getId()));
     }
 
     @Test
@@ -37,7 +38,7 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(post("/admin/restaurants/" + TESTING_RESTAURANT_ID + "/menu")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(NEW_MEAL_ALREADY_EXIST)))
+                        .content(JsonUtil.writeValue(NEW_MEAL_ALREADY_EXIST_DTO)))
                 .andDo(print())
                 .andExpect(status().is(422));
         assertFalse(mealRepository.findById(NEW_ENTITY_ID).isPresent());
@@ -48,11 +49,11 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(put("/admin/restaurants/" + TESTING_RESTAURANT_ID + "/menu/" + TESTING_MEAL_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(UPDATED_MEAL)))
+                        .content(JsonUtil.writeValue(UPDATED_MEAL_DTO)))
                 .andDo(print())
                 .andExpect(status().is(204));
-        Meal meal = mealRepository.findById(TESTING_MEAL_ID).get();
-        MEAL_MATCHER.assertMatch(meal, setIdForTests(UPDATED_MEAL, meal.getId()));
+        MealDto meal = mealMapper.toDTO(mealRepository.findById(TESTING_MEAL_ID).get());
+        MEAL_DTO_MATCHER.assertMatch(meal, setIdForTests(UPDATED_MEAL_DTO, meal.getId()));
     }
 
     @Test
@@ -60,11 +61,11 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(put("/admin/restaurants/" + TESTING_RESTAURANT_ID + "/menu/" + START_SEQ + 6)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(UPDATED_MEAL)))
+                        .content(JsonUtil.writeValue(UPDATED_MEAL_DTO)))
                 .andDo(print())
                 .andExpect(status().is(404));
-        Meal meal = mealRepository.findById(START_SEQ + 6).get();
-        MEAL_MATCHER.assertMatch(meal, MEAL_100006);
+        MealDto meal = mealMapper.toDTO(mealRepository.findById(START_SEQ + 6).get());
+        MEAL_DTO_MATCHER.assertMatch(meal, MEAL_100006);
     }
 
     @Test

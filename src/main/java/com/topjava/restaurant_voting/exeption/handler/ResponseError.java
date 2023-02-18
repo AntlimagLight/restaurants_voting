@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 public class ResponseError {
 
     private final HttpStatus status;
-    private final String exceptionClass;
+    private final String exception;
     private final String message;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime time = LocalDateTime.now();
 
     public ResponseError(Throwable throwable, HttpStatus status) {
-        this.exceptionClass = throwable.getClass().getName();
+        this.exception = throwable.getClass().getName();
         this.message = throwable.getMessage();
         this.status = status;
 

@@ -1,6 +1,6 @@
 package com.topjava.restaurant_voting.controller.user;
 
-import com.topjava.restaurant_voting.model.Restaurant;
+import com.topjava.restaurant_voting.dto.RestaurantDto;
 import com.topjava.restaurant_voting.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +32,7 @@ public class UserRestaurantController {
     )
     @GetMapping("/{restaurant_id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<Restaurant> getRestaurant(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
+    public ResponseEntity<RestaurantDto> getRestaurant(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("get {} {}", RESTAURANT_ENTITY_NAME, restaurant_id);
         return ResponseEntity.ok(restaurantService.getById(restaurant_id));
     }
@@ -43,7 +43,7 @@ public class UserRestaurantController {
     )
     @GetMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<List<Restaurant>> getAll() {
+    public ResponseEntity<List<RestaurantDto>> getAll() {
         log.info("get all {}", RESTAURANT_ENTITY_NAME);
         return ResponseEntity.ok(restaurantService.getAll());
     }
