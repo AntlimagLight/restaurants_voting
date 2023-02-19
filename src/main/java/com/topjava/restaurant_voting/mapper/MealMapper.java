@@ -1,6 +1,7 @@
 package com.topjava.restaurant_voting.mapper;
 
 import com.topjava.restaurant_voting.dto.MealDto;
+import com.topjava.restaurant_voting.dto.RestaurantOwnedMealDto;
 import com.topjava.restaurant_voting.model.Meal;
 import org.mapstruct.Mapper;
 
@@ -9,6 +10,8 @@ import org.mapstruct.Mapper;
 public interface MealMapper {
 
     MealDto toDTO(Meal meal);
+
+    MealDto toDTO(RestaurantOwnedMealDto dto);
 
     Meal toModel(MealDto dto);
 

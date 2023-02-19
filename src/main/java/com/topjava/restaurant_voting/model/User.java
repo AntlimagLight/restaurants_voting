@@ -1,13 +1,8 @@
 package com.topjava.restaurant_voting.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.util.CollectionUtils;
 
@@ -22,21 +17,10 @@ import java.util.*;
 @Table(name = "users", indexes = @Index(columnList = "email", name = "users_unique_email_idx", unique = true))
 public class User extends AbstractNamedEntity {
 
-    @Size(min = 3, max = 128)
-    @Email
-    @NotBlank
-    @Schema(example = "email@gmail.com")
     private String email;
-
-    @NotBlank
-    @Size(min = 3, max = 256)
-    @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     @Column(name = "password", nullable = false)
     private String password;
-
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Temporal(TemporalType.DATE)
     private LocalDate registered;
     @Enumerated(EnumType.STRING)
@@ -46,13 +30,11 @@ public class User extends AbstractNamedEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private Boolean enabled;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     @OrderBy("date DESC")
-    @JsonIgnore
     @ToString.Exclude
     private List<Vote> votes;
 

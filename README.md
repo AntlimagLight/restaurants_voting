@@ -35,8 +35,7 @@ P.P.S.: Assume that your API will be used by a frontend developer to build front
 
 ------------------
 ## _REST API documentation_
-[Link to Swagger](http://localhost:8080/swagger-ui/index.html)
-[Link to H2 Console](http://localhost:8080/h2)
+[Link to Swagger](http://localhost:8080/swagger-ui/index.html) /// [Link to H2 Console](http://localhost:8080/h2)
 
 ```
 http://localhost:8080/  

@@ -1,7 +1,5 @@
 package com.topjava.restaurant_voting.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.util.Assert;
@@ -17,7 +15,6 @@ public abstract class AbstractBaseEntity {
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = (int) START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     protected Long id;
 
     protected AbstractBaseEntity(Long id) {
@@ -27,11 +24,6 @@ public abstract class AbstractBaseEntity {
     public long id() {
         Assert.notNull(id, "Entity must have id");
         return id;
-    }
-
-    @JsonIgnore
-    public boolean isNew() {
-        return this.id == null;
     }
 
     @Override

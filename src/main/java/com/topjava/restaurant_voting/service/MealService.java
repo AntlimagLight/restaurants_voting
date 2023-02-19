@@ -1,6 +1,7 @@
 package com.topjava.restaurant_voting.service;
 
 import com.topjava.restaurant_voting.dto.MealDto;
+import com.topjava.restaurant_voting.dto.RestaurantOwnedMealDto;
 import com.topjava.restaurant_voting.dto.RestaurantWithMenuDto;
 import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
@@ -103,22 +104,24 @@ public class MealService {
 
     @Cacheable(value = "dateMealCache", key = "#date")
     public List<RestaurantWithMenuDto> getAllByDateWithRestaurants(LocalDate date) {
-        List<Meal> allMealList = mealRepository.findAllByDate(date);
+        List<RestaurantOwnedMealDto> allMealList = mealRepository.findAllByDate(date);
         Map<Long, RestaurantWithMenuDto> dayMenu = new HashMap<>();
-        for (Meal meal : allMealList) {
-            List<MealDto> menu;
-            Long key = meal.getRestaurant().getId();
-            if (dayMenu.containsKey(key)) {
-                menu = dayMenu.get(key).getMenu();
-            } else {
-                log.trace("{} {} was found", RESTAURANT_ENTITY_NAME, key);
-                menu = new ArrayList<>();
-            }
-            log.trace("add meal {} in {} {} ", meal.getName(), RESTAURANT_ENTITY_NAME, key);
-            menu.add(mealMapper.toDTO(meal));
-            RestaurantWithMenuDto menuDto =
-                    new RestaurantWithMenuDto(meal.getRestaurant().getId(), meal.getRestaurant().getName(), menu);
-            dayMenu.put(key, menuDto);
+        for (RestaurantOwnedMealDto meal : allMealList) {
+            Long restaurantId = meal.getRestaurantId();
+            dayMenu.computeIfPresent(restaurantId, (restId, val) -> {
+                log.trace("add meal {} in {} {} ", meal.getName(), RESTAURANT_ENTITY_NAME, restaurantId);
+                List<MealDto> menu = val.getMenu();
+                menu.add(mealMapper.toDTO(meal));
+                val.setMenu(menu);
+                return val;
+            });
+            dayMenu.computeIfAbsent(restaurantId, restId -> {
+                log.trace("{} {} was found", RESTAURANT_ENTITY_NAME, restaurantId);
+                log.trace("add meal {} in {} {} ", meal.getId(), RESTAURANT_ENTITY_NAME, restaurantId);
+                List<MealDto> menu = new ArrayList<>();
+                menu.add(mealMapper.toDTO(meal));
+                return new RestaurantWithMenuDto(restaurantId, meal.getRestaurantName(), menu);
+            });
         }
         return new ArrayList<>(dayMenu.values());
     }

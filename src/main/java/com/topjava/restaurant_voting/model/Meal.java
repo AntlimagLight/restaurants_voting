@@ -1,8 +1,5 @@
 package com.topjava.restaurant_voting.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
@@ -19,7 +16,6 @@ import java.time.LocalDate;
 public class Meal extends AbstractNamedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonIgnore
     @ToString.Exclude
     private Restaurant restaurant;
 
@@ -27,8 +23,6 @@ public class Meal extends AbstractNamedEntity {
     private int cost;
 
     @Column(name = "meal_date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Temporal(TemporalType.DATE)
     private LocalDate date;
 

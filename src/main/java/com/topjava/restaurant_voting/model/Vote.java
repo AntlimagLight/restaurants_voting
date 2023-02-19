@@ -1,6 +1,5 @@
 package com.topjava.restaurant_voting.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +21,6 @@ public class Vote extends AbstractBaseEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
     @Column(name = "vote_date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Temporal(TemporalType.DATE)
     private LocalDate date;
 

@@ -1,7 +1,9 @@
 package com.topjava.restaurant_voting.repository;
 
+import com.topjava.restaurant_voting.dto.RestaurantOwnedMealDto;
 import com.topjava.restaurant_voting.model.Meal;
 import com.topjava.restaurant_voting.model.Restaurant;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDate;
@@ -16,7 +18,10 @@ public interface MealRepository extends CrudRepository<Meal, Long> {
 
     List<Meal> findAllByRestaurant(Restaurant restaurant);
 
-    List<Meal> findAllByDate(LocalDate date);
+    @Query(value = "SELECT m.id as id, m.restaurant.id as restaurantId, m.name as name, m.cost as cost, " +
+            "m.date as date, r.name as restaurantName FROM Meal m LEFT JOIN Restaurant r  ON m.restaurant.id=r.id " +
+            "WHERE m.date= :date")
+    List<RestaurantOwnedMealDto> findAllByDate(LocalDate date);
 
 
 }
