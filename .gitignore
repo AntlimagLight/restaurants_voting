@@ -33,3 +33,6 @@ build/
 .vscode/
 /restaurant-voiting-soapui-project.xml
 /log/
+/.mvn/
+/mvnw
+/mvnw.cmd
