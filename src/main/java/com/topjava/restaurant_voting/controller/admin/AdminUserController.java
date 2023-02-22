@@ -73,9 +73,9 @@ public class AdminUserController {
     )
     @GetMapping("/{id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<UserDto> getUserByID(@PathVariable @Parameter(example = "100001") Long id) {
+    public UserDto getUserByID(@PathVariable @Parameter(example = "100001") Long id) {
         log.info("get {} {}", USER_ENTITY_NAME, id);
-        return ResponseEntity.ok(userService.getById(id));
+        return userService.getById(id);
     }
 
     @Operation(
@@ -84,9 +84,9 @@ public class AdminUserController {
     )
     @GetMapping("/by-email")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<UserDto> getUserByEmail(@RequestParam @Parameter(example = "user@yandex.ru") String email) {
+    public UserDto getUserByEmail(@RequestParam @Parameter(example = "user@yandex.ru") String email) {
         log.info("get {} {}", USER_ENTITY_NAME, email);
-        return ResponseEntity.ok(userService.getByEmail(email));
+        return userService.getByEmail(email);
     }
 
     @Operation(
@@ -107,9 +107,9 @@ public class AdminUserController {
     )
     @GetMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<List<UserDto>> getAll() {
+    public List<UserDto> getAll() {
         log.info("get all {}", USER_ENTITY_NAME);
-        return ResponseEntity.ok(userService.getAll());
+        return userService.getAll();
     }
 
 }

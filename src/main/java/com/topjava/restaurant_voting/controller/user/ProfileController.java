@@ -30,9 +30,9 @@ public class ProfileController {
     )
     @GetMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<UserDto> get(@AuthenticationPrincipal AuthUser authUser) {
+    public UserDto get(@AuthenticationPrincipal AuthUser authUser) {
         log.info("get from profile {} {}", USER_ENTITY_NAME, authUser.getEmail());
-        return ResponseEntity.ok(userService.getById(authUser.getId()));
+        return userService.getById(authUser.getId());
     }
 
     @Operation(

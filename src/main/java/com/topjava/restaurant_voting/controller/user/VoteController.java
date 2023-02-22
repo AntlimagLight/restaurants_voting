@@ -38,10 +38,10 @@ public class VoteController {
     )
     @GetMapping("/{vote_date}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<VoteDto> getVote(@AuthenticationPrincipal AuthUser authUser,
+    public VoteDto getVote(@AuthenticationPrincipal AuthUser authUser,
                                            @PathVariable @Parameter(example = "2022-06-10") LocalDate vote_date) {
         log.info("get {} by {}", VOTE_ENTITY_NAME, vote_date);
-        return ResponseEntity.ok(voteService.getUsersVoteByDate(authUser.getId(), vote_date));
+        return voteService.getUsersVoteByDate(authUser.getId(), vote_date);
     }
 
     @Operation(
@@ -87,9 +87,9 @@ public class VoteController {
     )
     @GetMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<List<VoteDto>> getAllUserVotes(@AuthenticationPrincipal AuthUser authUser) {
+    public List<VoteDto> getAllUserVotes(@AuthenticationPrincipal AuthUser authUser) {
         log.info("get all {} made by {}", VOTE_ENTITY_NAME, authUser.getId());
-        return ResponseEntity.ok(voteService.getAllByUser(authUser.getId()));
+        return voteService.getAllByUser(authUser.getId());
     }
 
     @Operation(
@@ -101,10 +101,10 @@ public class VoteController {
     )
     @GetMapping("/statistic")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<List<VoteCountDto>> viewStatistic(
+    public List<VoteCountDto> viewStatistic(
             @RequestParam @Parameter(example = "2022-06-10") LocalDate date) {
         log.info("view statistics for the {}", date);
-        return ResponseEntity.ok(voteService.getStatistic(date));
+        return voteService.getStatistic(date);
     }
 
 }

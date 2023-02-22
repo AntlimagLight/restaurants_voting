@@ -32,9 +32,9 @@ public class UserRestaurantController {
     )
     @GetMapping("/{restaurant_id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<RestaurantDto> getRestaurant(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
+    public RestaurantDto getRestaurant(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("get {} {}", RESTAURANT_ENTITY_NAME, restaurant_id);
-        return ResponseEntity.ok(restaurantService.getById(restaurant_id));
+        return restaurantService.getById(restaurant_id);
     }
 
     @Operation(
@@ -43,9 +43,9 @@ public class UserRestaurantController {
     )
     @GetMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<List<RestaurantDto>> getAll() {
+    public List<RestaurantDto> getAll() {
         log.info("get all {}", RESTAURANT_ENTITY_NAME);
-        return ResponseEntity.ok(restaurantService.getAll());
+        return restaurantService.getAll();
     }
 
 }

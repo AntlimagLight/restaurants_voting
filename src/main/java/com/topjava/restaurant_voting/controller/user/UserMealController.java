@@ -36,10 +36,10 @@ public class UserMealController {
     )
     @GetMapping("{restaurant_id}/menu/{meal_id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<MealDto> getMeal(@PathVariable @Parameter(example = "100004") Long restaurant_id,
+    public MealDto getMeal(@PathVariable @Parameter(example = "100004") Long restaurant_id,
                                            @PathVariable @Parameter(example = "100009") Long meal_id) {
         log.info("get {} {} from {} {}", MEAL_ENTITY_NAME, meal_id, RESTAURANT_ENTITY_NAME, restaurant_id);
-        return ResponseEntity.ok(mealService.getById(meal_id, restaurant_id));
+        return mealService.getById(meal_id, restaurant_id);
     }
 
     @Operation(
@@ -49,9 +49,9 @@ public class UserMealController {
     )
     @GetMapping("{restaurant_id}/menu")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<List<MealDto>> getMenu(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
+    public List<MealDto> getMenu(@PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("get all {} in {} {}", MEAL_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
-        return ResponseEntity.ok(mealService.getRestaurantMenu(restaurant_id));
+        return mealService.getRestaurantMenu(restaurant_id);
     }
 
     @Operation(
@@ -60,9 +60,9 @@ public class UserMealController {
     )
     @GetMapping("/today_menu")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<List<RestaurantWithMenuDto>> getTodayMenu() {
+    public List<RestaurantWithMenuDto> getTodayMenu() {
         log.info("get all {} today", MEAL_ENTITY_NAME);
-        return ResponseEntity.ok(mealService.getAllByDateWithRestaurants(LocalDate.now()));
+        return mealService.getAllByDateWithRestaurants(LocalDate.now());
     }
 
 }
