@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,6 +17,7 @@ import java.net.URI;
 import java.util.List;
 
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
+import static com.topjava.restaurant_voting.service.UserService.userMapper;
 import static com.topjava.restaurant_voting.util.UserUtils.assureDefaultRole;
 
 @RestController
@@ -32,12 +34,13 @@ public class AdminUserController {
     )
     @PostMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<URI> createUser(@Valid @RequestBody UserDto user) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
         log.info("create {} {}", USER_ENTITY_NAME, user.getEmail());
+        val created = userService.create(assureDefaultRole(user));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/admin/users/{id}")
-                .buildAndExpand(userService.create(assureDefaultRole(user)).getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(uriOfNewResource);
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(userMapper.toDTO(created));
     }
 
     @Operation(

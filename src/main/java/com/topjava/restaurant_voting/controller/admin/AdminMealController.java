@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 import static com.topjava.restaurant_voting.service.MealService.MEAL_ENTITY_NAME;
+import static com.topjava.restaurant_voting.service.MealService.mealMapper;
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 
 @RestController
@@ -31,13 +33,14 @@ public class AdminMealController {
     )
     @PostMapping()
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<URI> createMeal(@Valid @RequestBody MealDto meal,
+    public ResponseEntity<MealDto> createMeal(@Valid @RequestBody MealDto meal,
                                           @PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("create {} {} in {} {}", MEAL_ENTITY_NAME, meal.getName(), RESTAURANT_ENTITY_NAME, restaurant_id);
+        val created = mealService.create(meal, restaurant_id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/admin/restaurants/" + restaurant_id + "/menu/{id}")
-                .buildAndExpand(mealService.create(meal, restaurant_id).getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(uriOfNewResource);
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(mealMapper.toDTO(created));
     }
 
     @Operation(

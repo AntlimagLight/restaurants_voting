@@ -12,6 +12,7 @@ import com.topjava.restaurant_voting.repository.MealRepository;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.mapstruct.factory.Mappers;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -48,7 +49,7 @@ public class MealService {
     )
     @Transactional
     public Meal create(MealDto meal, Long restaurant_id) throws AlreadyExistException {
-        Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
+        val restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
         assertNotExistence(mealRepository.findByRestaurantAndName(restaurant, meal.getName()),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         Meal entity = mealMapper.toModel(meal);
@@ -65,8 +66,8 @@ public class MealService {
     )
     @Transactional
     public void update(MealDto meal, Long id, Long restaurant_id) throws NotExistException {
-        Restaurant restaurant = restaurantRepository.getById(restaurant_id);
-        Meal oldMeal = assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
+        Restaurant restaurant = restaurantRepository.getReferenceById(restaurant_id);
+        val oldMeal = assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         Meal entity = mealMapper.toModel(meal);
         entity.setId(id);
@@ -79,7 +80,7 @@ public class MealService {
         return mealMapper
                 .toDTO(assertExistence(mealRepository
                                 .findByRestaurantAndId(restaurantRepository
-                                        .getById(restaurant_id), id),
+                                        .getReferenceById(restaurant_id), id),
                         "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME));
     }
 
@@ -91,20 +92,20 @@ public class MealService {
     )
     @Transactional
     public void delete(Long id, Long restaurant_id) throws NotExistException {
-        assertExistence(mealRepository.findByRestaurantAndId(restaurantRepository.getById(restaurant_id), id),
+        assertExistence(mealRepository.findByRestaurantAndId(restaurantRepository.getReferenceById(restaurant_id), id),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         mealRepository.deleteById(id);
     }
 
     @Cacheable(value = "menu", key = "#restaurant_id")
     public List<MealDto> getRestaurantMenu(Long restaurant_id) throws NotExistException {
-        Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
+        val restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
         return mealRepository.findAllByRestaurant(restaurant).stream().map(mealMapper::toDTO).toList();
     }
 
     @Cacheable(value = "dateMealCache", key = "#date")
     public List<RestaurantWithMenuDto> getAllByDateWithRestaurants(LocalDate date) {
-        List<RestaurantOwnedMealDto> allMealList = mealRepository.findAllByDateWithRestaurants(date);
+        val allMealList = mealRepository.findAllByDateWithRestaurants(date);
         Map<Long, RestaurantWithMenuDto> dayMenu = new HashMap<>();
         for (RestaurantOwnedMealDto meal : allMealList) {
             Long restaurantId = meal.getRestaurantId();

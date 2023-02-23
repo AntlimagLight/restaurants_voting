@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
+import static com.topjava.restaurant_voting.service.UserService.userMapper;
 import static com.topjava.restaurant_voting.util.UserUtils.STARTING_ROLES;
 
 @RestController
@@ -32,13 +34,14 @@ public class RegisterController {
                     "The user will automatically be assigned the USER role."
     )
     @PostMapping()
-    public ResponseEntity<URI> registration(@Valid @RequestBody UserDto user) {
+    public ResponseEntity<UserDto> registration(@Valid @RequestBody UserDto user) {
         log.info("registration {} {}", USER_ENTITY_NAME, user.getEmail());
         user.setRoles(STARTING_ROLES);
+        val created = userService.create(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/admin/users/{id}")
-                .buildAndExpand(userService.create(user).getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(uriOfNewResource);
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(userMapper.toDTO(created));
     }
 
 }

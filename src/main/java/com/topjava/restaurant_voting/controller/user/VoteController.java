@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,7 @@ import java.util.List;
 
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
-import static com.topjava.restaurant_voting.service.VoteService.MAX_CHANGE_VOTE_TIME;
-import static com.topjava.restaurant_voting.service.VoteService.VOTE_ENTITY_NAME;
+import static com.topjava.restaurant_voting.service.VoteService.*;
 
 @RestController
 @Slf4j
@@ -50,14 +50,14 @@ public class VoteController {
     )
     @PostMapping()
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<URI> makeVote(@AuthenticationPrincipal AuthUser authUser,
+    public ResponseEntity<VoteDto> makeVote(@AuthenticationPrincipal AuthUser authUser,
                                         @RequestParam @Parameter(example = "100004") Long restaurant_id) {
         log.info("{} make vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
+        val created = voteService.makeVote(authUser.getId(), restaurant_id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/user/votes/{vote_date}")
-                .buildAndExpand(voteService.makeVote(userService.getProxyById(authUser.getId()),
-                        restaurant_id).getDate()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(uriOfNewResource);
+                .buildAndExpand(created.getDate()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(voteMapper.toDTO(created));
     }
 
     @Operation(
@@ -73,7 +73,7 @@ public class VoteController {
     public ResponseEntity<String> changeVote(@AuthenticationPrincipal AuthUser authUser,
                                              @RequestParam @Parameter(example = "100004") Long restaurant_id) {
         log.info("{} change vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
-        if (voteService.changeVote(userService.getProxyById(authUser.getId()), restaurant_id)) {
+        if (voteService.changeVote(authUser.getId(), restaurant_id)) {
             return ResponseEntity.status(204).body(null);
         } else {
             return ResponseEntity.status(422).body("Voting change time is out, you can change you vote between 0:00 and "

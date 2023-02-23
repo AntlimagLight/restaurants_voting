@@ -8,6 +8,7 @@ import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.util.UserUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.mapstruct.factory.Mappers;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -47,7 +48,7 @@ public class UserService {
     )
     @Transactional
     public void update(Long id, UserDto user) throws NotExistException {
-        User oldUser = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
+        val oldUser = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         User entity = userMapper.toModel(user);
         entity.setId(id);
         entity.setRegistered(oldUser.getRegistered());
@@ -69,10 +70,6 @@ public class UserService {
     @Cacheable
     public UserDto getById(Long id) throws NotExistException {
         return userMapper.toDTO(assertExistence(userRepository.findById(id), USER_ENTITY_NAME));
-    }
-
-    public User getProxyById(Long id) throws NotExistException {
-        return userRepository.getById(id);
     }
 
     public UserDto getByEmail(String email) throws NotExistException {

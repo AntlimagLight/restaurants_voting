@@ -9,8 +9,10 @@ import com.topjava.restaurant_voting.model.Vote;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.repository.VoteRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.mapstruct.factory.Mappers;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -45,30 +47,29 @@ public class VoteService {
 
 
     public VoteDto getUsersVoteByDate(Long user_id, LocalDate localDate) {
-        User user = userRepository.findById(user_id).get();
-        Optional<Vote> voteOpt = voteRepository.findByUserAndDate(user, localDate);
-        assertExistence(voteOpt, VOTE_ENTITY_NAME);
-        return voteMapper.toDTO(voteOpt.get());
+        val user = userRepository.getReferenceById(user_id);
+        val voteOpt = voteRepository.findByUserAndDate(user, localDate);
+        return voteMapper.toDTO(assertExistence(voteOpt, VOTE_ENTITY_NAME));
     }
 
-    @CacheEvict(value = "votesList", key = "#user.id()")
+    @CacheEvict(value = "votesList", key = "#userId")
     @Transactional
-    public Vote makeVote(User user, Long restaurantId) {
-        LocalDate now = LocalDateTime.now().toLocalDate();
-        Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurantId), RESTAURANT_ENTITY_NAME);
+    public Vote makeVote(Long userId, Long restaurantId) {
+        val now = LocalDateTime.now().toLocalDate();
+        val user = userRepository.getReferenceById(userId);
+        val restaurant = assertExistence(restaurantRepository.findById(restaurantId), RESTAURANT_ENTITY_NAME);
         assertNotExistence(voteRepository.findByUserAndDate(user, now),
                 "today for this " + USER_ENTITY_NAME + " " + VOTE_ENTITY_NAME);
         return voteRepository.save(new Vote(null, user, restaurant, now));
     }
 
-    @CacheEvict(value = "votesList", key = "#user.id()")
+    @CacheEvict(value = "votesList", key = "#userId")
     @Transactional
-    public boolean changeVote(User user, Long restaurantId) {
-        LocalDateTime now = LocalDateTime.now();
+    public boolean changeVote(Long userId, Long restaurantId) {
+        val now = LocalDateTime.now();
         Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurantId), RESTAURANT_ENTITY_NAME);
-        Optional<Vote> actualVoteOpt = voteRepository.findByUserAndDate(user, now.toLocalDate());
-        assertExistence(actualVoteOpt, "today for this " + USER_ENTITY_NAME + " " + VOTE_ENTITY_NAME);
-        Vote actualVote = actualVoteOpt.get();
+        val actualVoteOpt = voteRepository.findByUserAndDate(userRepository.getReferenceById(userId), now.toLocalDate());
+        Vote actualVote = assertExistence(actualVoteOpt, "today for this " + USER_ENTITY_NAME + " " + VOTE_ENTITY_NAME);
         if (now.toLocalTime().isBefore(MAX_CHANGE_VOTE_TIME)) {
             actualVote.setRestaurant(restaurant);
             voteRepository.save(actualVote);
@@ -81,7 +82,7 @@ public class VoteService {
 
     @Cacheable(value = "votesList", key = "#user_id")
     public List<VoteDto> getAllByUser(Long user_id) {
-        User user = userRepository.findById(user_id).get();
+        val user = userRepository.findById(user_id).get();
         return voteRepository.findAllByUser(user).stream().map(voteMapper::toDTO).toList();
     }
 
