@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class CacheClearUtil {
 
+    // All cache cleared every 24 hours
     @Caching(
             evict = {
                     @CacheEvict(value = "dateMealCache", allEntries = true),
                     @CacheEvict(value = "menu", allEntries = true),
                     @CacheEvict(value = "restaurantList", allEntries = true),
                     @CacheEvict(value = "restaurant", allEntries = true),
-                    @CacheEvict(value = "user", allEntries = true),
                     @CacheEvict(value = "votesList", allEntries = true),
                     @CacheEvict(value = "stats", allEntries = true)
             }

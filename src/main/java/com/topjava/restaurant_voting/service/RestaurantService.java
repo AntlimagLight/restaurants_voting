@@ -8,7 +8,6 @@ import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.factory.Mappers;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,7 +28,7 @@ import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExiste
 public class RestaurantService {
     public static final String RESTAURANT_ENTITY_NAME = "Restaurant";
     private final RestaurantRepository restaurantRepository;
-    public static final RestaurantMapper restaurantMapper = Mappers.getMapper(RestaurantMapper.class);
+    private final RestaurantMapper restaurantMapper;
 
     @Transactional
     @CacheEvict(value = "restaurantList", key = "0")

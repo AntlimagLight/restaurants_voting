@@ -2,8 +2,8 @@ package com.topjava.restaurant_voting.controller.user;
 
 import com.topjava.restaurant_voting.dto.VoteCountDto;
 import com.topjava.restaurant_voting.dto.VoteDto;
+import com.topjava.restaurant_voting.mapper.VoteMapper;
 import com.topjava.restaurant_voting.security.AuthUser;
-import com.topjava.restaurant_voting.service.UserService;
 import com.topjava.restaurant_voting.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,7 +22,8 @@ import java.util.List;
 
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
-import static com.topjava.restaurant_voting.service.VoteService.*;
+import static com.topjava.restaurant_voting.service.VoteService.MAX_CHANGE_VOTE_TIME;
+import static com.topjava.restaurant_voting.service.VoteService.VOTE_ENTITY_NAME;
 
 @RestController
 @Slf4j
@@ -30,7 +31,7 @@ import static com.topjava.restaurant_voting.service.VoteService.*;
 @RequiredArgsConstructor
 public class VoteController {
     private final VoteService voteService;
-    private final UserService userService;
+    private final VoteMapper voteMapper;
 
     @Operation(
             summary = "Get Vote",

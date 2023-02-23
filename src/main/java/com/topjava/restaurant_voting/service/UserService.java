@@ -9,11 +9,6 @@ import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.mapstruct.factory.Mappers;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,12 +20,11 @@ import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExiste
 
 @Service
 @Transactional(readOnly = true)
-@CacheConfig(cacheNames = "user")
 @RequiredArgsConstructor
 public class UserService {
     public static final String USER_ENTITY_NAME = "User";
     private final UserRepository userRepository;
-    public static final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    private final UserMapper userMapper;
 
     @Transactional
     public User create(UserDto user) throws AlreadyExistException {
@@ -41,11 +35,6 @@ public class UserService {
         return userRepository.save(UserUtils.prepareToSave(entity));
     }
 
-    @Caching(
-            evict = {
-                    @CacheEvict(key = "#id"),
-            }
-    )
     @Transactional
     public void update(Long id, UserDto user) throws NotExistException {
         val oldUser = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
@@ -56,18 +45,12 @@ public class UserService {
         userRepository.save(UserUtils.prepareToSave(entity));
     }
 
-    @Caching(
-            evict = {
-                    @CacheEvict(key = "#id"),
-            }
-    )
     @Transactional
     public void switchEnable(Long id) throws NotExistException {
         User user = assertExistence(userRepository.findById(id), USER_ENTITY_NAME);
         user.setEnabled(!user.getEnabled());
     }
 
-    @Cacheable
     public UserDto getById(Long id) throws NotExistException {
         return userMapper.toDTO(assertExistence(userRepository.findById(id), USER_ENTITY_NAME));
     }
@@ -76,11 +59,6 @@ public class UserService {
         return userMapper.toDTO(assertExistence(userRepository.findByEmail(email), USER_ENTITY_NAME));
     }
 
-    @Caching(
-            evict = {
-                    @CacheEvict(key = "#id"),
-            }
-    )
     @Transactional
     public void delete(long id) throws NotExistException {
         assertExistence(userRepository.findById(id), USER_ENTITY_NAME);

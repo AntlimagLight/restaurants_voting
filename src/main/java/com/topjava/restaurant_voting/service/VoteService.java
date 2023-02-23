@@ -4,16 +4,13 @@ import com.topjava.restaurant_voting.dto.VoteCountDto;
 import com.topjava.restaurant_voting.dto.VoteDto;
 import com.topjava.restaurant_voting.mapper.VoteMapper;
 import com.topjava.restaurant_voting.model.Restaurant;
-import com.topjava.restaurant_voting.model.User;
 import com.topjava.restaurant_voting.model.Vote;
 import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.repository.VoteRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.mapstruct.factory.Mappers;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,7 +21,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 import static com.topjava.restaurant_voting.service.RestaurantService.RESTAURANT_ENTITY_NAME;
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
@@ -39,7 +35,7 @@ import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExiste
 public class VoteService {
     public static final String VOTE_ENTITY_NAME = "Vote";
     public static final LocalTime MAX_CHANGE_VOTE_TIME = LocalTime.of(11, 0);
-    public static final VoteMapper voteMapper = Mappers.getMapper(VoteMapper.class);
+    private final VoteMapper voteMapper;
 
     private final VoteRepository voteRepository;
     private final RestaurantRepository restaurantRepository;
@@ -86,14 +82,15 @@ public class VoteService {
         return voteRepository.findAllByUser(user).stream().map(voteMapper::toDTO).toList();
     }
 
-    @Cacheable(value = "stats", key = "0")
+    @Cacheable(value = "stats", key = "#date")
     public List<VoteCountDto> getStatistic(LocalDate date) {
         return voteRepository.findAllByDate(date);
     }
 
-    @CacheEvict(value = "stats", key = "0")
+    // All Statistic cache cleared every 5 minutes
+    @CacheEvict(value = "stats", allEntries = true)
     @Scheduled(initialDelay = 320000, fixedDelay = 300000)
-    public void clearRestaurantListCache() {
+    public void clearStatsCache() {
         log.debug("Statistic cache was cleared");
     }
 }

@@ -1,6 +1,7 @@
 package com.topjava.restaurant_voting.controller.admin;
 
 import com.topjava.restaurant_voting.dto.UserDto;
+import com.topjava.restaurant_voting.mapper.UserMapper;
 import com.topjava.restaurant_voting.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,7 +19,6 @@ import java.net.URI;
 import java.util.List;
 
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
-import static com.topjava.restaurant_voting.service.UserService.userMapper;
 import static com.topjava.restaurant_voting.util.UserUtils.assureDefaultRole;
 
 @RestController
@@ -26,6 +27,7 @@ import static com.topjava.restaurant_voting.util.UserUtils.assureDefaultRole;
 @RequestMapping("/admin/users")
 public class AdminUserController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Operation(
             summary = "Create User",
@@ -50,11 +52,11 @@ public class AdminUserController {
     )
     @PutMapping("/{id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto user,
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateUser(@Valid @RequestBody UserDto user,
                                              @PathVariable @Parameter(example = "100001") Long id) {
         log.info("update {} {}", USER_ENTITY_NAME, user.getEmail());
         userService.update(id, assureDefaultRole(user));
-        return ResponseEntity.status(204).body(null);
     }
 
     @Operation(
@@ -64,10 +66,10 @@ public class AdminUserController {
     )
     @PatchMapping("/{id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<String> SwitchEnabled(@PathVariable @Parameter(example = "100001") Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void SwitchEnabled(@PathVariable @Parameter(example = "100001") Long id) {
         log.info("switch enabled for {} {}", USER_ENTITY_NAME, id);
         userService.switchEnable(id);
-        return ResponseEntity.status(204).body(null);
     }
 
     @Operation(
@@ -98,10 +100,10 @@ public class AdminUserController {
     )
     @DeleteMapping("/{id}")
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<String> deleteUser(@PathVariable @Parameter(example = "100001") Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable @Parameter(example = "100001") Long id) {
         log.info("delete {} {}", USER_ENTITY_NAME, id);
         userService.delete(id);
-        return ResponseEntity.status(204).body(null);
     }
 
     @Operation(

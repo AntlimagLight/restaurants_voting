@@ -1,6 +1,7 @@
 package com.topjava.restaurant_voting.controller;
 
 import com.topjava.restaurant_voting.dto.UserDto;
+import com.topjava.restaurant_voting.mapper.UserMapper;
 import com.topjava.restaurant_voting.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -17,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
-import static com.topjava.restaurant_voting.service.UserService.userMapper;
 import static com.topjava.restaurant_voting.util.UserUtils.STARTING_ROLES;
 
 @RestController
@@ -27,6 +27,7 @@ import static com.topjava.restaurant_voting.util.UserUtils.STARTING_ROLES;
 public class RegisterController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Operation(
             summary = "User registration",

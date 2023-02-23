@@ -13,7 +13,6 @@ import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.mapstruct.factory.Mappers;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -39,7 +38,7 @@ public class MealService {
     public static final String MEAL_ENTITY_NAME = "Meal";
     private final MealRepository mealRepository;
     private final RestaurantRepository restaurantRepository;
-    public static final MealMapper mealMapper = Mappers.getMapper(MealMapper.class);
+    private final MealMapper mealMapper;
 
     @Caching(
             evict = {
