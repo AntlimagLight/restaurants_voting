@@ -104,7 +104,7 @@ public class MealService {
 
     @Cacheable(value = "dateMealCache", key = "#date")
     public List<RestaurantWithMenuDto> getAllByDateWithRestaurants(LocalDate date) {
-        List<RestaurantOwnedMealDto> allMealList = mealRepository.findAllByDate(date);
+        List<RestaurantOwnedMealDto> allMealList = mealRepository.findAllByDateWithRestaurants(date);
         Map<Long, RestaurantWithMenuDto> dayMenu = new HashMap<>();
         for (RestaurantOwnedMealDto meal : allMealList) {
             Long restaurantId = meal.getRestaurantId();

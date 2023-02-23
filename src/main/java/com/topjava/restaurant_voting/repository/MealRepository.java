@@ -18,10 +18,9 @@ public interface MealRepository extends CrudRepository<Meal, Long> {
 
     List<Meal> findAllByRestaurant(Restaurant restaurant);
 
-    @Query(value = "SELECT m.id as id, m.restaurant.id as restaurantId, m.name as name, m.cost as cost, " +
-            "m.date as date, r.name as restaurantName FROM Meal m LEFT JOIN Restaurant r  ON m.restaurant.id=r.id " +
-            "WHERE m.date= :date")
-    List<RestaurantOwnedMealDto> findAllByDate(LocalDate date);
-
+    @Query(value = "SELECT r.id as restaurantId, m.id as id, m.name as name, m.cost as cost, " +
+        "m.date as date, r.name as restaurantName FROM Restaurant r JOIN FETCH Meal m " +
+        "ON r.id = m.restaurant.id WHERE m.date= :date")
+    List<RestaurantOwnedMealDto> findAllByDateWithRestaurants(LocalDate date);
 
 }

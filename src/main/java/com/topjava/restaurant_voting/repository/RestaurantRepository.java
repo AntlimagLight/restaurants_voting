@@ -12,7 +12,7 @@ public interface RestaurantRepository extends CrudRepository<Restaurant, Long> {
 
     Optional<Restaurant> findByName(String name);
 
-    @Query("select r from Restaurant r order by r.id asc")
+    @Query("SELECT r FROM Restaurant r ORDER BY r.id ASC")
     List<Restaurant> findAll();
 
     Restaurant getById(Long id);
