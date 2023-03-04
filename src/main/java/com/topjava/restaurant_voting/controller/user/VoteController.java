@@ -94,15 +94,15 @@ public class VoteController {
     }
 
     @Operation(
-            summary = "Get Statistic",
-            description = "In response to the request, you get statistic. " +
+            summary = "Get Statistics",
+            description = "In response to the request, you get statistics. " +
                     "The calculation is relevant for the date specified in the parameters.<br>" +
                     "NOTE! You can see the actual statistics every 5 minutes. " +
                     "When you try to request statistics more often, the same latest version will view."
     )
-    @GetMapping("/statistic")
+    @GetMapping("/statistics")
     @SecurityRequirement(name = "basicAuth")
-    public List<VoteCountDto> viewStatistic(
+    public List<VoteCountDto> viewStatistics(
             @RequestParam @Parameter(example = "2022-06-10") LocalDate date) {
         log.info("view statistics for the {}", date);
         return voteService.getStatistic(date);

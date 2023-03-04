@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,10 +42,10 @@ public class ProfileController {
     )
     @DeleteMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<String> delete(@AuthenticationPrincipal AuthUser authUser) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("delete from profile {} {}", USER_ENTITY_NAME, authUser.getEmail());
         userService.delete(authUser.getId());
-        return ResponseEntity.status(204).body(null);
     }
 
     @Operation(
@@ -53,12 +54,12 @@ public class ProfileController {
     )
     @PutMapping
     @SecurityRequirement(name = "basicAuth")
-    public ResponseEntity<String> update(@Valid @RequestBody UserDto user, @AuthenticationPrincipal AuthUser authUser) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@Valid @RequestBody UserDto user, @AuthenticationPrincipal AuthUser authUser) {
         log.info("update from profile {} {}", USER_ENTITY_NAME, authUser.getEmail());
         assureIdConsistent(user, authUser.getId());
         user.setRoles(convertToRoles(authUser.getAuthorities()));
         userService.update(authUser.getId(), user);
-        return ResponseEntity.status(204).body(null);
     }
 
 }

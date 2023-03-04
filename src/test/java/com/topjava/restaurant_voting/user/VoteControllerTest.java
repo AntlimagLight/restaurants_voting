@@ -98,13 +98,13 @@ public class VoteControllerTest extends RestaurantVotingApplicationTests {
     }
 
     @Test
-    void getStatistic() throws Exception {
-        ResultActions resultActions = this.mockMvc.perform(get("/user/votes/statistic?date=2022-06-10")
+    void getStatistics() throws Exception {
+        ResultActions resultActions = this.mockMvc.perform(get("/user/votes/statistics?date=2022-06-10")
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-        JSONAssert.assertEquals(JsonUtil.writeValue(STATISTIC),
+        JSONAssert.assertEquals(JsonUtil.writeValue(STATISTICS),
                 resultActions.andReturn().getResponse().getContentAsString(), false);
     }
 }

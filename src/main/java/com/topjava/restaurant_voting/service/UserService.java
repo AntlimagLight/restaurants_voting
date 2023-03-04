@@ -9,14 +9,16 @@ import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.util.UserUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertExistence;
 import static com.topjava.restaurant_voting.util.ValidationUtils.assertNotExistence;
+import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Service
 @Transactional(readOnly = true)
@@ -65,10 +67,9 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public List<UserDto> getAll() {
-        return userRepository.findAll().stream()
-                .map(userMapper::toDTO)
-                .toList();
+    public Page<UserDto> getAll(Pageable pageable) {
+        val page = userRepository.findAll(pageable);
+        return page.map(userMapper::toDTO);
     }
 
 }

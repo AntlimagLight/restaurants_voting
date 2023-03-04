@@ -1,18 +1,15 @@
 package com.topjava.restaurant_voting.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
+@RequiredArgsConstructor
 public class VoteCountDtoImpl implements VoteCountDto {
 
-    Long restaurantId;
-    String name;
-    Integer count;
+    private final Long restaurantId;
+    private final String name;
+    private final Integer count;
 
 }

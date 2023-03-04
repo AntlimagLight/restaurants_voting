@@ -10,13 +10,17 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 import static com.topjava.restaurant_voting.service.UserService.USER_ENTITY_NAME;
 import static com.topjava.restaurant_voting.util.UserUtils.assureDefaultRole;
@@ -67,7 +71,7 @@ public class AdminUserController {
     @PatchMapping("/{id}")
     @SecurityRequirement(name = "basicAuth")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void SwitchEnabled(@PathVariable @Parameter(example = "100001") Long id) {
+    public void switchEnabled(@PathVariable @Parameter(example = "100001") Long id) {
         log.info("switch enabled for {} {}", USER_ENTITY_NAME, id);
         userService.switchEnable(id);
     }
@@ -106,15 +110,23 @@ public class AdminUserController {
         userService.delete(id);
     }
 
+
     @Operation(
             summary = "Get All Users",
             description = "The response is a list of all users."
     )
     @GetMapping
     @SecurityRequirement(name = "basicAuth")
-    public List<UserDto> getAll() {
+    public Page<UserDto> getAll(@PageableDefault(page = 0, size = 10)
+                                @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                @Parameter(example =
+                                """
+                                {
+                                  "page": 0,
+                                  "size": 2,
+                                  "sort": ["id"]
+                                }""") Pageable pageable) {
         log.info("get all {}", USER_ENTITY_NAME);
-        return userService.getAll();
+        return userService.getAll(pageable);
     }
-
 }

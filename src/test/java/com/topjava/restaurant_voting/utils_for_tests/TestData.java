@@ -99,13 +99,13 @@ public class TestData {
     public static final VoteDto VOTE_DTO_2 = new VoteDto(START_SEQ + 15, USER_100000.getId(),
             REST_100005.getId(), LocalDate.of(2022, 6, 10));
     public final static List<VoteDto> VOTES_BY_USER100000 = new ArrayList<>();
-    public final static List<VoteCountDtoImpl> STATISTIC = new ArrayList<>();
+    public final static List<VoteCountDtoImpl> STATISTICS = new ArrayList<>();
 
     static {
         VOTES_BY_USER100000.add(VOTE_DTO_1);
         VOTES_BY_USER100000.add(VOTE_DTO_2);
-        STATISTIC.add(new VoteCountDtoImpl(REST_100003.getId(), REST_100003.getName(), 2));
-        STATISTIC.add(new VoteCountDtoImpl(REST_100005.getId(), REST_100005.getName(), 1));
+        STATISTICS.add(new VoteCountDtoImpl(REST_100003.getId(), REST_100003.getName(), 2));
+        STATISTICS.add(new VoteCountDtoImpl(REST_100005.getId(), REST_100005.getName(), 1));
     }
 
     public static <T extends AbstractNamedDto> T setIdForTests(T dto, Long id) {

@@ -6,11 +6,11 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@ToString
 @AllArgsConstructor
 @EqualsAndHashCode
 public class RestaurantWithMenuDto {
-    private Long restaurantId;
-    private String restaurantName;
+    private final Long restaurantId;
+    private final String restaurantName;
     private List<MealDto> menu;
 }

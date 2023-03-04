@@ -8,16 +8,16 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@ToString
+@RequiredArgsConstructor
 @EqualsAndHashCode
 public class VoteDto {
 
-    private long id;
-    private long userId;
-    private long restaurantId;
+    private final long id;
+    private final long userId;
+    private final long restaurantId;
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private LocalDate date;
+    private final LocalDate date;
 
 }

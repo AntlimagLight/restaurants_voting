@@ -16,23 +16,24 @@ import java.util.Set;
 
 @Getter
 @Setter
+@ToString
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @EqualsAndHashCode(callSuper = true)
 public class UserDto extends AbstractNamedDto {
     @Email
     @NotBlank
     @Schema(example = "email@gmail.com")
-    private String email;
+    private final String email;
     @NotBlank
     @Size(min = 3, max = 256)
     @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
+    private final String password;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private LocalDate registered;
+    private final LocalDate registered;
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private Boolean enabled;
+    private final Boolean enabled;
 }

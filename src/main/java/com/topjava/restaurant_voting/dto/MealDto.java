@@ -9,13 +9,14 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@ToString
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @EqualsAndHashCode(callSuper = true)
 public class MealDto extends AbstractNamedDto {
     @Range(min = 0, max = 50000)
-    private int cost;
+    private final int cost;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDate date;
+    private final LocalDate date;
 }
