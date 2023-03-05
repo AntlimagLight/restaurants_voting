@@ -3,7 +3,6 @@ package com.topjava.restaurant_voting.service;
 import com.topjava.restaurant_voting.dto.MealDto;
 import com.topjava.restaurant_voting.dto.RestaurantOwnedMealDto;
 import com.topjava.restaurant_voting.dto.RestaurantWithMenuDto;
-import com.topjava.restaurant_voting.exeption.AlreadyExistException;
 import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.mapper.MealMapper;
 import com.topjava.restaurant_voting.model.Meal;
@@ -47,8 +46,8 @@ public class MealService {
             }
     )
     @Transactional
-    public Meal create(MealDto meal, Long restaurant_id) throws AlreadyExistException {
-        val restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
+    public Meal create(MealDto meal, Long restaurant_id) {
+        val restaurant = getRestaurantReferenceIfExist(restaurant_id);
         assertNotExistence(mealRepository.findByRestaurantAndName(restaurant, meal.getName()),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         Meal entity = mealMapper.toModel(meal);
@@ -64,8 +63,8 @@ public class MealService {
             }
     )
     @Transactional
-    public void update(MealDto meal, Long id, Long restaurant_id) throws NotExistException {
-        Restaurant restaurant = restaurantRepository.getReferenceById(restaurant_id);
+    public void update(MealDto meal, Long id, Long restaurant_id) {
+        val restaurant = getRestaurantReferenceIfExist(restaurant_id);
         val oldMeal = assertExistence(mealRepository.findByRestaurantAndId(restaurant, id),
                 "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
         Meal entity = mealMapper.toModel(meal);
@@ -75,7 +74,7 @@ public class MealService {
         mealRepository.save(entity);
     }
 
-    public MealDto getById(Long id, Long restaurant_id) throws NotExistException {
+    public MealDto getById(Long id, Long restaurant_id) {
         return mealMapper
                 .toDTO(assertExistence(mealRepository
                                 .findByRestaurantAndId(restaurantRepository
@@ -90,15 +89,18 @@ public class MealService {
             }
     )
     @Transactional
-    public void delete(Long id, Long restaurant_id) throws NotExistException {
-        assertExistence(mealRepository.findByRestaurantAndId(restaurantRepository.getReferenceById(restaurant_id), id),
-                "In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
-        mealRepository.deleteById(id);
+    public void delete(Long id, Long restaurant_id) {
+        val restaurant = getRestaurantReferenceIfExist(restaurant_id);
+        if (!mealRepository.existsByRestaurantAndId(restaurant, id)) {
+            throw new NotExistException("In this " + RESTAURANT_ENTITY_NAME + " the specified " + MEAL_ENTITY_NAME);
+        } else {
+            mealRepository.deleteById(id);
+        }
     }
 
     @Cacheable(value = "menu", key = "#restaurant_id")
-    public List<MealDto> getRestaurantMenu(Long restaurant_id) throws NotExistException {
-        val restaurant = assertExistence(restaurantRepository.findById(restaurant_id), RESTAURANT_ENTITY_NAME);
+    public List<MealDto> getRestaurantMenu(Long restaurant_id) {
+        val restaurant = getRestaurantReferenceIfExist(restaurant_id);
         return mealRepository.findAllByRestaurant(restaurant).stream().map(mealMapper::toDTO).toList();
     }
 
@@ -124,6 +126,14 @@ public class MealService {
             });
         }
         return new ArrayList<>(dayMenu.values());
+    }
+
+    private Restaurant getRestaurantReferenceIfExist(Long restaurant_id) {
+        if (!restaurantRepository.existsById(restaurant_id)) {
+            throw new NotExistException(RESTAURANT_ENTITY_NAME);
+        } else {
+            return restaurantRepository.getReferenceById(restaurant_id);
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package com.topjava.restaurant_voting.service;
 
 import com.topjava.restaurant_voting.dto.VoteCountDto;
 import com.topjava.restaurant_voting.dto.VoteDto;
+import com.topjava.restaurant_voting.exeption.NotExistException;
 import com.topjava.restaurant_voting.mapper.VoteMapper;
 import com.topjava.restaurant_voting.model.Restaurant;
 import com.topjava.restaurant_voting.model.Vote;
@@ -36,7 +37,6 @@ public class VoteService {
     public static final String VOTE_ENTITY_NAME = "Vote";
     public static final LocalTime MAX_CHANGE_VOTE_TIME = LocalTime.of(11, 0);
     private final VoteMapper voteMapper;
-
     private final VoteRepository voteRepository;
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
@@ -53,7 +53,7 @@ public class VoteService {
     public Vote makeVote(Long userId, Long restaurantId) {
         val now = LocalDateTime.now().toLocalDate();
         val user = userRepository.getReferenceById(userId);
-        val restaurant = assertExistence(restaurantRepository.findById(restaurantId), RESTAURANT_ENTITY_NAME);
+        val restaurant = getRestaurantReferenceIfExist(restaurantId);
         assertNotExistence(voteRepository.findByUserAndDate(user, now),
                 "today for this " + USER_ENTITY_NAME + " " + VOTE_ENTITY_NAME);
         return voteRepository.save(new Vote(null, user, restaurant, now));
@@ -63,7 +63,7 @@ public class VoteService {
     @Transactional
     public boolean changeVote(Long userId, Long restaurantId) {
         val now = LocalDateTime.now();
-        Restaurant restaurant = assertExistence(restaurantRepository.findById(restaurantId), RESTAURANT_ENTITY_NAME);
+        val restaurant = getRestaurantReferenceIfExist(restaurantId);
         val actualVoteOpt = voteRepository.findByUserAndDate(userRepository.getReferenceById(userId), now.toLocalDate());
         Vote actualVote = assertExistence(actualVoteOpt, "today for this " + USER_ENTITY_NAME + " " + VOTE_ENTITY_NAME);
         if (now.toLocalTime().isBefore(MAX_CHANGE_VOTE_TIME)) {
@@ -83,14 +83,22 @@ public class VoteService {
     }
 
     @Cacheable(value = "stats", key = "#date")
-    public List<VoteCountDto> getStatistic(LocalDate date) {
+    public List<VoteCountDto> getStatistics(LocalDate date) {
         return voteRepository.findAllByDate(date);
     }
 
     // All Statistic cache cleared every 5 minutes
     @CacheEvict(value = "stats", allEntries = true)
-    @Scheduled(initialDelay = 320000, fixedDelay = 300000)
+    @Scheduled(fixedDelayString = "${cache.timeout.clear-stats}")
     public void clearStatsCache() {
         log.debug("Statistic cache was cleared");
+    }
+
+    private Restaurant getRestaurantReferenceIfExist(Long restaurant_id) {
+        if (!restaurantRepository.existsById(restaurant_id)) {
+            throw new NotExistException(RESTAURANT_ENTITY_NAME);
+        } else {
+            return restaurantRepository.getReferenceById(restaurant_id);
+        }
     }
 }

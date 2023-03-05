@@ -6,6 +6,7 @@ import com.topjava.restaurant_voting.repository.RestaurantRepository;
 import com.topjava.restaurant_voting.repository.UserRepository;
 import com.topjava.restaurant_voting.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 
+
 @SuppressWarnings({"OptionalGetWithoutIsPresent"})
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class InitiateDataUtil implements CommandLineRunner {
+
     private final RestaurantRepository restaurantRepository;
     private final MealRepository mealRepository;
     private final UserRepository userRepository;
@@ -95,6 +99,7 @@ public class InitiateDataUtil implements CommandLineRunner {
         voteRepository.save(oldVote4);
         voteRepository.save(newVote1);
         voteRepository.save(newVote2);
+        log.debug("Starting test data uploaded");
     }
 
     @Override

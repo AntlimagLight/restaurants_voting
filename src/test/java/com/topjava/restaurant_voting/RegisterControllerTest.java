@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -33,7 +34,8 @@ public class RegisterControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(DUPLICATE_EMAIL_USER_DTO, DUPLICATE_EMAIL_USER_DTO.getPassword())))
                 .andDo(print())
-                .andExpect(status().is(422));
+                .andExpect(status().is(422))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
         assertFalse(userRepository.findById(NEW_ENTITY_ID).isPresent());
     }
 

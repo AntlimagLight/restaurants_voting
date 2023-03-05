@@ -36,7 +36,7 @@ public class AdminMealController {
     @PostMapping()
     @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<MealDto> createMeal(@Valid @RequestBody MealDto meal,
-                                          @PathVariable @Parameter(example = "100004") Long restaurant_id) {
+                                              @PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("create {} {} in {} {}", MEAL_ENTITY_NAME, meal.getName(), RESTAURANT_ENTITY_NAME, restaurant_id);
         val created = mealService.create(meal, restaurant_id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -53,8 +53,8 @@ public class AdminMealController {
     @SecurityRequirement(name = "basicAuth")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateMeal(@Valid @RequestBody MealDto meal,
-                                             @PathVariable @Parameter(example = "100004") Long restaurant_id,
-                                             @PathVariable @Parameter(example = "100009") Long meal_id) {
+                           @PathVariable @Parameter(example = "100004") Long restaurant_id,
+                           @PathVariable @Parameter(example = "100009") Long meal_id) {
         log.info("update {} {} in {} {}", MEAL_ENTITY_NAME, meal.getName(), RESTAURANT_ENTITY_NAME, restaurant_id);
         mealService.update(meal, meal_id, restaurant_id);
     }
@@ -67,7 +67,7 @@ public class AdminMealController {
     @SecurityRequirement(name = "basicAuth")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMeal(@PathVariable @Parameter(example = "100004") Long restaurant_id,
-                                             @PathVariable @Parameter(example = "100009") Long meal_id) {
+                           @PathVariable @Parameter(example = "100009") Long meal_id) {
         log.info("delete {} {} in {} {}", MEAL_ENTITY_NAME, meal_id, RESTAURANT_ENTITY_NAME, restaurant_id);
         mealService.delete(meal_id, restaurant_id);
     }

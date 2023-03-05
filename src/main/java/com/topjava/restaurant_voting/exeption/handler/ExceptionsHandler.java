@@ -37,7 +37,7 @@ public class ExceptionsHandler {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ExceptionHandler
     public ResponseError dataIntegrityViolationExceptionHandle(DataIntegrityViolationException exception) {
         Throwable specificCause = exception.getMostSpecificCause();
         log.error(specificCause.getClass() + " : " + specificCause.getMessage());
@@ -45,7 +45,8 @@ public class ExceptionsHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler({MethodArgumentNotValidException.class, PropertyAccessException.class, HttpMessageConversionException.class})
+    @ExceptionHandler({MethodArgumentNotValidException.class, PropertyAccessException.class,
+            HttpMessageConversionException.class, IllegalArgumentException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseError badRequestHandle(Exception exception) {
         log.error(exception.getMessage(), exception);

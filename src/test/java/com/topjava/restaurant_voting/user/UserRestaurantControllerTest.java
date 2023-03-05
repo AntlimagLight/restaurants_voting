@@ -34,7 +34,8 @@ public class UserRestaurantControllerTest extends RestaurantVotingApplicationTes
         this.mockMvc.perform(get("/user/restaurants/" + NOT_EXISTING_ID)
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test

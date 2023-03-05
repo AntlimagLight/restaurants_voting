@@ -1,6 +1,9 @@
 package com.topjava.restaurant_voting.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter

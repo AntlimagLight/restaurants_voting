@@ -50,7 +50,7 @@ public class AdminRestaurantController {
     @SecurityRequirement(name = "basicAuth")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateRestaurant(@Valid @RequestBody RestaurantDto restaurant,
-                                                   @PathVariable @Parameter(example = "100004") Long restaurant_id) {
+                                 @PathVariable @Parameter(example = "100004") Long restaurant_id) {
         log.info("update {} {}", RESTAURANT_ENTITY_NAME, restaurant.getName());
         restaurantService.update(restaurant_id, restaurant);
     }

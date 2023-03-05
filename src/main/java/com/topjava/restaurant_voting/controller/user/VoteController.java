@@ -40,7 +40,7 @@ public class VoteController {
     @GetMapping("/{vote_date}")
     @SecurityRequirement(name = "basicAuth")
     public VoteDto getVote(@AuthenticationPrincipal AuthUser authUser,
-                                           @PathVariable @Parameter(example = "2022-06-10") LocalDate vote_date) {
+                           @PathVariable @Parameter(example = "2022-06-10") LocalDate vote_date) {
         log.info("get {} by {}", VOTE_ENTITY_NAME, vote_date);
         return voteService.getUsersVoteByDate(authUser.getId(), vote_date);
     }
@@ -52,7 +52,7 @@ public class VoteController {
     @PostMapping()
     @SecurityRequirement(name = "basicAuth")
     public ResponseEntity<VoteDto> makeVote(@AuthenticationPrincipal AuthUser authUser,
-                                        @RequestParam @Parameter(example = "100004") Long restaurant_id) {
+                                            @RequestParam @Parameter(example = "100004") Long restaurant_id) {
         log.info("{} make vote for {} {}", USER_ENTITY_NAME, RESTAURANT_ENTITY_NAME, restaurant_id);
         val created = voteService.makeVote(authUser.getId(), restaurant_id);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -105,7 +105,7 @@ public class VoteController {
     public List<VoteCountDto> viewStatistics(
             @RequestParam @Parameter(example = "2022-06-10") LocalDate date) {
         log.info("view statistics for the {}", date);
-        return voteService.getStatistic(date);
+        return voteService.getStatistics(date);
     }
 
 }

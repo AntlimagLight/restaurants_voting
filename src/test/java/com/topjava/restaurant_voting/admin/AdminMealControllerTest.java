@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -40,7 +41,8 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(NEW_MEAL_ALREADY_EXIST_DTO)))
                 .andDo(print())
-                .andExpect(status().is(422));
+                .andExpect(status().is(422))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
         assertFalse(mealRepository.findById(NEW_ENTITY_ID).isPresent());
     }
 
@@ -63,7 +65,8 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(UPDATED_MEAL_DTO)))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
         MealDto meal = mealMapper.toDTO(mealRepository.findById(START_SEQ + 6).get());
         MEAL_DTO_MATCHER.assertMatch(meal, MEAL_100006);
     }
@@ -82,7 +85,8 @@ public class AdminMealControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(delete("/admin/restaurants/" + TESTING_RESTAURANT_ID + "/menu/" + START_SEQ + 6)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
         assertTrue(mealRepository.findById(START_SEQ + 6).isPresent());
     }
 

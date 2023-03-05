@@ -51,6 +51,11 @@ public class TestData {
             "updpass12", null, true, Role.USER, Role.ADMIN);
     public static final UserDto UPD_USER_TO_ADMIN_DTO = sortRoles(userMapper.toDTO(UPD_USER_TO_ADMIN));
     public static final List<UserDto> ALL_USERS = List.of(USER_100000, USER_100001, USER_100002);
+    public static final List<UserDto> ALL_USERS_ON_FIRST_PAGE = List.of(USER_100000, USER_100001);
+    public static final PageOfUsersDto PAGE_ALL_USERS = new PageOfUsersDto(1, 3, 10, 0,
+            ALL_USERS);
+    public static final PageOfUsersDto PAGE_ALL_USERS_ON_FIRST_PAGE = new PageOfUsersDto(2, 3, 2, 0,
+            ALL_USERS_ON_FIRST_PAGE);
 
     public static final RestaurantDto REST_100003 = setIdForTests(restaurantMapper.toDTO(REST_1), START_SEQ + 3);
     public static final RestaurantDto REST_100004 = setIdForTests(restaurantMapper.toDTO(REST_2), START_SEQ + 4);

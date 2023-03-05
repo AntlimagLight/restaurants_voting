@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -40,7 +41,8 @@ public class AdminRestaurantControllerTest extends RestaurantVotingApplicationTe
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(REST_2)))
                 .andDo(print())
-                .andExpect(status().is(422));
+                .andExpect(status().is(422))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
         assertFalse(restaurantRepository.findById(NEW_ENTITY_ID).isPresent());
     }
 
@@ -63,7 +65,8 @@ public class AdminRestaurantControllerTest extends RestaurantVotingApplicationTe
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(UPDATED_RESTAURANT)))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -80,7 +83,8 @@ public class AdminRestaurantControllerTest extends RestaurantVotingApplicationTe
         this.mockMvc.perform(delete("/admin/restaurants/" + NOT_EXISTING_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test

@@ -43,7 +43,8 @@ public class VoteControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(get("/user/votes/2010-10-10")
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test

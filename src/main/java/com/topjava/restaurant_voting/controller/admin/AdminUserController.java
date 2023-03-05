@@ -1,5 +1,6 @@
 package com.topjava.restaurant_voting.controller.admin;
 
+import com.topjava.restaurant_voting.dto.PageOfUsersDto;
 import com.topjava.restaurant_voting.dto.UserDto;
 import com.topjava.restaurant_voting.mapper.UserMapper;
 import com.topjava.restaurant_voting.service.UserService;
@@ -10,11 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +55,7 @@ public class AdminUserController {
     @SecurityRequirement(name = "basicAuth")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateUser(@Valid @RequestBody UserDto user,
-                                             @PathVariable @Parameter(example = "100001") Long id) {
+                           @PathVariable @Parameter(example = "100001") Long id) {
         log.info("update {} {}", USER_ENTITY_NAME, user.getEmail());
         userService.update(id, assureDefaultRole(user));
     }
@@ -117,16 +114,10 @@ public class AdminUserController {
     )
     @GetMapping
     @SecurityRequirement(name = "basicAuth")
-    public Page<UserDto> getAll(@PageableDefault(page = 0, size = 10)
-                                @SortDefault(sort = "id", direction = Sort.Direction.ASC)
-                                @Parameter(example =
-                                """
-                                {
-                                  "page": 0,
-                                  "size": 2,
-                                  "sort": ["id"]
-                                }""") Pageable pageable) {
-        log.info("get all {}", USER_ENTITY_NAME);
+    public PageOfUsersDto getAll(@RequestParam(defaultValue = "0") int pageNumber,
+                                 @RequestParam(defaultValue = "10") int pageSize) {
+        val pageable = PageRequest.of(pageNumber, pageSize);
+        log.info("get all {}, page {}", USER_ENTITY_NAME, pageNumber);
         return userService.getAll(pageable);
     }
 }

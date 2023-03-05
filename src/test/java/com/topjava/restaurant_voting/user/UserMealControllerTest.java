@@ -33,7 +33,8 @@ public class UserMealControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(get("/user/restaurants/" + TESTING_RESTAURANT_ID + "/menu/" + START_SEQ + 6)
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test

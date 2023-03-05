@@ -3,10 +3,8 @@ package com.topjava.restaurant_voting.admin;
 import com.topjava.restaurant_voting.RestaurantVotingApplicationTests;
 import com.topjava.restaurant_voting.dto.UserDto;
 import com.topjava.restaurant_voting.util.JsonUtil;
-import org.glassfish.jaxb.core.v2.TODO;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -16,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -41,7 +40,8 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(DUPLICATE_EMAIL_USER_DTO, DUPLICATE_EMAIL_USER_DTO.getPassword())))
                 .andDo(print())
-                .andExpect(status().is(422));
+                .andExpect(status().is(422))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
         assertFalse(userRepository.findById(NEW_ENTITY_ID).isPresent());
     }
 
@@ -64,11 +64,12 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonWithPassword(UPD_USER_TO_ADMIN_DTO, UPD_USER_TO_ADMIN_DTO.getPassword())))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    void SwitchEnabled() throws Exception {
+    void switchEnabled() throws Exception {
         this.mockMvc.perform(patch("/admin/users/" + TESTING_USER_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
@@ -77,7 +78,7 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
     }
 
     @Test
-    void SwitchEnabledNotAdmin() throws Exception {
+    void switchEnabledNotAdmin() throws Exception {
         this.mockMvc.perform(patch("/admin/users/" + TESTING_USER_ID)
                         .with(httpBasic(USER_LOGIN_EMAIL, USER_LOGIN_PASSWORD)))
                 .andDo(print())
@@ -101,7 +102,8 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(get("/admin/users/" + NOT_EXISTING_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -121,7 +123,8 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(get("/admin/users/by-email?email=nonexmail@mail.ru")
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -138,30 +141,39 @@ public class AdminUserControllerTest extends RestaurantVotingApplicationTests {
         this.mockMvc.perform(delete("/admin/users/" + NOT_EXISTING_ID)
                         .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
-                .andExpect(status().is(404));
+                .andExpect(status().is(404))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    void getAll() throws Exception {
+    void getAllDefault() throws Exception {
         ResultActions resultActions = this.mockMvc.perform(get("/admin/users")
-                        .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD))
-                        .content("""
-                                {
-                                  "page": 0,
-                                  "size": 10,
-                                  "sort": ["id"]
-                                }
-                                """))
+                        .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-        //TODO Test with page
-
-//                .andExpect(jsonPath("$.content").value(JsonUtil.writeValue(ALL_USERS)))
-//        PageImpl page =
-//                JsonUtil.readValue(resultActions.andReturn().getResponse().getContentAsString(), PageImpl.class);
-//        assertEquals(page.getContent(), ALL_USERS);
-//        JSONAssert.assertEquals(JsonUtil.writeValue(ALL_USERS),
-//                resultActions.andReturn().getResponse().getContentAsString(), false);
+        JSONAssert.assertEquals(JsonUtil.writeValue(PAGE_ALL_USERS),
+                resultActions.andReturn().getResponse().getContentAsString(), false);
     }
+
+    @Test
+    void getAllWithPages() throws Exception {
+        ResultActions resultActions = this.mockMvc.perform(get("/admin/users?pageNumber=0&pageSize=2")
+                        .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        JSONAssert.assertEquals(JsonUtil.writeValue(PAGE_ALL_USERS_ON_FIRST_PAGE),
+                resultActions.andReturn().getResponse().getContentAsString(), false);
+    }
+
+    @Test
+    void getAllEmptyPage() throws Exception {
+        this.mockMvc.perform(get("/admin/users?pageNumber=2&pageSize=2")
+                        .with(httpBasic(ADMIN_LOGIN_EMAIL, ADMIN_LOGIN_PASSWORD)))
+                .andDo(print())
+                .andExpect(status().is(400))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
 }
