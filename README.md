@@ -1,5 +1,7 @@
 _Restaurant voting application_
 ===============================
+Developed as an example of Rest API , for students of topjava.ru, the application should demonstrate the main ways to solve problems in the design of Rest API in Java.
+We connect Postgress SQL and create Docker file in additional lessons.
 
 ##### Current Version 1.1
 Application for user voting for the best restaurant for lunch. It is a simple REST API and uses basic authorization. Made according to the technical requirement.
