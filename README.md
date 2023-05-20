@@ -9,7 +9,7 @@ Application for user voting for the best restaurant for lunch. It is a simple RE
 Designed by [AntimagLight](https://www.linkedin.com/in/anton-dvorko-53a545263/)
 
 ------------------
-- Stack: [JDK 17](http://jdk.java.net/17/), [Maven](https://maven.apache.org/), Spring Boot 3.0 (web, datajpa, validation, security, cache, tests), JUnit Jupiter API, Lombok, H2, mapstruct, [SoapUI](https://www.soapui.org/).
+- Stack: [JDK 17](http://jdk.java.net/17/), [Maven](https://maven.apache.org/), Spring Boot 3.0 (web, datajpa, validation, security, cache, tests), JUnit Jupiter API, Lombok, H2, mapstruct, swagger, [SoapUI](https://www.soapui.org/).
 - Run: `mvn spring-boot:run` in root directory.
 
 ------------------
