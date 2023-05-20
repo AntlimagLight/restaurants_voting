@@ -31,6 +31,7 @@ Build a voting system for deciding where to have lunch.
 Each restaurant provides a new menu each day.
 
 As a result, provide a link to GitHub repository. It should contain the code, README.md with API documentation and couple curl commands to test it, better - link to Swagger.
+Use the inMemory database to make it easier to run and test your application.
 
 P.S.: Make sure everything works with the latest version that is on github :)  
 P.P.S.: Assume that your API will be used by a frontend developer to build frontend on top of that.
